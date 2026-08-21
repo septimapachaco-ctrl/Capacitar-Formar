@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de administración | Formar Capacitaciones</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="admin-body">
+
+  <!-- Pantalla de carga inicial -->
+  <div id="loading-screen" class="loading-screen">Cargando...</div>
+
+  <!-- LOGIN -->
+  <div id="login-screen" class="login-wrap hidden">
+    <form class="login-card" id="login-form">
+      <span class="brand-logo" style="margin:0 auto 0.75rem;display:flex;">FC</span>
+      <h1>Panel de administración</h1>
+      <p class="sub">Formar Capacitaciones</p>
+
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" required />
+
+      <label for="login-password">Contraseña</label>
+      <input type="password" id="login-password" required />
+
+      <p class="form-error hidden" id="login-error"></p>
+
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.25rem;" id="login-submit">
+        Ingresar
+      </button>
+      <p class="hint">El usuario administrador se crea desde el panel de Supabase (Authentication → Users).</p>
+    </form>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard-screen" class="hidden">
+    <header class="admin-topbar">
+      <div class="container">
+        <div class="brand">
+          <span class="brand-logo">FC</span>
+          <h1 style="font-size:1.05rem;">Panel de administración</h1>
+        </div>
+        <button class="btn btn-outline btn-sm" id="logout-btn">Cerrar sesión</button>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="cursos" id="tab-cursos">Cursos (<span id="courses-count">0</span>)</button>
+        <button class="admin-tab" data-tab="categorias" id="tab-categorias">Categorías (<span id="categories-count">0</span>)</button>
+      </div>
+
+      <!-- TAB CURSOS -->
+      <div id="panel-cursos" class="admin-layout">
+        <form class="admin-panel" id="course-form">
+          <h2 id="course-form-title">Nuevo curso</h2>
+
+          <div class="form-field">
+            <label>Título *</label>
+            <input type="text" id="field-title" required placeholder="Ej: Preceptores" />
+          </div>
+
+          <div class="form-field">
+            <label>Slug (URL)</label>
+            <input type="text" id="field-slug" placeholder="Se genera automáticamente si lo dejás vacío" />
+          </div>
+
+          <div class="form-field">
+            <label>Descripción corta</label>
+            <textarea id="field-short-description" rows="2" placeholder="Se muestra en las tarjetas del listado"></textarea>
+          </div>
+
+          <div class="form-field">
+            <label>Descripción completa</label>
+            <textarea id="field-description" rows="5" placeholder="Se muestra en la página de detalle del curso"></textarea>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label>Precio (ARS)</label>
+              <input type="number" id="field-price" min="0" value="0" />
+            </div>
+            <div class="form-field">
+              <label>Modalidad</label>
+              <select id="field-modality">
+                <option>Presencial</option>
+                <option>Virtual</option>
+                <option>Presencial / Virtual</option>
+                <option>Online</option>
+                <option selected>Consultar</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Categoría</label>
+            <select id="field-category"></select>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label>Duración</label>
+              <input type="text" id="field-duration" placeholder="Ej: 4 meses" />
+            </div>
+            <div class="form-field">
+              <label>Ubicación</label>
+              <input type="text" id="field-location" placeholder="Ej: Salta y Córdoba" />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Imagen del curso</label>
+            <input type="text" id="field-image-url" placeholder="URL de la imagen (https://...)" />
+            <div class="image-upload-row">
+              <label class="upload-btn">
+                <span id="upload-label-text">Subir imagen</span>
+                <input type="file" id="field-image-file" accept="image/*" />
+              </label>
+              <img id="image-preview" class="preview-thumb hidden" alt="Vista previa" />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Video (URL embed, YouTube/Vimeo)</label>
+            <input type="text" id="field-video-url" placeholder="https://www.youtube.com/embed/..." />
+          </div>
+
+          <div class="checkbox-row">
+            <label><input type="checkbox" id="field-featured" /> Destacado</label>
+            <label><input type="checkbox" id="field-active" checked /> Visible en la web</label>
+          </div>
+
+          <p class="form-error hidden" id="course-form-error"></p>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" style="flex:1;" id="course-submit-btn">Crear curso</button>
+            <button type="button" class="btn btn-outline hidden" id="course-cancel-btn">Cancelar</button>
+          </div>
+        </form>
+
+        <div id="courses-list"></div>
+      </div>
+
+      <!-- TAB CATEGORÍAS -->
+      <div id="panel-categorias" class="admin-layout hidden">
+        <form class="admin-panel" id="category-form">
+          <h2>Nueva categoría</h2>
+          <div class="form-field">
+            <input type="text" id="field-category-name" placeholder="Ej: Oficios" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Crear categoría</button>
+        </form>
+
+        <div id="categories-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

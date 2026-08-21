@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gracias por inscribirte | Formar Capacitaciones</title>
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div id="header-root"></div>
+
+  <div class="container text-center" style="min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;max-width:560px;">
+    <span style="font-size:3.5rem;" id="gracias-icon">🎉</span>
+    <h1 style="margin-top:1rem;" id="gracias-title">¡Gracias por inscribirte!</h1>
+    <p class="muted" style="margin-top:0.75rem;" id="gracias-text">
+      Recibimos tu inscripción correctamente. En breve un asesor de Formar Capacitaciones se pondrá en contacto para coordinar el inicio del curso.
+    </p>
+    <p class="muted" style="font-size:0.8rem;margin-top:0.5rem;" id="gracias-order"></p>
+    <a href="index.html" class="btn btn-primary" style="margin-top:2rem;">Volver al inicio</a>
+  </div>
+
+  <div id="footer-root"></div>
+
+  <script type="module">
+    import { renderHeader, renderFooter } from "./js/layout.js";
+    renderHeader();
+    renderFooter();
+
+    const params = new URLSearchParams(window.location.search);
+    const order = params.get("order");
+    const status = params.get("status");
+
+    if (status === "pending") {
+      document.getElementById("gracias-icon").textContent = "⏳";
+      document.getElementById("gracias-title").textContent = "Tu pago está en proceso";
+      document.getElementById("gracias-text").textContent =
+        "Estamos confirmando tu pago. Te avisaremos por email en cuanto se acredite.";
+    }
+
+    if (order) {
+      document.getElementById("gracias-order").textContent = `N° de orden: ${order}`;
+    }
+  </script>
+</body>
+</html>
