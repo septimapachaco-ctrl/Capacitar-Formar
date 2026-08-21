@@ -288,4 +288,3 @@ values
   true,
   (select id from public.categories where slug = 'docencia-y-educacion')
 )
-on conflict (slug) do nothing;
