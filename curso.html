@@ -15,7 +15,473 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+/* =============================================================
+   FORMAR CAPACITACIONES — Sistema de diseño v2
+   Inmersivo · Animado · SVG propio · 100% responsive
+   ============================================================= */
+
+/* ---------- Variables de marca ---------- */
+:root {
+  --color-blue: #102e58;
+  --color-blue-light: #1c4a85;
+  --color-turquoise: #127b7b;
+  --color-turquoise-light: #17a3a3;
+  --color-orange: #f07a04;
+  --color-orange-dark: #cf6600;
+  --color-white: #ffffff;
+  --color-bg-soft: #f6f9fc;
+  --color-text: #1e293b;
+  --color-text-muted: #5b6b82;
+  --color-border: #e4eaf1;
+
+  --gradient-brand: linear-gradient(90deg, #102e58, #127b7b);
+  --gradient-brand-diagonal: linear-gradient(135deg, #0c2447, #102e58 45%, #127b7b);
+  --gradient-orange: linear-gradient(135deg, #f07a04, #ff9736);
+  --gradient-mesh: radial-gradient(circle at 15% 20%, rgba(18, 123, 123, 0.55), transparent 40%),
+    radial-gradient(circle at 85% 15%, rgba(240, 122, 4, 0.35), transparent 38%),
+    radial-gradient(circle at 50% 90%, rgba(28, 74, 133, 0.6), transparent 45%);
+
+  --font-display: "Poppins", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-full: 999px;
+
+  --shadow-card: 0 10px 30px -12px rgba(16, 46, 58, 0.18);
+  --shadow-card-hover: 0 24px 48px -16px rgba(16, 46, 88, 0.28);
+  --shadow-cta: 0 10px 24px -6px rgba(240, 122, 4, 0.45);
+
+  --container-width: 1200px;
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-snap: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---------- Reset ---------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-white);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+ul { list-style: none; }
+svg { display: block; }
+
+::selection { background-color: var(--color-orange); color: var(--color-white); }
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--color-bg-soft); }
+::-webkit-scrollbar-thumb { background: var(--color-turquoise); border-radius: var(--radius-full); border: 2px solid var(--color-bg-soft); }
+
+:focus-visible { outline: 2px solid var(--color-turquoise); outline-offset: 3px; border-radius: 4px; }
+
+.container { max-width: var(--container-width); margin: 0 auto; padding: 0 1.5rem; }
+.section { padding: 6rem 0; position: relative; }
+.section-header { max-width: 640px; margin: 0 auto 3.25rem; text-align: center; }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--color-orange); margin-bottom: 0.65rem;
+}
+.eyebrow::before { content: ""; width: 22px; height: 2px; background: var(--color-orange); border-radius: var(--radius-full); }
+
+h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); font-weight: 700; line-height: 1.18; }
+.section-header h2 { font-size: clamp(1.85rem, 3.2vw, 2.6rem); margin-bottom: 0.85rem; letter-spacing: -0.01em; }
+.section-header p { color: var(--color-text-muted); font-size: 1.02rem; }
+
+/* ---------- Reveal on scroll ---------- */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth); will-change: opacity, transform; }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1.is-visible { transition-delay: 0.08s; }
+.reveal-delay-2.is-visible { transition-delay: 0.16s; }
+.reveal-delay-3.is-visible { transition-delay: 0.24s; }
+.reveal-delay-4.is-visible { transition-delay: 0.32s; }
+
+@keyframes floatY { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-16px) rotate(2deg); } }
+@keyframes floatYSlow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(14px); } }
+@keyframes spinSlow { to { transform: rotate(360deg); } }
+@keyframes pulseGlow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+@keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+@keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ---------- Botones ---------- */
+.btn {
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
+  padding: 0.9rem 1.85rem; border-radius: var(--radius-full); font-weight: 700; font-size: 0.95rem;
+  border: none; overflow: hidden;
+  transition: transform 0.25s var(--ease-snap), box-shadow 0.25s ease, background 0.25s ease;
+  white-space: nowrap;
+}
+.btn::after { content: ""; position: absolute; inset: 0; background: rgba(255, 255, 255, 0.25); transform: translateX(-100%); transition: transform 0.5s ease; }
+.btn:hover::after { transform: translateX(0); }
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: scale(0.97) translateY(0); }
+
+.btn-primary { background: var(--gradient-orange); color: var(--color-white); box-shadow: var(--shadow-cta); }
+.btn-primary:hover { box-shadow: 0 14px 30px -8px rgba(240, 122, 4, 0.6); }
+
+.btn-outline { background: transparent; border: 2px solid var(--color-blue); color: var(--color-blue); }
+.btn-outline:hover { background: var(--color-blue); color: var(--color-white); }
+
+.btn-outline-light { background: transparent; border: 2px solid rgba(255, 255, 255, 0.7); color: var(--color-white); backdrop-filter: blur(4px); }
+.btn-outline-light:hover { background: var(--color-white); color: var(--color-blue); border-color: var(--color-white); }
+
+.btn-block { width: 100%; }
+.btn-sm { padding: 0.55rem 1.15rem; font-size: 0.8rem; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px) saturate(160%);
+  border-bottom: 1px solid transparent;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+.site-header.scrolled { box-shadow: 0 8px 24px -16px rgba(16, 46, 58, 0.35); border-bottom-color: var(--color-border); background: rgba(255, 255, 255, 0.92); }
+.site-header .container { display: flex; align-items: center; justify-content: space-between; padding-top: 0.9rem; padding-bottom: 0.9rem; }
+
+.brand { display: flex; align-items: center; gap: 0.65rem; }
+.brand-logo {
+  width: 44px; height: 44px; border-radius: var(--radius-md); background: var(--gradient-brand); color: var(--color-white);
+  display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; font-size: 1rem;
+  box-shadow: 0 6px 16px -6px rgba(16, 46, 88, 0.5); transition: transform 0.3s var(--ease-snap);
+}
+.brand:hover .brand-logo { transform: rotate(-8deg) scale(1.05); }
+.brand-name { font-family: var(--font-display); font-weight: 700; color: var(--color-blue); font-size: 1.05rem; line-height: 1.15; }
+
+.main-nav { display: flex; align-items: center; gap: 2.1rem; }
+.main-nav a { position: relative; font-size: 0.9rem; font-weight: 600; color: var(--color-blue); padding-bottom: 4px; }
+.main-nav a::after { content: ""; position: absolute; left: 0; bottom: 0; height: 2px; width: 0; background: var(--gradient-brand); transition: width 0.3s var(--ease-smooth); }
+.main-nav a:hover::after { width: 100%; }
+.main-nav a:hover { color: var(--color-turquoise); }
+
+.nav-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--color-blue); }
+
+@media (max-width: 860px) {
+  .main-nav { display: none; }
+  .nav-toggle { display: block; }
+  .header-cta { display: none; }
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative; background: var(--gradient-brand-diagonal); background-size: 200% 200%;
+  animation: gradientShift 14s ease infinite; color: var(--color-white); overflow: hidden; isolation: isolate;
+}
+.hero::before { content: ""; position: absolute; inset: 0; background-image: var(--gradient-mesh); opacity: 0.9; z-index: -1; }
+.hero-noise { position: absolute; inset: 0; opacity: 0.06; background-image: radial-gradient(circle at 1px 1px, #fff 1px, transparent 0); background-size: 26px 26px; z-index: -1; }
+
+.hero-blob { position: absolute; z-index: -1; filter: blur(2px); opacity: 0.5; }
+.hero-blob.b1 { top: -10%; right: -8%; width: 480px; animation: floatY 12s ease-in-out infinite; }
+.hero-blob.b2 { bottom: -15%; left: -10%; width: 420px; animation: floatYSlow 16s ease-in-out infinite; }
+
+.hero .container {
+  position: relative; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center;
+  padding-top: 6rem; padding-bottom: 7rem; min-height: 88vh;
+}
+@media (max-width: 960px) { .hero .container { grid-template-columns: 1fr; padding-top: 3rem; padding-bottom: 4rem; min-height: auto; } }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.45rem 1.1rem; border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 1.4rem; backdrop-filter: blur(6px); animation: fadeInUp 0.8s var(--ease-smooth) both;
+}
+.hero-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-orange); animation: pulseGlow 1.8s ease-in-out infinite; }
+
+.hero h1 { color: var(--color-white); font-size: clamp(2.35rem, 5.2vw, 3.6rem); margin-bottom: 1.3rem; letter-spacing: -0.02em; animation: fadeInUp 0.8s var(--ease-smooth) 0.08s both; }
+.hero p.lead { max-width: 520px; color: rgba(255, 255, 255, 0.88); font-size: 1.12rem; margin-bottom: 2.1rem; animation: fadeInUp 0.8s var(--ease-smooth) 0.16s both; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.75rem; animation: fadeInUp 0.8s var(--ease-smooth) 0.24s both; }
+
+.hero-stats { display: grid; grid-template-columns: repeat(3, auto); gap: 2.2rem; border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 1.6rem; max-width: 440px; animation: fadeInUp 0.8s var(--ease-smooth) 0.32s both; }
+.hero-stats strong { display: block; font-family: var(--font-display); font-size: 1.85rem; font-weight: 800; }
+.hero-stats span { font-size: 0.8rem; color: rgba(255, 255, 255, 0.7); }
+
+.hero-graphic { position: relative; animation: fadeInUp 1s var(--ease-smooth) 0.3s both; }
+.hero-graphic svg { width: 100%; height: auto; filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.25)); }
+.hero-orbit { animation: spinSlow 40s linear infinite; transform-origin: center; }
+@media (max-width: 960px) { .hero-graphic { display: none; } }
+
+.scroll-cue { position: absolute; bottom: 1.75rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.4rem; color: rgba(255, 255, 255, 0.75); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.scroll-cue svg { animation: floatYSlow 2s ease-in-out infinite; }
+
+.wave-divider { position: relative; line-height: 0; }
+.wave-divider svg { width: 100%; height: 70px; display: block; }
+
+/* ---------- Buscador y filtros ---------- */
+.search-wrap { max-width: 560px; margin: 0 auto 1.1rem; position: relative; }
+.search-wrap svg { position: absolute; left: 1.15rem; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); pointer-events: none; }
+.search-wrap input {
+  width: 100%; padding: 0.95rem 1.1rem 0.95rem 2.85rem; border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-border); font-size: 0.92rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.search-wrap input:focus { border-color: var(--color-turquoise); box-shadow: 0 0 0 4px rgba(18, 123, 123, 0.12); }
+
+.filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.55rem; margin-bottom: 3rem; }
+.filter-chip {
+  padding: 0.55rem 1.2rem; border-radius: var(--radius-full); background: var(--color-bg-soft); color: var(--color-text-muted);
+  font-size: 0.85rem; font-weight: 600; border: 1.5px solid transparent;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s var(--ease-snap), border-color 0.2s ease;
+}
+.filter-chip:hover { background: #e8edf3; transform: translateY(-1px); }
+.filter-chip.active { background: var(--color-blue); color: var(--color-white); box-shadow: 0 8px 18px -8px rgba(16, 46, 88, 0.5); }
+
+/* ---------- Grilla de cursos ---------- */
+.courses-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; }
+@media (max-width: 960px) { .courses-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .courses-grid { grid-template-columns: 1fr; } }
+
+.course-card {
+  background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: var(--shadow-card); display: flex; flex-direction: column;
+  transition: transform 0.35s var(--ease-smooth), box-shadow 0.35s var(--ease-smooth), border-color 0.35s ease;
+}
+.course-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-card-hover); border-color: rgba(18, 123, 123, 0.25); }
+
+.course-card-media { position: relative; height: 190px; background: var(--color-bg-soft); overflow: hidden; }
+.course-card-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(16, 46, 88, 0) 50%, rgba(16, 46, 88, 0.35) 100%); opacity: 0; transition: opacity 0.3s ease; }
+.course-card:hover .course-card-media::after { opacity: 1; }
+.course-card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-smooth); }
+.course-card:hover .course-card-media img { transform: scale(1.08); }
+
+.badge-featured {
+  position: absolute; top: 0.8rem; left: 0.8rem; background: var(--gradient-orange); color: var(--color-white);
+  font-size: 0.7rem; font-weight: 700; padding: 0.35rem 0.8rem; border-radius: var(--radius-full);
+  box-shadow: 0 6px 14px -4px rgba(240, 122, 4, 0.6); display: flex; align-items: center; gap: 0.3rem;
+}
+
+.course-card-body { padding: 1.35rem; display: flex; flex-direction: column; flex: 1; gap: 0.4rem; }
+.course-category { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-turquoise); }
+.course-card-body h3 { font-size: 1.12rem; }
+.course-card-body p.desc { color: var(--color-text-muted); font-size: 0.89rem; flex: 1; }
+
+.course-meta-row { display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; }
+.pill { background: rgba(16, 46, 88, 0.06); color: var(--color-blue); font-size: 0.78rem; font-weight: 700; padding: 0.32rem 0.75rem; border-radius: var(--radius-full); }
+.price { font-family: var(--font-display); font-weight: 800; color: var(--color-blue); font-size: 1.12rem; }
+
+.course-card-actions { display: flex; gap: 0.5rem; margin-top: 0.85rem; }
+.course-card-actions .btn { flex: 1; }
+
+.empty-state { text-align: center; color: var(--color-text-muted); padding: 3rem 0; }
+
+/* Skeleton loading */
+.skeleton-card { border-radius: var(--radius-lg); border: 1px solid var(--color-border); overflow: hidden; background: var(--color-white); }
+.skeleton-block { background: linear-gradient(90deg, #eef2f7 25%, #f8fafc 37%, #eef2f7 63%); background-size: 400px 100%; animation: shimmer 1.4s ease-in-out infinite; }
+.skeleton-card .skeleton-block.media { height: 190px; }
+.skeleton-card .skeleton-body { padding: 1.35rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.skeleton-card .skeleton-block.line { height: 12px; border-radius: 6px; }
+.skeleton-card .skeleton-block.line.w60 { width: 60%; }
+.skeleton-card .skeleton-block.line.w40 { width: 40%; }
+
+/* ---------- Ventajas ---------- */
+.advantages { background: var(--color-bg-soft); position: relative; overflow: hidden; }
+.advantages-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; }
+@media (max-width: 960px) { .advantages-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .advantages-grid { grid-template-columns: 1fr; } }
+
+.advantage-card { background: var(--color-white); border-radius: var(--radius-lg); padding: 1.9rem; box-shadow: var(--shadow-card); transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth); }
+.advantage-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); }
+.advantage-icon { width: 52px; height: 52px; border-radius: var(--radius-md); background: var(--gradient-brand); display: flex; align-items: center; justify-content: center; color: var(--color-white); margin-bottom: 1rem; }
+.advantage-card h3 { font-size: 1.05rem; margin-bottom: 0.4rem; }
+.advantage-card p { color: var(--color-text-muted); font-size: 0.89rem; }
+
+/* ---------- Contacto ---------- */
+.contact { background: var(--gradient-brand-diagonal); color: var(--color-white); text-align: center; position: relative; overflow: hidden; }
+.contact h2 { color: var(--color-white); font-size: clamp(1.85rem, 3.2vw, 2.6rem); }
+.contact p { max-width: 520px; margin: 1.1rem auto 2.1rem; color: rgba(255, 255, 255, 0.85); }
+.contact-btn { background: var(--color-white); color: var(--color-blue); box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.3); }
+
+/* ---------- Footer ---------- */
+.site-footer { background: var(--color-blue); color: rgba(255, 255, 255, 0.7); padding: 2.75rem 0; text-align: center; font-size: 0.85rem; }
+.site-footer strong { color: var(--color-white); font-family: var(--font-display); }
+.site-footer a { text-decoration: underline; }
+.site-footer a:hover { color: var(--color-white); }
+
+/* ---------- Carrito flotante ---------- */
+.cart-fab {
+  position: fixed; bottom: 1.6rem; right: 1.6rem; z-index: 60; width: 62px; height: 62px; border-radius: 50%;
+  background: var(--gradient-orange); color: var(--color-white); border: none; box-shadow: var(--shadow-cta);
+  display: flex; align-items: center; justify-content: center; transition: transform 0.3s var(--ease-snap), box-shadow 0.3s ease;
+}
+.cart-fab:hover { transform: scale(1.08) rotate(-4deg); box-shadow: 0 16px 32px -8px rgba(240, 122, 4, 0.6); }
+.cart-count {
+  position: absolute; top: -4px; right: -4px; background: var(--color-blue); color: var(--color-white);
+  font-size: 0.7rem; font-weight: 700; width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; border: 2px solid var(--color-white); animation: fadeInUp 0.3s var(--ease-snap);
+}
+
+.cart-overlay { position: fixed; inset: 0; background: rgba(16, 46, 88, 0.45); backdrop-filter: blur(3px); z-index: 70; display: none; opacity: 0; transition: opacity 0.3s ease; }
+.cart-overlay.open { display: block; opacity: 1; }
+
+.cart-panel {
+  position: fixed; top: 0; right: 0; height: 100%; width: 100%; max-width: 430px; background: var(--color-white); z-index: 80;
+  display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.4s var(--ease-smooth);
+  box-shadow: -16px 0 40px rgba(0, 0, 0, 0.18);
+}
+.cart-panel.open { transform: translateX(0); }
+
+.cart-header { display: flex; align-items: center; justify-content: space-between; padding: 1.35rem 1.6rem; border-bottom: 1px solid var(--color-border); }
+.cart-header h2 { font-size: 1.12rem; }
+.cart-close { background: none; border: none; font-size: 1.3rem; color: var(--color-text-muted); transition: transform 0.2s ease, color 0.2s ease; }
+.cart-close:hover { transform: rotate(90deg); color: var(--color-orange); }
+
+.cart-items { flex: 1; overflow-y: auto; padding: 1.1rem 1.6rem; }
+.cart-empty { text-align: center; color: var(--color-text-muted); padding: 3rem 0; }
+
+.cart-item { display: flex; gap: 0.8rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 0.8rem; margin-bottom: 0.8rem; animation: fadeInUp 0.3s var(--ease-smooth); transition: box-shadow 0.2s ease; }
+.cart-item:hover { box-shadow: var(--shadow-card); }
+.cart-item img { width: 62px; height: 62px; border-radius: var(--radius-md); object-fit: cover; background: var(--color-bg-soft); }
+.cart-item-info { flex: 1; }
+.cart-item-info h4 { font-size: 0.93rem; color: var(--color-blue); }
+.cart-item-info .modality { font-size: 0.75rem; color: var(--color-turquoise); font-weight: 600; }
+
+.qty-row { display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; }
+.qty-controls { display: flex; align-items: center; gap: 0.5rem; }
+.qty-btn { width: 25px; height: 25px; border-radius: 50%; border: 1px solid var(--color-border); background: var(--color-white); font-weight: 700; color: var(--color-text-muted); display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, color 0.2s ease; }
+.qty-btn:hover { background: var(--color-blue); color: var(--color-white); border-color: var(--color-blue); }
+
+.cart-item-remove { background: none; border: none; color: #cbd5e1; align-self: flex-start; transition: color 0.2s ease, transform 0.2s ease; }
+.cart-item-remove:hover { color: var(--color-orange); transform: scale(1.15); }
+
+.cart-footer { border-top: 1px solid var(--color-border); padding: 1.35rem 1.6rem; }
+.cart-total-row { display: flex; justify-content: space-between; font-weight: 800; color: var(--color-blue); font-size: 1.15rem; margin-bottom: 1.1rem; }
+
+.form-field { margin-bottom: 0.65rem; }
+.form-field input, .form-field textarea, .form-field select {
+  width: 100%; padding: 0.65rem 0.9rem; border-radius: var(--radius-md); border: 1.5px solid var(--color-border);
+  font-size: 0.88rem; font-family: inherit; transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.form-field input:focus, .form-field textarea:focus, .form-field select:focus { border-color: var(--color-turquoise); box-shadow: 0 0 0 3px rgba(18, 123, 123, 0.12); }
+
+.form-error { color: #dc2626; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.hint { font-size: 0.75rem; color: var(--color-text-muted); text-align: center; margin-top: 0.6rem; }
+
+/* ---------- Página de detalle de curso ---------- */
+.breadcrumb { font-size: 0.85rem; color: var(--color-text-muted); padding-top: 1.6rem; }
+.breadcrumb a:hover { color: var(--color-turquoise); }
+
+.course-detail { display: grid; grid-template-columns: 2fr 1fr; gap: 2.6rem; padding: 2.6rem 0; }
+@media (max-width: 960px) { .course-detail { grid-template-columns: 1fr; } }
+
+.course-hero-media { height: 390px; border-radius: var(--radius-lg); overflow: hidden; background: var(--color-bg-soft); box-shadow: var(--shadow-card); }
+.course-hero-media img { width: 100%; height: 100%; object-fit: cover; }
+
+.tag-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.3rem 0 0.8rem; }
+.tag { border-radius: var(--radius-full); padding: 0.42rem 1.05rem; font-size: 0.82rem; font-weight: 700; }
+.tag-category { background: rgba(18, 123, 123, 0.1); color: var(--color-turquoise); }
+.tag-modality { background: rgba(16, 46, 88, 0.06); color: var(--color-blue); }
+.tag-duration { background: var(--color-bg-soft); color: var(--color-text-muted); }
+
+.course-detail h1 { font-size: clamp(1.85rem, 3.6vw, 2.5rem); margin: 0.8rem 0 0.55rem; }
+.course-location { color: var(--color-text-muted); margin-bottom: 1.1rem; }
+.course-description { color: #475569; white-space: pre-line; }
+
+.video-wrap { margin-top: 2.1rem; }
+.video-wrap h2 { font-size: 1.22rem; margin-bottom: 0.8rem; }
+.video-frame { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius-lg); overflow: hidden; background: #000; box-shadow: var(--shadow-card); }
+.video-frame iframe { width: 100%; height: 100%; border: none; }
+
+.related-courses { margin-top: 3.2rem; }
+.related-courses h2 { font-size: 1.22rem; margin-bottom: 1.1rem; }
+.related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+@media (max-width: 640px) { .related-grid { grid-template-columns: 1fr; } }
+.related-card { border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.05rem; box-shadow: var(--shadow-card); transition: transform 0.25s var(--ease-smooth), box-shadow 0.25s ease; }
+.related-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); }
+.related-card h4 { font-size: 0.96rem; }
+.related-card p { font-size: 0.82rem; color: var(--color-text-muted); margin-top: 0.25rem; }
+
+.sidebar-card { position: sticky; top: 6.5rem; border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.6rem; box-shadow: var(--shadow-card); height: fit-content; }
+.sidebar-card .label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); font-weight: 700; }
+.sidebar-card .price { font-size: 1.95rem; margin: 0.28rem 0 0.55rem; }
+.sidebar-card .modality-line { font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 1.2rem; }
+.sidebar-card .btn { margin-bottom: 0.65rem; }
+
+.checklist { margin-top: 1.3rem; font-size: 0.85rem; color: var(--color-text-muted); }
+.checklist li { display: flex; gap: 0.55rem; margin-bottom: 0.55rem; align-items: flex-start; }
+.checklist li svg { flex-shrink: 0; margin-top: 2px; color: var(--color-turquoise); }
+
+.not-found { text-align: center; padding: 5.5rem 1.5rem; }
+
+/* ---------- Página de administración ---------- */
+.admin-body { background: var(--color-bg-soft); min-height: 100vh; }
+
+.login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; background: var(--gradient-brand-diagonal); }
+.login-card { width: 100%; max-width: 390px; background: var(--color-white); border-radius: var(--radius-lg); padding: 2.35rem; box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.4); animation: fadeInUp 0.5s var(--ease-smooth); }
+.login-card .brand-logo { margin: 0 auto 0.8rem; }
+.login-card h1 { text-align: center; font-size: 1.28rem; }
+.login-card .sub { text-align: center; color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 1.6rem; }
+.login-card label { display: block; font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 0.32rem; margin-top: 0.9rem; }
+
+.admin-topbar { position: sticky; top: 0; z-index: 20; background: var(--color-white); border-bottom: 1px solid var(--color-border); padding: 1.05rem 0; }
+.admin-topbar .container { display: flex; align-items: center; justify-content: space-between; }
+
+.admin-tabs { display: flex; gap: 0.5rem; margin: 1.6rem 0; }
+.admin-tab { padding: 0.58rem 1.3rem; border-radius: var(--radius-full); background: var(--color-white); color: var(--color-text-muted); font-weight: 700; font-size: 0.88rem; border: 1px solid var(--color-border); transition: all 0.2s ease; }
+.admin-tab.active { background: var(--color-blue); color: var(--color-white); border-color: var(--color-blue); }
+
+.admin-layout { display: grid; grid-template-columns: 380px 1fr; gap: 1.8rem; align-items: start; }
+@media (max-width: 960px) { .admin-layout { grid-template-columns: 1fr; } }
+
+.admin-panel { background: var(--color-white); border-radius: var(--radius-lg); border: 1px solid var(--color-border); padding: 1.6rem; box-shadow: var(--shadow-card); }
+.admin-panel h2 { font-size: 1.08rem; margin-bottom: 1.05rem; }
+
+.checkbox-row { display: flex; gap: 1.6rem; margin: 1.05rem 0; }
+.checkbox-row label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: #475569; }
+
+.form-actions { display: flex; gap: 0.75rem; margin-top: 1.05rem; }
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+.image-upload-row { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; }
+.upload-btn { border: 1px solid var(--color-border); border-radius: var(--radius-full); padding: 0.5rem 1rem; font-size: 0.78rem; font-weight: 700; color: #475569; background: var(--color-white); cursor: pointer; transition: all 0.2s ease; }
+.upload-btn:hover { border-color: var(--color-turquoise); color: var(--color-turquoise); }
+.upload-btn input { display: none; }
+.preview-thumb { width: 40px; height: 40px; border-radius: var(--radius-md); object-fit: cover; }
+
+.admin-list-item { display: flex; align-items: center; gap: 1rem; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.05rem; box-shadow: var(--shadow-card); margin-bottom: 0.8rem; transition: box-shadow 0.2s ease, transform 0.2s ease; }
+.admin-list-item:hover { box-shadow: var(--shadow-card-hover); transform: translateY(-2px); }
+.admin-list-item img { width: 56px; height: 56px; border-radius: var(--radius-md); object-fit: cover; background: var(--color-bg-soft); flex-shrink: 0; }
+.admin-list-info { flex: 1; min-width: 0; }
+.admin-list-info h4 { font-size: 0.95rem; color: var(--color-blue); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.admin-list-info p { font-size: 0.8rem; color: var(--color-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.mini-badge { font-size: 0.68rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: var(--radius-full); margin-left: 0.4rem; }
+.mini-badge.hidden-badge { background: var(--color-bg-soft); color: var(--color-text-muted); }
+.mini-badge.featured-badge { background: rgba(240, 122, 4, 0.1); color: var(--color-orange); }
+
+.admin-list-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+.btn-edit { border: 1px solid var(--color-blue); color: var(--color-blue); background: var(--color-white); padding: 0.45rem 0.9rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700; transition: all 0.2s ease; }
+.btn-edit:hover { background: var(--color-blue); color: var(--color-white); }
+.btn-delete { border: 1px solid #fecaca; color: #ef4444; background: var(--color-white); padding: 0.45rem 0.9rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700; transition: all 0.2s ease; }
+.btn-delete:hover { background: #fef2f2; }
+
+.muted { color: var(--color-text-muted); }
+.loading-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; color: var(--color-text-muted); gap: 0.6rem; }
+.spinner { width: 20px; height: 20px; border-radius: 50%; border: 2.5px solid var(--color-border); border-top-color: var(--color-turquoise); animation: spinSlow 0.8s linear infinite; }
+
+/* ---------- Utilidades ---------- */
+.hidden { display: none !important; }
+.text-center { text-align: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+
+  </style>
 
   <script type="application/ld+json" id="course-jsonld"></script>
 </head>
@@ -37,6 +503,702 @@
   <div id="footer-root"></div>
   <div id="cart-root"></div>
 
-  <script type="module" src="js/curso.js"></script>
+  <script type="module">
+// ==============================================================
+// FORMAR CAPACITACIONES — Cliente de Supabase
+// ==============================================================
+// Se importa el SDK de Supabase desde CDN como módulo ES.
+// Reemplazá SUPABASE_URL y SUPABASE_ANON_KEY por los datos de TU
+// proyecto (Project Settings → API en el panel de Supabase).
+
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = "https://vwgwjhbkchzcawfohimu.supabase.co";
+const SUPABASE_ANON_KEY = "PEGÁ_ACÁ_TU_ANON_KEY"; // ← ver README, paso 2
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+  },
+});
+
+/**
+ * URL del backend que crea la preferencia de pago en Mercado Pago.
+ * Ver carpeta /server para el código de este endpoint.
+ * En producción, reemplazalo por la URL donde despliegues el server
+ * (ej: https://api.formarcapacitaciones.com.ar/checkout).
+ */
+const CHECKOUT_API_URL = "http://localhost:4000/api/checkout";
+
+function formatARS(value) {
+  return new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    maximumFractionDigits: 0,
+  }).format(value || 0);
+}
+
+function slugify(text) {
+  return text
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str ?? "";
+  return div.innerHTML;
+}
+
+function renderHeader() {
+  const el = document.getElementById("header-root");
+  if (!el) return;
+
+  el.innerHTML = `
+    <header class="site-header">
+      <div class="container">
+        <a href="index.html" class="brand">
+          <span class="brand-logo">FC</span>
+          <span class="brand-name">Formar<br class="mobile-only" /> Capacitaciones</span>
+        </a>
+        <nav class="main-nav" id="main-nav">
+          <a href="index.html#cursos">Cursos</a>
+          <a href="index.html#ventajas">Por qué elegirnos</a>
+          <a href="index.html#contacto">Contacto</a>
+        </nav>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        </button>
+        <a href="https://instagram.com/formar.capacitaciones" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm header-cta">
+          Consultar ahora
+        </a>
+      </div>
+    </header>
+  `;
+
+  const toggle = document.getElementById("nav-toggle");
+  const nav = document.getElementById("main-nav");
+
+  toggle?.addEventListener("click", () => {
+    const isOpen = nav.classList.toggle("mobile-open");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    nav.style.display = isOpen ? "flex" : "";
+    nav.style.flexDirection = isOpen ? "column" : "";
+    nav.style.position = isOpen ? "absolute" : "";
+    nav.style.top = isOpen ? "100%" : "";
+    nav.style.left = "0";
+    nav.style.right = "0";
+    nav.style.background = isOpen ? "#ffffff" : "";
+    nav.style.padding = isOpen ? "1.25rem 1.5rem" : "";
+    nav.style.boxShadow = isOpen ? "0 16px 30px -16px rgba(16,46,58,0.3)" : "";
+    nav.style.gap = isOpen ? "1rem" : "";
+  });
+
+  nav?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("mobile-open");
+      nav.removeAttribute("style");
+      toggle?.setAttribute("aria-expanded", "false");
+    });
+  });
+}
+
+function renderFooter() {
+  const el = document.getElementById("footer-root");
+  if (!el) return;
+
+  el.innerHTML = `
+    <footer class="site-footer">
+      <div class="container">
+        <p><strong>Formar Capacitaciones</strong></p>
+        <p style="margin-top:0.5rem;">Cursos y capacitaciones con validez nacional e internacional en Salta, Córdoba y toda Argentina.</p>
+        <p style="margin-top:1rem;">© <span id="footer-year"></span> Formar Capacitaciones. Todos los derechos reservados. ·
+          <a href="admin.html">Acceso administrador</a>
+        </p>
+      </div>
+    </footer>
+  `;
+  document.getElementById("footer-year").textContent = new Date().getFullYear();
+}
+
+// ==============================================================
+// FORMAR CAPACITACIONES — Carrito de compras
+// ==============================================================
+// Carrito basado en localStorage, sin dependencias externas.
+// Se usa en todas las páginas que incluyan <div id="cart-root">.
+
+
+const STORAGE_KEY = "fc_cart";
+
+function readCart() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeCart(items) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  renderCart();
+  updateCartCount();
+}
+
+/**
+ * Agrega un curso al carrito (o suma 1 si ya estaba agregado).
+ * course = { id, slug, title, price, image_url, modality }
+ */
+function addToCart(course) {
+  const items = readCart();
+  const existing = items.find((i) => i.courseId === course.id);
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    items.push({
+      courseId: course.id,
+      slug: course.slug,
+      title: course.title,
+      price: course.price,
+      image_url: course.image_url,
+      modality: course.modality,
+      quantity: 1,
+    });
+  }
+  writeCart(items);
+  openCart();
+}
+
+function removeFromCart(courseId) {
+  writeCart(readCart().filter((i) => i.courseId !== courseId));
+}
+
+function changeQuantity(courseId, delta) {
+  const items = readCart()
+    .map((i) => (i.courseId === courseId ? { ...i, quantity: i.quantity + delta } : i))
+    .filter((i) => i.quantity > 0);
+  writeCart(items);
+}
+
+function clearCart() {
+  writeCart([]);
+}
+
+function getCartTotal() {
+  return readCart().reduce((sum, i) => sum + i.price * i.quantity, 0);
+}
+
+function getCartCount() {
+  return readCart().reduce((sum, i) => sum + i.quantity, 0);
+}
+
+/* ---------------------------------------------------------------
+   UI: inyecta el botón flotante + panel del carrito en el DOM
+   --------------------------------------------------------------- */
+
+function initCartUI() {
+  const root = document.getElementById("cart-root");
+  if (!root) return;
+
+  root.innerHTML = `
+    <button class="cart-fab" id="cart-fab" aria-label="Abrir carrito de compras">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="26" height="26">
+        <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+      </svg>
+      <span class="cart-count hidden" id="cart-count">0</span>
+    </button>
+
+    <div class="cart-overlay" id="cart-overlay"></div>
+
+    <aside class="cart-panel" id="cart-panel" aria-hidden="true">
+      <div class="cart-header">
+        <h2>Tu carrito</h2>
+        <button class="cart-close" id="cart-close" aria-label="Cerrar carrito">✕</button>
+      </div>
+      <div class="cart-items" id="cart-items"></div>
+      <div class="cart-footer hidden" id="cart-footer">
+        <div class="cart-total-row">
+          <span>Total</span>
+          <span id="cart-total">$0</span>
+        </div>
+        <div class="form-field">
+          <input type="text" id="checkout-name" placeholder="Nombre y apellido" />
+        </div>
+        <div class="form-field">
+          <input type="email" id="checkout-email" placeholder="Tu email *" required />
+        </div>
+        <div class="form-field">
+          <input type="tel" id="checkout-phone" placeholder="WhatsApp / Teléfono" />
+        </div>
+        <p class="form-error hidden" id="checkout-error"></p>
+        <button class="btn btn-primary btn-block" id="checkout-btn">Pagar con Mercado Pago</button>
+        <p class="hint">Pago 100% seguro procesado por Mercado Pago.</p>
+      </div>
+    </div>
+    </aside>
+  `;
+
+  document.getElementById("cart-fab").addEventListener("click", toggleCart);
+  document.getElementById("cart-close").addEventListener("click", closeCart);
+  document.getElementById("cart-overlay").addEventListener("click", closeCart);
+  document.getElementById("checkout-btn").addEventListener("click", handleCheckout);
+
+  renderCart();
+  updateCartCount();
+}
+
+function openCart() {
+  document.getElementById("cart-panel")?.classList.add("open");
+  document.getElementById("cart-overlay")?.classList.add("open");
+}
+
+function closeCart() {
+  document.getElementById("cart-panel")?.classList.remove("open");
+  document.getElementById("cart-overlay")?.classList.remove("open");
+}
+
+function toggleCart() {
+  const panel = document.getElementById("cart-panel");
+  if (panel?.classList.contains("open")) {
+    closeCart();
+  } else {
+    openCart();
+  }
+}
+
+function updateCartCount() {
+  const el = document.getElementById("cart-count");
+  if (!el) return;
+  const count = getCartCount();
+  el.textContent = String(count);
+  el.classList.toggle("hidden", count === 0);
+}
+
+function renderCart() {
+  const itemsEl = document.getElementById("cart-items");
+  const footerEl = document.getElementById("cart-footer");
+  if (!itemsEl) return;
+
+  const items = readCart();
+
+  if (items.length === 0) {
+    itemsEl.innerHTML = `
+      <div class="cart-empty">
+        <p>Todavía no agregaste cursos.</p>
+        <p style="font-size:0.85rem;margin-top:0.4rem;">Elegí un curso y sumalo al carrito para inscribirte.</p>
+      </div>`;
+    footerEl?.classList.add("hidden");
+    return;
+  }
+
+  footerEl?.classList.remove("hidden");
+
+  itemsEl.innerHTML = items
+    .map(
+      (item) => `
+      <div class="cart-item" data-id="${item.courseId}">
+        <img src="${escapeHtml(item.image_url || "")}" alt="${escapeHtml(item.title)}" />
+        <div class="cart-item-info">
+          <h4>${escapeHtml(item.title)}</h4>
+          <p class="modality">${escapeHtml(item.modality)}</p>
+          <div class="qty-row">
+            <div class="qty-controls">
+              <button class="qty-btn" data-action="decrement" data-id="${item.courseId}" aria-label="Restar cantidad">−</button>
+              <span>${item.quantity}</span>
+              <button class="qty-btn" data-action="increment" data-id="${item.courseId}" aria-label="Sumar cantidad">+</button>
+            </div>
+            <strong>${formatARS(item.price * item.quantity)}</strong>
+          </div>
+        </div>
+        <button class="cart-item-remove" data-action="remove" data-id="${item.courseId}" aria-label="Quitar">✕</button>
+      </div>
+    `
+    )
+    .join("");
+
+  document.getElementById("cart-total").textContent = formatARS(getCartTotal());
+
+  itemsEl.querySelectorAll("[data-action]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-id");
+      const action = btn.getAttribute("data-action");
+      if (action === "increment") changeQuantity(id, 1);
+      if (action === "decrement") changeQuantity(id, -1);
+      if (action === "remove") removeFromCart(id);
+    });
+  });
+}
+
+async function handleCheckout() {
+  const errorEl = document.getElementById("checkout-error");
+  const btn = document.getElementById("checkout-btn");
+  errorEl.classList.add("hidden");
+
+  const email = document.getElementById("checkout-email").value.trim();
+  const name = document.getElementById("checkout-name").value.trim();
+  const phone = document.getElementById("checkout-phone").value.trim();
+  const items = readCart();
+
+  if (!email) {
+    errorEl.textContent = "Ingresá tu email para continuar con la inscripción.";
+    errorEl.classList.remove("hidden");
+    return;
+  }
+  if (items.length === 0) {
+    errorEl.textContent = "Tu carrito está vacío.";
+    errorEl.classList.remove("hidden");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Procesando...";
+
+  try {
+    const res = await fetch(CHECKOUT_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        student_email: email,
+        student_name: name,
+        student_phone: phone,
+        items,
+        total: getCartTotal(),
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.init_point) {
+      throw new Error(data.error || "No se pudo iniciar el pago.");
+    }
+
+    window.location.href = data.init_point;
+  } catch (err) {
+    errorEl.textContent =
+      err.message || "Ocurrió un error al procesar la compra. Intentá nuevamente.";
+    errorEl.classList.remove("hidden");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Pagar con Mercado Pago";
+  }
+}
+
+// ==============================================================
+// FORMAR CAPACITACIONES — Animaciones (scroll reveal, header, contadores)
+// ==============================================================
+
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/**
+ * Revela con fade-up + delay escalonado los elementos con clase .reveal
+ * a medida que entran en el viewport.
+ */
+function initScrollReveal() {
+  const items = document.querySelectorAll(".reveal");
+  if (items.length === 0) return;
+
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    items.forEach((el) => el.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
+  );
+
+  items.forEach((el) => observer.observe(el));
+}
+
+/**
+ * Agrega la clase "scrolled" al header cuando el usuario baja la página,
+ * para intensificar el fondo y la sombra (mejora de legibilidad).
+ */
+function initHeaderScroll() {
+  const header = document.querySelector(".site-header");
+  if (!header) return;
+
+  function update() {
+    header.classList.toggle("scrolled", window.scrollY > 12);
+  }
+  update();
+  window.addEventListener("scroll", update, { passive: true });
+}
+
+/**
+ * Anima números (ej: "+8", "100%") contando desde 0 hasta el valor final
+ * cuando el elemento entra en pantalla. Requiere data-count-to="8" y
+ * opcionalmente data-suffix="%".
+ */
+function initCounters() {
+  const counters = document.querySelectorAll("[data-count-to]");
+  if (counters.length === 0) return;
+
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    counters.forEach((el) => {
+      const to = Number(el.getAttribute("data-count-to"));
+      const suffix = el.getAttribute("data-suffix") || "";
+      el.textContent = `${to}${suffix}`;
+    });
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const to = Number(el.getAttribute("data-count-to"));
+        const suffix = el.getAttribute("data-suffix") || "";
+        const duration = 1200;
+        const start = performance.now();
+
+        function tick(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
+          el.textContent = `${Math.round(to * eased)}${suffix}`;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        observer.unobserve(el);
+      });
+    },
+    { threshold: 0.6 }
+  );
+
+  counters.forEach((el) => observer.observe(el));
+}
+
+/**
+ * Efecto parallax sutil en los blobs del hero al mover el mouse
+ * (solo desktop, respeta prefers-reduced-motion).
+ */
+function initHeroParallax() {
+  if (prefersReducedMotion) return;
+  const hero = document.querySelector(".hero");
+  const blobs = document.querySelectorAll(".hero-blob");
+  if (!hero || blobs.length === 0 || window.matchMedia("(max-width: 860px)").matches) return;
+
+  hero.addEventListener("mousemove", (e) => {
+    const { innerWidth, innerHeight } = window;
+    const x = (e.clientX / innerWidth - 0.5) * 2;
+    const y = (e.clientY / innerHeight - 0.5) * 2;
+
+    blobs.forEach((blob, i) => {
+      const strength = (i + 1) * 10;
+      blob.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+    });
+  });
+}
+
+function initAllAnimations() {
+  initScrollReveal();
+  initHeaderScroll();
+  initCounters();
+  initHeroParallax();
+}
+
+const CHECK_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>`;
+
+const SITE_URL = "https://formarcapacitaciones.com.ar";
+
+function getSlugFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("slug");
+}
+
+async function fetchCourse(slug) {
+  const { data, error } = await supabase
+    .from("courses")
+    .select("*, categories(id, name, slug)")
+    .eq("slug", slug)
+    .eq("active", true)
+    .single();
+  if (error || !data) return null;
+  return data;
+}
+
+async function fetchRelated(categoryId, currentId) {
+  if (!categoryId) return [];
+  const { data } = await supabase
+    .from("courses")
+    .select("*, categories(id, name, slug)")
+    .eq("active", true)
+    .eq("category_id", categoryId)
+    .neq("id", currentId)
+    .limit(3);
+  return data ?? [];
+}
+
+function applySEO(course) {
+  const title = `${course.title} | Curso con validez nacional`;
+  const description =
+    course.short_description ||
+    `Formate en ${course.title} con Formar Capacitaciones. Modalidad ${course.modality}. Certificación con validez nacional e internacional.`;
+  const url = `${SITE_URL}/curso.html?slug=${encodeURIComponent(course.slug)}`;
+
+  document.title = title;
+  document.getElementById("page-title").textContent = title;
+  document.getElementById("meta-description").setAttribute("content", description);
+  document.getElementById("canonical-link").setAttribute("href", url);
+  document.getElementById("og-title").setAttribute("content", title);
+  document.getElementById("og-description").setAttribute("content", description);
+  if (course.image_url) {
+    document.getElementById("og-image").setAttribute("content", course.image_url);
+  }
+  document.getElementById("breadcrumb-current").textContent = course.title;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: course.title,
+    description: course.description,
+    provider: {
+      "@type": "Organization",
+      name: "Formar Capacitaciones",
+      sameAs: "https://instagram.com/formar.capacitaciones",
+      url: SITE_URL,
+    },
+    ...(course.price > 0 && {
+      offers: {
+        "@type": "Offer",
+        price: course.price,
+        priceCurrency: "ARS",
+        category: "Paid",
+        availability: "https://schema.org/InStock",
+        url,
+      },
+    }),
+    hasCourseInstance: {
+      "@type": "CourseInstance",
+      courseMode: course.modality,
+      location: course.location || "Argentina",
+    },
+    educationalCredentialAwarded: "Certificado con validez nacional e internacional",
+    inLanguage: "es-AR",
+    areaServed: ["Salta", "Córdoba", "Argentina"],
+  };
+  document.getElementById("course-jsonld").textContent = JSON.stringify(jsonLd);
+}
+
+function renderCourse(course, related) {
+  const wrap = document.getElementById("course-content");
+
+  wrap.innerHTML = `
+    <article class="container course-detail">
+      <div>
+        <div class="course-hero-media">
+          ${course.image_url ? `<img src="${escapeHtml(course.image_url)}" alt="${escapeHtml(course.title)}" />` : ""}
+        </div>
+
+        <div class="tag-row">
+          ${course.categories?.name ? `<span class="tag tag-category">${escapeHtml(course.categories.name)}</span>` : ""}
+          <span class="tag tag-modality">${escapeHtml(course.modality)}</span>
+          ${course.duration ? `<span class="tag tag-duration">Duración: ${escapeHtml(course.duration)}</span>` : ""}
+        </div>
+
+        <h1>${escapeHtml(course.title)}</h1>
+        ${course.location ? `<p class="course-location">📍 ${escapeHtml(course.location)}</p>` : ""}
+
+        <p class="course-description">${escapeHtml(course.description)}</p>
+
+        ${
+          course.video_url
+            ? `<div class="video-wrap">
+                <h2>Video explicativo</h2>
+                <div class="video-frame">
+                  <iframe src="${escapeHtml(course.video_url)}" title="Video explicativo de ${escapeHtml(course.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+              </div>`
+            : ""
+        }
+
+        ${
+          related.length > 0
+            ? `<div class="related-courses">
+                <h2>Otros cursos que te pueden interesar</h2>
+                <div class="related-grid">
+                  ${related
+                    .map(
+                      (r) => `
+                    <a href="curso.html?slug=${encodeURIComponent(r.slug)}" class="related-card">
+                      <h4>${escapeHtml(r.title)}</h4>
+                      <p>${escapeHtml(r.modality)}</p>
+                    </a>`
+                    )
+                    .join("")}
+                </div>
+              </div>`
+            : ""
+        }
+      </div>
+
+      <aside class="sidebar-card">
+        <span class="label">Inversión</span>
+        <p class="price">${course.price > 0 ? formatARS(course.price) : "Consultar"}</p>
+        <p class="modality-line">Modalidad: <strong>${escapeHtml(course.modality)}</strong></p>
+
+        <button class="btn btn-primary btn-block" id="add-to-cart-btn">Inscribirme / Agregar al carrito</button>
+        <a href="https://instagram.com/formar.capacitaciones" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+          Consultar por Instagram
+        </a>
+
+        <ul class="checklist">
+          <li>${CHECK_ICON}<span>Certificado con validez nacional e internacional</span></li>
+          <li>${CHECK_ICON}<span>Acompañamiento docente durante todo el cursado</span></li>
+          <li>${CHECK_ICON}<span>Inscripción 100% online</span></li>
+        </ul>
+      </aside>
+    </article>
+  `;
+
+  const btn = document.getElementById("add-to-cart-btn");
+  btn.addEventListener("click", () => {
+    addToCart(course);
+    btn.textContent = "¡Agregado al carrito! ✓";
+    setTimeout(() => {
+      btn.textContent = "Inscribirme / Agregar al carrito";
+    }, 2000);
+  });
+}
+
+async function init() {
+  renderHeader();
+  renderFooter();
+  initCartUI();
+  initAllAnimations();
+
+  const slug = getSlugFromUrl();
+  const course = slug ? await fetchCourse(slug) : null;
+
+  if (!course) {
+    document.getElementById("not-found").classList.remove("hidden");
+    document.getElementById("breadcrumb").classList.add("hidden");
+    return;
+  }
+
+  const related = await fetchRelated(course.category_id, course.id);
+  applySEO(course);
+  renderCourse(course, related);
+  initScrollReveal();
+}
+
+document.addEventListener("DOMContentLoaded", init);
+  </script>
 </body>
 </html>
