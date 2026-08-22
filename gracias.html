@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gracias por inscribirte | Formar Capacitaciones</title>
-  <meta name="robots" content="noindex" />
+  <title>Nuestro Equipo | Formar Capacitaciones</title>
+  <meta name="description" content="Conocé al equipo docente y de coordinación de Formar Capacitaciones: profesionales con experiencia real acompañando tu formación en Salta, Córdoba y toda Argentina." />
+  <link rel="canonical" href="https://formarcapacitaciones.com.ar/gracias.html" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
   <style>
 /* =============================================================
@@ -467,6 +468,74 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 .hidden { display: none !important; }
 .text-center { text-align: center; }
 
+/* ---------- Splash screen ---------- */
+.splash-screen {
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--gradient-brand-diagonal);
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.splash-screen img { width: 120px; height: 120px; object-fit: contain; animation: splashPulse 1.4s ease-in-out infinite; border-radius: var(--radius-lg); background: rgba(255,255,255,0.08); padding: 0.5rem; }
+.splash-screen span { color: rgba(255,255,255,0.75); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.splash-screen.splash-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+@keyframes splashPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.85; } }
+
+/* ---------- Lockup de marca en el hero ---------- */
+.hero-brand-lockup { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.5rem; }
+.hero-brand-lockup img { width: 56px; height: 56px; object-fit: contain; border-radius: var(--radius-md); background: rgba(255,255,255,0.12); padding: 0.4rem; flex-shrink: 0; }
+.hero-brand-lockup .brand-text-big { font-family: var(--font-display); font-weight: 800; font-size: 2rem; color: var(--color-white); line-height: 1; letter-spacing: 0.02em; }
+.hero-brand-lockup .brand-text-small { display: block; font-size: 0.8rem; color: rgba(255,255,255,0.75); font-weight: 600; letter-spacing: 0.04em; margin-top: 0.2rem; }
+
+/* ---------- Botón de WhatsApp ---------- */
+.btn-whatsapp { background: #25d366; color: #ffffff; box-shadow: 0 10px 24px -8px rgba(37, 211, 102, 0.55); }
+.btn-whatsapp:hover { background: #1ebd5a; }
+.btn-whatsapp svg { flex-shrink: 0; }
+
+/* ---------- Sección Equipo ---------- */
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; }
+@media (max-width: 960px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .team-grid { grid-template-columns: 1fr; } }
+
+.team-card {
+  background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--shadow-card); text-align: center;
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+}
+.team-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); }
+.team-card-photo { height: 220px; background: var(--color-bg-soft); overflow: hidden; }
+.team-card-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-smooth); }
+.team-card:hover .team-card-photo img { transform: scale(1.06); }
+.team-card-plaque { padding: 1.1rem 1rem; }
+.team-card-plaque h3 { font-size: 1rem; margin-bottom: 0.15rem; }
+.team-card-plaque p { font-size: 0.82rem; color: var(--color-turquoise); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.9rem; }
+.team-card-plaque .btn { width: 100%; }
+
+/* Variante grande para gracias.html (equipo en primer plano) */
+.team-card.team-card-large .team-card-photo { height: 300px; }
+.team-card.team-card-large .team-card-plaque h3 { font-size: 1.2rem; }
+
+/* ---------- Precio oculto ---------- */
+.price-placeholder { letter-spacing: 0.05em; opacity: 0.85; }
+
+/* ---------- Tarjeta expandida (cursos.html) ---------- */
+.course-card-wide {
+  display: grid; grid-template-columns: 280px 1fr; gap: 0;
+  background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--shadow-card);
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+}
+.course-card-wide:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); }
+@media (max-width: 760px) { .course-card-wide { grid-template-columns: 1fr; } }
+
+.course-card-wide-media { position: relative; min-height: 220px; background: var(--color-bg-soft); overflow: hidden; }
+.course-card-wide-media img { width: 100%; height: 100%; object-fit: cover; }
+
+.course-card-wide-body { padding: 1.75rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.course-card-wide-body .desc-full { color: var(--color-text-muted); font-size: 0.92rem; }
+.course-card-wide-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.3rem; }
+.course-card-wide-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-top: auto; padding-top: 0.75rem; }
+.course-card-wide-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1; transform: none; }
@@ -477,109 +546,353 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 <body>
   <div id="header-root"></div>
 
-  <div class="container text-center" style="min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;max-width:560px;">
-    <span style="font-size:3.5rem;" id="gracias-icon">🎉</span>
-    <h1 style="margin-top:1rem;" id="gracias-title">¡Gracias por inscribirte!</h1>
-    <p class="muted" style="margin-top:0.75rem;" id="gracias-text">
-      Recibimos tu inscripción correctamente. En breve un asesor de Formar Capacitaciones se pondrá en contacto para coordinar el inicio del curso.
-    </p>
-    <p class="muted" style="font-size:0.8rem;margin-top:0.5rem;" id="gracias-order"></p>
-    <a href="index.html" class="btn btn-primary" style="margin-top:2rem;">Volver al inicio</a>
+  <section class="hero" style="min-height:auto;">
+    <div class="hero-noise"></div>
+    <div class="container" style="padding-top:4rem;padding-bottom:3.5rem;min-height:auto;grid-template-columns:1fr;text-align:center;">
+      <div style="max-width:680px;margin:0 auto;">
+        <span class="hero-badge"><span class="dot"></span>Nuestro equipo</span>
+        <h1>Las personas que hacen posible tu formación</h1>
+        <p class="lead" style="margin:0 auto;">
+          Detrás de cada curso hay un equipo con años de experiencia en
+          educación, comprometido con que cumplas tu objetivo: formarte y
+          conseguir un mejor trabajo. Escribile directo por WhatsApp a
+          quien prefieras.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="wave-divider">
+    <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#ffffff" d="M0,32 C240,64 480,0 720,16 C960,32 1200,64 1440,32 L1440,70 L0,70 Z" />
+    </svg>
   </div>
+
+  <section class="section" style="padding-top:1.5rem;">
+    <div class="container">
+      <div class="team-grid" id="team-grid-large"></div>
+    </div>
+  </section>
+
+  <section class="section contact">
+    <div class="container">
+      <h2 class="reveal">¿Listo para empezar?</h2>
+      <p class="reveal">Descubrí el curso ideal para tu futuro laboral.</p>
+      <a href="cursos.html" class="btn contact-btn reveal">Ver todos los cursos</a>
+    </div>
+  </section>
 
   <div id="footer-root"></div>
 
   <script type="module">
-    function renderHeader() {
-      const el = document.getElementById("header-root");
-      if (!el) return;
-    
-      el.innerHTML = `
-        <header class="site-header">
-          <div class="container">
-            <a href="index.html" class="brand">
-              <span class="brand-logo">FC</span>
-              <span class="brand-name">Formar<br class="mobile-only" /> Capacitaciones</span>
-            </a>
-            <nav class="main-nav" id="main-nav">
-              <a href="index.html#cursos">Cursos</a>
-              <a href="index.html#ventajas">Por qué elegirnos</a>
-              <a href="index.html#contacto">Contacto</a>
-            </nav>
-            <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <path d="M4 7h16M4 12h16M4 17h16" />
-              </svg>
-            </button>
-            <a href="https://instagram.com/formar.capacitaciones" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm header-cta">
-              Consultar ahora
-            </a>
-          </div>
-        </header>
-      `;
-    
-      const toggle = document.getElementById("nav-toggle");
-      const nav = document.getElementById("main-nav");
-    
-      toggle?.addEventListener("click", () => {
-        const isOpen = nav.classList.toggle("mobile-open");
-        toggle.setAttribute("aria-expanded", String(isOpen));
-        nav.style.display = isOpen ? "flex" : "";
-        nav.style.flexDirection = isOpen ? "column" : "";
-        nav.style.position = isOpen ? "absolute" : "";
-        nav.style.top = isOpen ? "100%" : "";
-        nav.style.left = "0";
-        nav.style.right = "0";
-        nav.style.background = isOpen ? "#ffffff" : "";
-        nav.style.padding = isOpen ? "1.25rem 1.5rem" : "";
-        nav.style.boxShadow = isOpen ? "0 16px 30px -16px rgba(16,46,58,0.3)" : "";
-        nav.style.gap = isOpen ? "1rem" : "";
+// ==============================================================
+// FORMAR CAPACITACIONES — Cliente de Supabase
+// ==============================================================
+// Se importa el SDK de Supabase desde CDN como módulo ES.
+// Reemplazá SUPABASE_URL y SUPABASE_ANON_KEY por los datos de TU
+// proyecto (Project Settings → API en el panel de Supabase).
+
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = "https://vwgwjhbkchzcawfohimu.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_okikSztE3beBxMI6rpTgXg_s3h5tmh_";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+  },
+});
+
+/**
+ * Número de WhatsApp del negocio (solo dígitos, con código de país,
+ * SIN "+" ni espacios). Ej: Argentina +54 9 387 654-3210 → "5493876543210".
+ * ⚠️ REEMPLAZAR por el número real: se usa en TODOS los botones de
+ * "Consultar por WhatsApp" del sitio (cursos, equipo, contacto).
+ */
+const WHATSAPP_NUMBER = "5493870000000";
+
+/** Logo por defecto (se puede sobreescribir desde site_content.logo_url en el admin) */
+const DEFAULT_LOGO_URL = "https://i.ibb.co/LDXsp8FF/Formar-posts.png";
+
+function formatARS(value) {
+  return new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    maximumFractionDigits: 0,
+  }).format(value || 0);
+}
+
+function slugify(text) {
+  return text
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str ?? "";
+  return div.innerHTML;
+}
+
+/**
+ * Genera un link de WhatsApp (wa.me) con mensaje pre-cargado.
+ * number: solo dígitos con código de país (ej: "5493876543210")
+ */
+function whatsappLink(number, message) {
+  const cleanNumber = (number || "").replace(/\D/g, "");
+  const text = encodeURIComponent(message || "Hola, quiero más información");
+  return `https://wa.me/${cleanNumber}?text=${text}`;
+}
+
+function renderHeader() {
+  const el = document.getElementById("header-root");
+  if (!el) return;
+
+  el.innerHTML = `
+    <header class="site-header">
+      <div class="container">
+        <a href="index.html" class="brand">
+          <img src="https://i.ibb.co/LDXsp8FF/Formar-posts.png" alt="Formar Capacitaciones" class="js-logo-img" style="width:36px;height:36px;object-fit:contain;border-radius:8px;" />
+          <span class="brand-name">Formar<br class="mobile-only" /> Capacitaciones</span>
+        </a>
+        <nav class="main-nav" id="main-nav">
+          <a href="cursos.html">Cursos</a>
+          <a href="index.html#equipo">Equipo</a>
+          <a href="index.html#ventajas">Por qué elegirnos</a>
+          <a href="index.html#contacto">Contacto</a>
+          <a href="admin.html" style="opacity:0.55;font-size:0.8rem;">Admin</a>
+        </nav>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        </button>
+        <a href="https://instagram.com/formar.capacitaciones" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm header-cta">
+          Consultar ahora
+        </a>
+      </div>
+    </header>
+  `;
+
+  const toggle = document.getElementById("nav-toggle");
+  const nav = document.getElementById("main-nav");
+
+  toggle?.addEventListener("click", () => {
+    const isOpen = nav.classList.toggle("mobile-open");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    nav.style.display = isOpen ? "flex" : "";
+    nav.style.flexDirection = isOpen ? "column" : "";
+    nav.style.position = isOpen ? "absolute" : "";
+    nav.style.top = isOpen ? "100%" : "";
+    nav.style.left = "0";
+    nav.style.right = "0";
+    nav.style.background = isOpen ? "#ffffff" : "";
+    nav.style.padding = isOpen ? "1.25rem 1.5rem" : "";
+    nav.style.boxShadow = isOpen ? "0 16px 30px -16px rgba(16,46,58,0.3)" : "";
+    nav.style.gap = isOpen ? "1rem" : "";
+  });
+
+  nav?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("mobile-open");
+      nav.removeAttribute("style");
+      toggle?.setAttribute("aria-expanded", "false");
+    });
+  });
+}
+
+function renderFooter(footerText) {
+  const el = document.getElementById("footer-root");
+  if (!el) return;
+
+  el.innerHTML = `
+    <footer class="site-footer">
+      <div class="container">
+        <p><strong>Formar Capacitaciones</strong></p>
+        <p style="margin-top:0.5rem;" id="footer-text">${footerText || "Cursos y capacitaciones con validez nacional e internacional en Salta, Córdoba y toda Argentina."}</p>
+        <p style="margin-top:1rem;">© <span id="footer-year"></span> Formar Capacitaciones. Todos los derechos reservados. ·
+          <a href="admin.html">Acceso administrador</a>
+        </p>
+      </div>
+    </footer>
+  `;
+  document.getElementById("footer-year").textContent = new Date().getFullYear();
+}
+
+// ==============================================================
+// FORMAR CAPACITACIONES — Animaciones (scroll reveal, header, contadores)
+// ==============================================================
+
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/**
+ * Revela con fade-up + delay escalonado los elementos con clase .reveal
+ * a medida que entran en el viewport.
+ */
+function initScrollReveal() {
+  const items = document.querySelectorAll(".reveal");
+  if (items.length === 0) return;
+
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    items.forEach((el) => el.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
       });
-    
-      nav?.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          nav.classList.remove("mobile-open");
-          nav.removeAttribute("style");
-          toggle?.setAttribute("aria-expanded", "false");
-        });
+    },
+    { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
+  );
+
+  items.forEach((el) => observer.observe(el));
+}
+
+/**
+ * Agrega la clase "scrolled" al header cuando el usuario baja la página,
+ * para intensificar el fondo y la sombra (mejora de legibilidad).
+ */
+function initHeaderScroll() {
+  const header = document.querySelector(".site-header");
+  if (!header) return;
+
+  function update() {
+    header.classList.toggle("scrolled", window.scrollY > 12);
+  }
+  update();
+  window.addEventListener("scroll", update, { passive: true });
+}
+
+/**
+ * Anima números (ej: "+8", "100%") contando desde 0 hasta el valor final
+ * cuando el elemento entra en pantalla. Requiere data-count-to="8" y
+ * opcionalmente data-suffix="%".
+ */
+function initCounters() {
+  const counters = document.querySelectorAll("[data-count-to]");
+  if (counters.length === 0) return;
+
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    counters.forEach((el) => {
+      const to = Number(el.getAttribute("data-count-to"));
+      const suffix = el.getAttribute("data-suffix") || "";
+      el.textContent = `${to}${suffix}`;
+    });
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const to = Number(el.getAttribute("data-count-to"));
+        const suffix = el.getAttribute("data-suffix") || "";
+        const duration = 1200;
+        const start = performance.now();
+
+        function tick(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
+          el.textContent = `${Math.round(to * eased)}${suffix}`;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        observer.unobserve(el);
       });
-    }
-    
-    function renderFooter() {
-      const el = document.getElementById("footer-root");
-      if (!el) return;
-    
-      el.innerHTML = `
-        <footer class="site-footer">
-          <div class="container">
-            <p><strong>Formar Capacitaciones</strong></p>
-            <p style="margin-top:0.5rem;">Cursos y capacitaciones con validez nacional e internacional en Salta, Córdoba y toda Argentina.</p>
-            <p style="margin-top:1rem;">© <span id="footer-year"></span> Formar Capacitaciones. Todos los derechos reservados. ·
-              <a href="admin.html">Acceso administrador</a>
-            </p>
-          </div>
-        </footer>
-      `;
-      document.getElementById("footer-year").textContent = new Date().getFullYear();
-    }
+    },
+    { threshold: 0.6 }
+  );
+
+  counters.forEach((el) => observer.observe(el));
+}
+
+/**
+ * Efecto parallax sutil en los blobs del hero al mover el mouse
+ * (solo desktop, respeta prefers-reduced-motion).
+ */
+function initHeroParallax() {
+  if (prefersReducedMotion) return;
+  const hero = document.querySelector(".hero");
+  const blobs = document.querySelectorAll(".hero-blob");
+  if (!hero || blobs.length === 0 || window.matchMedia("(max-width: 860px)").matches) return;
+
+  hero.addEventListener("mousemove", (e) => {
+    const { innerWidth, innerHeight } = window;
+    const x = (e.clientX / innerWidth - 0.5) * 2;
+    const y = (e.clientY / innerHeight - 0.5) * 2;
+
+    blobs.forEach((blob, i) => {
+      const strength = (i + 1) * 10;
+      blob.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+    });
+  });
+}
+
+function initAllAnimations() {
+  initScrollReveal();
+  initHeaderScroll();
+  initCounters();
+  initHeroParallax();
+}
+
+    const WHATSAPP_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2Zm5.8 14.07c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.3-1.64-.6-2.88-1.24-4.76-4.15-4.9-4.34-.14-.19-1.17-1.56-1.17-2.98 0-1.42.74-2.11 1.01-2.4.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.58.81 2 .88 2.15.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.61-.07.16-.19.7-.81.88-1.09.19-.28.37-.23.62-.14.26.09 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.36Z"/></svg>`;
 
     renderHeader();
     renderFooter();
+    initAllAnimations();
 
-    const params = new URLSearchParams(window.location.search);
-    const order = params.get("order");
-    const status = params.get("status");
+    async function loadTeam() {
+      const grid = document.getElementById("team-grid-large");
+      try {
+        const { data, error } = await supabase
+          .from("team_members")
+          .select("*")
+          .eq("active", true)
+          .order("display_order", { ascending: true });
+        if (error) throw error;
 
-    if (status === "pending") {
-      document.getElementById("gracias-icon").textContent = "⏳";
-      document.getElementById("gracias-title").textContent = "Tu pago está en proceso";
-      document.getElementById("gracias-text").textContent =
-        "Estamos confirmando tu pago. Te avisaremos por email en cuanto se acredite.";
+        if (!data || data.length === 0) {
+          grid.innerHTML = `<p class="muted text-center" style="grid-column:1/-1;">Todavía no cargaste miembros del equipo. Agregalos desde el panel de administración.</p>`;
+          return;
+        }
+
+        grid.innerHTML = data
+          .map(
+            (m) => `
+          <div class="team-card team-card-large reveal">
+            <div class="team-card-photo">
+              ${m.photo_url ? `<img src="${escapeHtml(m.photo_url)}" alt="${escapeHtml(m.name)}" loading="lazy" />` : ""}
+            </div>
+            <div class="team-card-plaque">
+              <h3>${escapeHtml(m.name)}</h3>
+              <p>${escapeHtml(m.role)}</p>
+              <a class="btn btn-whatsapp" href="${whatsappLink(m.whatsapp_number || WHATSAPP_NUMBER, m.whatsapp_message)}" target="_blank" rel="noopener noreferrer">
+                ${WHATSAPP_ICON} Contactar por WhatsApp
+              </a>
+            </div>
+          </div>`
+          )
+          .join("");
+        initScrollReveal();
+      } catch (err) {
+        grid.innerHTML = `<p class="muted text-center" style="grid-column:1/-1;">No se pudo cargar el equipo. Revisá la conexión con Supabase.</p>`;
+        console.warn(err.message || err);
+      }
     }
 
-    if (order) {
-      document.getElementById("gracias-order").textContent = `N° de orden: ${order}`;
-    }
+    loadTeam();
   </script>
 </body>
 </html>
