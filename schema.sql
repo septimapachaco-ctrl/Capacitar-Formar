@@ -287,4 +287,102 @@ values
   true,
   true,
   (select id from public.categories where slug = 'docencia-y-educacion')
+);
+
+-- ============================================================
+-- 9. TABLA: team_members (equipo / profesionales)
+-- ============================================================
+create table if not exists public.team_members (
+  id             uuid primary key default gen_random_uuid(),
+  name           text not null,
+  profession     text not null,
+  photo_url      text,
+  whatsapp       text, -- opcional: si está vacío, se usa site_settings.whatsapp_number
+  bio            text,
+  display_order  integer not null default 0,
+  active         boolean not null default true,
+  created_at     timestamptz not null default now(),
+  updated_at     timestamptz not null default now()
+);
+
+create index if not exists team_members_active_idx on public.team_members (active);
+create index if not exists team_members_order_idx on public.team_members (display_order);
+
+drop trigger if exists trg_team_members_updated_at on public.team_members;
+create trigger trg_team_members_updated_at
+  before update on public.team_members
+  for each row execute function public.set_updated_at();
+
+alter table public.team_members enable row level security;
+
+drop policy if exists "public_read_team_members" on public.team_members;
+create policy "public_read_team_members"
+  on public.team_members for select
+  using (active = true);
+
+drop policy if exists "admin_all_team_members" on public.team_members;
+create policy "admin_all_team_members"
+  on public.team_members for all
+  using (auth.role() = 'authenticated')
+  with check (auth.role() = 'authenticated');
+
+-- ============================================================
+-- 10. TABLA: site_settings (fila única de configuración editable)
+-- ============================================================
+create table if not exists public.site_settings (
+  id                smallint primary key default 1 check (id = 1),
+  logo_url          text,
+  whatsapp_number   text default '', -- formato E.164 sin '+', ej: 5493876000000
+  hero_title        text not null default 'FORMAR',
+  hero_subtitle     text not null default 'Cursos · Capacitaciones',
+  show_prices       boolean not null default true,
+  price_placeholder text not null default '$0000',
+  splash_enabled    boolean not null default true,
+  updated_at        timestamptz not null default now()
+);
+
+drop trigger if exists trg_site_settings_updated_at on public.site_settings;
+create trigger trg_site_settings_updated_at
+  before update on public.site_settings
+  for each row execute function public.set_updated_at();
+
+alter table public.site_settings enable row level security;
+
+drop policy if exists "public_read_site_settings" on public.site_settings;
+create policy "public_read_site_settings"
+  on public.site_settings for select
+  using (true);
+
+drop policy if exists "admin_update_site_settings" on public.site_settings;
+create policy "admin_update_site_settings"
+  on public.site_settings for update
+  using (auth.role() = 'authenticated')
+  with check (auth.role() = 'authenticated');
+
+drop policy if exists "admin_insert_site_settings" on public.site_settings;
+create policy "admin_insert_site_settings"
+  on public.site_settings for insert
+  with check (auth.role() = 'authenticated');
+
+-- ============================================================
+-- 11. SEED: configuración del sitio y equipo
+-- ============================================================
+insert into public.site_settings (id, logo_url, whatsapp_number, hero_title, hero_subtitle, show_prices, price_placeholder, splash_enabled)
+values (
+  1,
+  'https://i.ibb.co/LDXsp8FF/Formar-posts.png',
+  '',
+  'FORMAR',
+  'Cursos · Capacitaciones',
+  true,
+  '$0000',
+  true
 )
+on conflict (id) do nothing;
+
+insert into public.team_members (name, profession, photo_url, display_order, active) values
+  ('Lic. Tania Simkin', 'Directora', 'https://i.ibb.co/DHVQFYWR/Lic-Tania-Simkin-Directora.jpg', 1, true),
+  ('Cra. Sol Camila Montenegro Trogliero', 'Vicedirectora', 'https://i.ibb.co/gLMMKntm/Contadora-Sol-Camila-Montenegro-Trogliero-Vivedirectora.jpg', 2, true),
+  ('Lic. Dalia Korman', 'Coordinadora', 'https://i.ibb.co/k29Dpdhb/Lic-Dalia-Korman-Coordinadora.jpg', 3, true),
+  ('Lic. Damián Simkin', 'Recursos Humanos', 'https://i.ibb.co/kgzZZQ04/Lic-Dami-n-Simkin-RRHH.jpg', 4, true)
+on conflict do nothing;
