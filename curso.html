@@ -476,6 +476,74 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 .hidden { display: none !important; }
 .text-center { text-align: center; }
 
+/* ---------- Splash screen ---------- */
+.splash-screen {
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--gradient-brand-diagonal);
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.splash-screen img { width: 120px; height: 120px; object-fit: contain; animation: splashPulse 1.4s ease-in-out infinite; border-radius: var(--radius-lg); background: rgba(255,255,255,0.08); padding: 0.5rem; }
+.splash-screen span { color: rgba(255,255,255,0.75); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.splash-screen.splash-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+@keyframes splashPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.85; } }
+
+/* ---------- Lockup de marca en el hero ---------- */
+.hero-brand-lockup { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.5rem; }
+.hero-brand-lockup img { width: 56px; height: 56px; object-fit: contain; border-radius: var(--radius-md); background: rgba(255,255,255,0.12); padding: 0.4rem; flex-shrink: 0; }
+.hero-brand-lockup .brand-text-big { font-family: var(--font-display); font-weight: 800; font-size: 2rem; color: var(--color-white); line-height: 1; letter-spacing: 0.02em; }
+.hero-brand-lockup .brand-text-small { display: block; font-size: 0.8rem; color: rgba(255,255,255,0.75); font-weight: 600; letter-spacing: 0.04em; margin-top: 0.2rem; }
+
+/* ---------- Botón de WhatsApp ---------- */
+.btn-whatsapp { background: #25d366; color: #ffffff; box-shadow: 0 10px 24px -8px rgba(37, 211, 102, 0.55); }
+.btn-whatsapp:hover { background: #1ebd5a; }
+.btn-whatsapp svg { flex-shrink: 0; }
+
+/* ---------- Sección Equipo ---------- */
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; }
+@media (max-width: 960px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .team-grid { grid-template-columns: 1fr; } }
+
+.team-card {
+  background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--shadow-card); text-align: center;
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+}
+.team-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); }
+.team-card-photo { height: 220px; background: var(--color-bg-soft); overflow: hidden; }
+.team-card-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-smooth); }
+.team-card:hover .team-card-photo img { transform: scale(1.06); }
+.team-card-plaque { padding: 1.1rem 1rem; }
+.team-card-plaque h3 { font-size: 1rem; margin-bottom: 0.15rem; }
+.team-card-plaque p { font-size: 0.82rem; color: var(--color-turquoise); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.9rem; }
+.team-card-plaque .btn { width: 100%; }
+
+/* Variante grande para gracias.html (equipo en primer plano) */
+.team-card.team-card-large .team-card-photo { height: 300px; }
+.team-card.team-card-large .team-card-plaque h3 { font-size: 1.2rem; }
+
+/* ---------- Precio oculto ---------- */
+.price-placeholder { letter-spacing: 0.05em; opacity: 0.85; }
+
+/* ---------- Tarjeta expandida (cursos.html) ---------- */
+.course-card-wide {
+  display: grid; grid-template-columns: 280px 1fr; gap: 0;
+  background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--shadow-card);
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+}
+.course-card-wide:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); }
+@media (max-width: 760px) { .course-card-wide { grid-template-columns: 1fr; } }
+
+.course-card-wide-media { position: relative; min-height: 220px; background: var(--color-bg-soft); overflow: hidden; }
+.course-card-wide-media img { width: 100%; height: 100%; object-fit: cover; }
+
+.course-card-wide-body { padding: 1.75rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.course-card-wide-body .desc-full { color: var(--color-text-muted); font-size: 0.92rem; }
+.course-card-wide-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.3rem; }
+.course-card-wide-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-top: auto; padding-top: 0.75rem; }
+.course-card-wide-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1; transform: none; }
@@ -501,7 +569,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
   </div>
 
   <div id="footer-root"></div>
-  <div id="cart-root"></div>
 
   <script type="module">
 // ==============================================================
@@ -514,7 +581,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://vwgwjhbkchzcawfohimu.supabase.co";
-const SUPABASE_ANON_KEY = "PEGÁ_ACÁ_TU_ANON_KEY"; // ← ver README, paso 2
+const SUPABASE_ANON_KEY = "sb_publishable_okikSztE3beBxMI6rpTgXg_s3h5tmh_";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
@@ -524,12 +591,15 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 });
 
 /**
- * URL del backend que crea la preferencia de pago en Mercado Pago.
- * Ver carpeta /server para el código de este endpoint.
- * En producción, reemplazalo por la URL donde despliegues el server
- * (ej: https://api.formarcapacitaciones.com.ar/checkout).
+ * Número de WhatsApp del negocio (solo dígitos, con código de país,
+ * SIN "+" ni espacios). Ej: Argentina +54 9 387 654-3210 → "5493876543210".
+ * ⚠️ REEMPLAZAR por el número real: se usa en TODOS los botones de
+ * "Consultar por WhatsApp" del sitio (cursos, equipo, contacto).
  */
-const CHECKOUT_API_URL = "http://localhost:4000/api/checkout";
+const WHATSAPP_NUMBER = "5493870000000";
+
+/** Logo por defecto (se puede sobreescribir desde site_content.logo_url en el admin) */
+const DEFAULT_LOGO_URL = "https://i.ibb.co/LDXsp8FF/Formar-posts.png";
 
 function formatARS(value) {
   return new Intl.NumberFormat("es-AR", {
@@ -556,6 +626,16 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+/**
+ * Genera un link de WhatsApp (wa.me) con mensaje pre-cargado.
+ * number: solo dígitos con código de país (ej: "5493876543210")
+ */
+function whatsappLink(number, message) {
+  const cleanNumber = (number || "").replace(/\D/g, "");
+  const text = encodeURIComponent(message || "Hola, quiero más información");
+  return `https://wa.me/${cleanNumber}?text=${text}`;
+}
+
 function renderHeader() {
   const el = document.getElementById("header-root");
   if (!el) return;
@@ -564,13 +644,15 @@ function renderHeader() {
     <header class="site-header">
       <div class="container">
         <a href="index.html" class="brand">
-          <span class="brand-logo">FC</span>
+          <img src="https://i.ibb.co/LDXsp8FF/Formar-posts.png" alt="Formar Capacitaciones" class="js-logo-img" style="width:36px;height:36px;object-fit:contain;border-radius:8px;" />
           <span class="brand-name">Formar<br class="mobile-only" /> Capacitaciones</span>
         </a>
         <nav class="main-nav" id="main-nav">
-          <a href="index.html#cursos">Cursos</a>
+          <a href="cursos.html">Cursos</a>
+          <a href="index.html#equipo">Equipo</a>
           <a href="index.html#ventajas">Por qué elegirnos</a>
           <a href="index.html#contacto">Contacto</a>
+          <a href="admin.html" style="opacity:0.55;font-size:0.8rem;">Admin</a>
         </nav>
         <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -611,7 +693,7 @@ function renderHeader() {
   });
 }
 
-function renderFooter() {
+function renderFooter(footerText) {
   const el = document.getElementById("footer-root");
   if (!el) return;
 
@@ -619,7 +701,7 @@ function renderFooter() {
     <footer class="site-footer">
       <div class="container">
         <p><strong>Formar Capacitaciones</strong></p>
-        <p style="margin-top:0.5rem;">Cursos y capacitaciones con validez nacional e internacional en Salta, Córdoba y toda Argentina.</p>
+        <p style="margin-top:0.5rem;" id="footer-text">${footerText || "Cursos y capacitaciones con validez nacional e internacional en Salta, Córdoba y toda Argentina."}</p>
         <p style="margin-top:1rem;">© <span id="footer-year"></span> Formar Capacitaciones. Todos los derechos reservados. ·
           <a href="admin.html">Acceso administrador</a>
         </p>
@@ -627,268 +709,6 @@ function renderFooter() {
     </footer>
   `;
   document.getElementById("footer-year").textContent = new Date().getFullYear();
-}
-
-// ==============================================================
-// FORMAR CAPACITACIONES — Carrito de compras
-// ==============================================================
-// Carrito basado en localStorage, sin dependencias externas.
-// Se usa en todas las páginas que incluyan <div id="cart-root">.
-
-
-const STORAGE_KEY = "fc_cart";
-
-function readCart() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeCart(items) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  renderCart();
-  updateCartCount();
-}
-
-/**
- * Agrega un curso al carrito (o suma 1 si ya estaba agregado).
- * course = { id, slug, title, price, image_url, modality }
- */
-function addToCart(course) {
-  const items = readCart();
-  const existing = items.find((i) => i.courseId === course.id);
-  if (existing) {
-    existing.quantity += 1;
-  } else {
-    items.push({
-      courseId: course.id,
-      slug: course.slug,
-      title: course.title,
-      price: course.price,
-      image_url: course.image_url,
-      modality: course.modality,
-      quantity: 1,
-    });
-  }
-  writeCart(items);
-  openCart();
-}
-
-function removeFromCart(courseId) {
-  writeCart(readCart().filter((i) => i.courseId !== courseId));
-}
-
-function changeQuantity(courseId, delta) {
-  const items = readCart()
-    .map((i) => (i.courseId === courseId ? { ...i, quantity: i.quantity + delta } : i))
-    .filter((i) => i.quantity > 0);
-  writeCart(items);
-}
-
-function clearCart() {
-  writeCart([]);
-}
-
-function getCartTotal() {
-  return readCart().reduce((sum, i) => sum + i.price * i.quantity, 0);
-}
-
-function getCartCount() {
-  return readCart().reduce((sum, i) => sum + i.quantity, 0);
-}
-
-/* ---------------------------------------------------------------
-   UI: inyecta el botón flotante + panel del carrito en el DOM
-   --------------------------------------------------------------- */
-
-function initCartUI() {
-  const root = document.getElementById("cart-root");
-  if (!root) return;
-
-  root.innerHTML = `
-    <button class="cart-fab" id="cart-fab" aria-label="Abrir carrito de compras">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="26" height="26">
-        <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
-        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-      </svg>
-      <span class="cart-count hidden" id="cart-count">0</span>
-    </button>
-
-    <div class="cart-overlay" id="cart-overlay"></div>
-
-    <aside class="cart-panel" id="cart-panel" aria-hidden="true">
-      <div class="cart-header">
-        <h2>Tu carrito</h2>
-        <button class="cart-close" id="cart-close" aria-label="Cerrar carrito">✕</button>
-      </div>
-      <div class="cart-items" id="cart-items"></div>
-      <div class="cart-footer hidden" id="cart-footer">
-        <div class="cart-total-row">
-          <span>Total</span>
-          <span id="cart-total">$0</span>
-        </div>
-        <div class="form-field">
-          <input type="text" id="checkout-name" placeholder="Nombre y apellido" />
-        </div>
-        <div class="form-field">
-          <input type="email" id="checkout-email" placeholder="Tu email *" required />
-        </div>
-        <div class="form-field">
-          <input type="tel" id="checkout-phone" placeholder="WhatsApp / Teléfono" />
-        </div>
-        <p class="form-error hidden" id="checkout-error"></p>
-        <button class="btn btn-primary btn-block" id="checkout-btn">Pagar con Mercado Pago</button>
-        <p class="hint">Pago 100% seguro procesado por Mercado Pago.</p>
-      </div>
-    </div>
-    </aside>
-  `;
-
-  document.getElementById("cart-fab").addEventListener("click", toggleCart);
-  document.getElementById("cart-close").addEventListener("click", closeCart);
-  document.getElementById("cart-overlay").addEventListener("click", closeCart);
-  document.getElementById("checkout-btn").addEventListener("click", handleCheckout);
-
-  renderCart();
-  updateCartCount();
-}
-
-function openCart() {
-  document.getElementById("cart-panel")?.classList.add("open");
-  document.getElementById("cart-overlay")?.classList.add("open");
-}
-
-function closeCart() {
-  document.getElementById("cart-panel")?.classList.remove("open");
-  document.getElementById("cart-overlay")?.classList.remove("open");
-}
-
-function toggleCart() {
-  const panel = document.getElementById("cart-panel");
-  if (panel?.classList.contains("open")) {
-    closeCart();
-  } else {
-    openCart();
-  }
-}
-
-function updateCartCount() {
-  const el = document.getElementById("cart-count");
-  if (!el) return;
-  const count = getCartCount();
-  el.textContent = String(count);
-  el.classList.toggle("hidden", count === 0);
-}
-
-function renderCart() {
-  const itemsEl = document.getElementById("cart-items");
-  const footerEl = document.getElementById("cart-footer");
-  if (!itemsEl) return;
-
-  const items = readCart();
-
-  if (items.length === 0) {
-    itemsEl.innerHTML = `
-      <div class="cart-empty">
-        <p>Todavía no agregaste cursos.</p>
-        <p style="font-size:0.85rem;margin-top:0.4rem;">Elegí un curso y sumalo al carrito para inscribirte.</p>
-      </div>`;
-    footerEl?.classList.add("hidden");
-    return;
-  }
-
-  footerEl?.classList.remove("hidden");
-
-  itemsEl.innerHTML = items
-    .map(
-      (item) => `
-      <div class="cart-item" data-id="${item.courseId}">
-        <img src="${escapeHtml(item.image_url || "")}" alt="${escapeHtml(item.title)}" />
-        <div class="cart-item-info">
-          <h4>${escapeHtml(item.title)}</h4>
-          <p class="modality">${escapeHtml(item.modality)}</p>
-          <div class="qty-row">
-            <div class="qty-controls">
-              <button class="qty-btn" data-action="decrement" data-id="${item.courseId}" aria-label="Restar cantidad">−</button>
-              <span>${item.quantity}</span>
-              <button class="qty-btn" data-action="increment" data-id="${item.courseId}" aria-label="Sumar cantidad">+</button>
-            </div>
-            <strong>${formatARS(item.price * item.quantity)}</strong>
-          </div>
-        </div>
-        <button class="cart-item-remove" data-action="remove" data-id="${item.courseId}" aria-label="Quitar">✕</button>
-      </div>
-    `
-    )
-    .join("");
-
-  document.getElementById("cart-total").textContent = formatARS(getCartTotal());
-
-  itemsEl.querySelectorAll("[data-action]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-id");
-      const action = btn.getAttribute("data-action");
-      if (action === "increment") changeQuantity(id, 1);
-      if (action === "decrement") changeQuantity(id, -1);
-      if (action === "remove") removeFromCart(id);
-    });
-  });
-}
-
-async function handleCheckout() {
-  const errorEl = document.getElementById("checkout-error");
-  const btn = document.getElementById("checkout-btn");
-  errorEl.classList.add("hidden");
-
-  const email = document.getElementById("checkout-email").value.trim();
-  const name = document.getElementById("checkout-name").value.trim();
-  const phone = document.getElementById("checkout-phone").value.trim();
-  const items = readCart();
-
-  if (!email) {
-    errorEl.textContent = "Ingresá tu email para continuar con la inscripción.";
-    errorEl.classList.remove("hidden");
-    return;
-  }
-  if (items.length === 0) {
-    errorEl.textContent = "Tu carrito está vacío.";
-    errorEl.classList.remove("hidden");
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = "Procesando...";
-
-  try {
-    const res = await fetch(CHECKOUT_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        student_email: email,
-        student_name: name,
-        student_phone: phone,
-        items,
-        total: getCartTotal(),
-      }),
-    });
-
-    const data = await res.json();
-    if (!res.ok || !data.init_point) {
-      throw new Error(data.error || "No se pudo iniciar el pago.");
-    }
-
-    window.location.href = data.init_point;
-  } catch (err) {
-    errorEl.textContent =
-      err.message || "Ocurrió un error al procesar la compra. Intentá nuevamente.";
-    errorEl.classList.remove("hidden");
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "Pagar con Mercado Pago";
-  }
 }
 
 // ==============================================================
@@ -1014,12 +834,20 @@ function initAllAnimations() {
 }
 
 const CHECK_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>`;
+const WHATSAPP_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2Zm5.8 14.07c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.3-1.64-.6-2.88-1.24-4.76-4.15-4.9-4.34-.14-.19-1.17-1.56-1.17-2.98 0-1.42.74-2.11 1.01-2.4.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.58.81 2 .88 2.15.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.61-.07.16-.19.7-.81.88-1.09.19-.28.37-.23.62-.14.26.09 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.36Z"/></svg>`;
 
 const SITE_URL = "https://formarcapacitaciones.com.ar";
+let showPrices = false;
 
 function getSlugFromUrl() {
   const params = new URLSearchParams(window.location.search);
   return params.get("slug");
+}
+
+async function fetchSiteContent() {
+  const { data, error } = await supabase.from("site_content").select("data").eq("id", 1).single();
+  if (error) throw error;
+  return data?.data || {};
 }
 
 async function fetchCourse(slug) {
@@ -1043,6 +871,11 @@ async function fetchRelated(categoryId, currentId) {
     .neq("id", currentId)
     .limit(3);
   return data ?? [];
+}
+
+function priceDisplay(course) {
+  if (!showPrices) return `<span class="price-placeholder">$0000</span>`;
+  return course.price > 0 ? formatARS(course.price) : "Consultar";
 }
 
 function applySEO(course) {
@@ -1074,16 +907,6 @@ function applySEO(course) {
       sameAs: "https://instagram.com/formar.capacitaciones",
       url: SITE_URL,
     },
-    ...(course.price > 0 && {
-      offers: {
-        "@type": "Offer",
-        price: course.price,
-        priceCurrency: "ARS",
-        category: "Paid",
-        availability: "https://schema.org/InStock",
-        url,
-      },
-    }),
     hasCourseInstance: {
       "@type": "CourseInstance",
       courseMode: course.modality,
@@ -1098,6 +921,7 @@ function applySEO(course) {
 
 function renderCourse(course, related) {
   const wrap = document.getElementById("course-content");
+  const message = `Hola, quiero más información sobre el curso "${course.title}"`;
 
   wrap.innerHTML = `
     <article class="container course-detail">
@@ -1150,10 +974,12 @@ function renderCourse(course, related) {
 
       <aside class="sidebar-card">
         <span class="label">Inversión</span>
-        <p class="price">${course.price > 0 ? formatARS(course.price) : "Consultar"}</p>
+        <p class="price">${priceDisplay(course)}</p>
         <p class="modality-line">Modalidad: <strong>${escapeHtml(course.modality)}</strong></p>
 
-        <button class="btn btn-primary btn-block" id="add-to-cart-btn">Inscribirme / Agregar al carrito</button>
+        <a href="${whatsappLink(WHATSAPP_NUMBER, message)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-block">
+          ${WHATSAPP_ICON} Consultar por WhatsApp
+        </a>
         <a href="https://instagram.com/formar.capacitaciones" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
           Consultar por Instagram
         </a>
@@ -1166,22 +992,19 @@ function renderCourse(course, related) {
       </aside>
     </article>
   `;
-
-  const btn = document.getElementById("add-to-cart-btn");
-  btn.addEventListener("click", () => {
-    addToCart(course);
-    btn.textContent = "¡Agregado al carrito! ✓";
-    setTimeout(() => {
-      btn.textContent = "Inscribirme / Agregar al carrito";
-    }, 2000);
-  });
 }
 
 async function init() {
   renderHeader();
   renderFooter();
-  initCartUI();
   initAllAnimations();
+
+  try {
+    const content = await fetchSiteContent();
+    showPrices = !!content.show_prices;
+  } catch (err) {
+    console.warn("No se pudo cargar site_content:", err.message || err);
+  }
 
   const slug = getSlugFromUrl();
   const course = slug ? await fetchCourse(slug) : null;
