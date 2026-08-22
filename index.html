@@ -15,6 +15,7 @@
   <meta property="og:description" content="Cursos y capacitaciones presenciales y online en Salta, Córdoba y toda Argentina. Certificación con validez nacional e internacional." />
   <meta name="twitter:card" content="summary_large_image" />
 
+  <link rel="icon" type="image/png" href="https://i.ibb.co/LDXsp8FF/Formar-posts.png" class="js-logo-img" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -479,6 +480,74 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 .hidden { display: none !important; }
 .text-center { text-align: center; }
 
+/* ---------- Splash screen ---------- */
+.splash-screen {
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--gradient-brand-diagonal);
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.splash-screen img { width: 120px; height: 120px; object-fit: contain; animation: splashPulse 1.4s ease-in-out infinite; border-radius: var(--radius-lg); background: rgba(255,255,255,0.08); padding: 0.5rem; }
+.splash-screen span { color: rgba(255,255,255,0.75); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.splash-screen.splash-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+@keyframes splashPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.85; } }
+
+/* ---------- Lockup de marca en el hero ---------- */
+.hero-brand-lockup { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.5rem; }
+.hero-brand-lockup img { width: 56px; height: 56px; object-fit: contain; border-radius: var(--radius-md); background: rgba(255,255,255,0.12); padding: 0.4rem; flex-shrink: 0; }
+.hero-brand-lockup .brand-text-big { font-family: var(--font-display); font-weight: 800; font-size: 2rem; color: var(--color-white); line-height: 1; letter-spacing: 0.02em; }
+.hero-brand-lockup .brand-text-small { display: block; font-size: 0.8rem; color: rgba(255,255,255,0.75); font-weight: 600; letter-spacing: 0.04em; margin-top: 0.2rem; }
+
+/* ---------- Botón de WhatsApp ---------- */
+.btn-whatsapp { background: #25d366; color: #ffffff; box-shadow: 0 10px 24px -8px rgba(37, 211, 102, 0.55); }
+.btn-whatsapp:hover { background: #1ebd5a; }
+.btn-whatsapp svg { flex-shrink: 0; }
+
+/* ---------- Sección Equipo ---------- */
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; }
+@media (max-width: 960px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .team-grid { grid-template-columns: 1fr; } }
+
+.team-card {
+  background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--shadow-card); text-align: center;
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+}
+.team-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); }
+.team-card-photo { height: 220px; background: var(--color-bg-soft); overflow: hidden; }
+.team-card-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-smooth); }
+.team-card:hover .team-card-photo img { transform: scale(1.06); }
+.team-card-plaque { padding: 1.1rem 1rem; }
+.team-card-plaque h3 { font-size: 1rem; margin-bottom: 0.15rem; }
+.team-card-plaque p { font-size: 0.82rem; color: var(--color-turquoise); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.9rem; }
+.team-card-plaque .btn { width: 100%; }
+
+/* Variante grande para gracias.html (equipo en primer plano) */
+.team-card.team-card-large .team-card-photo { height: 300px; }
+.team-card.team-card-large .team-card-plaque h3 { font-size: 1.2rem; }
+
+/* ---------- Precio oculto ---------- */
+.price-placeholder { letter-spacing: 0.05em; opacity: 0.85; }
+
+/* ---------- Tarjeta expandida (cursos.html) ---------- */
+.course-card-wide {
+  display: grid; grid-template-columns: 280px 1fr; gap: 0;
+  background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--shadow-card);
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+}
+.course-card-wide:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); }
+@media (max-width: 760px) { .course-card-wide { grid-template-columns: 1fr; } }
+
+.course-card-wide-media { position: relative; min-height: 220px; background: var(--color-bg-soft); overflow: hidden; }
+.course-card-wide-media img { width: 100%; height: 100%; object-fit: cover; }
+
+.course-card-wide-body { padding: 1.75rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.course-card-wide-body .desc-full { color: var(--color-text-muted); font-size: 0.92rem; }
+.course-card-wide-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.3rem; }
+.course-card-wide-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-top: auto; padding-top: 0.75rem; }
+.course-card-wide-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1; transform: none; }
@@ -499,13 +568,18 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
   </script>
 </head>
 <body>
+  <!-- SPLASH -->
+  <div class="splash-screen" id="splash-screen">
+    <img src="https://i.ibb.co/LDXsp8FF/Formar-posts.png" alt="Formar Capacitaciones" class="js-logo-img" />
+    <span>Formar Capacitaciones</span>
+  </div>
+
   <div id="header-root"></div>
 
   <!-- HERO -->
   <section class="hero">
     <div class="hero-noise"></div>
 
-    <!-- Blobs decorativos SVG -->
     <svg class="hero-blob b1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
       <path fill="#ffffff" d="M45.4,-58.3C58.2,-49.9,67.4,-34.9,71.6,-18.4C75.8,-1.9,75,16.1,67.1,30.4C59.2,44.7,44.2,55.3,27.9,62.1C11.6,68.9,-6,71.9,-22.4,67.7C-38.8,63.5,-53.9,52.1,-62.6,37.1C-71.3,22.1,-73.6,3.5,-69.9,-13.2C-66.2,-29.9,-56.5,-44.7,-43.3,-53.1C-30.1,-61.5,-15.1,-63.5,1.4,-65.2C17.9,-66.9,35.8,-68.3,45.4,-58.3Z" transform="translate(100 100)" />
     </svg>
@@ -515,56 +589,53 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 
     <div class="container">
       <div>
-        <span class="hero-badge"><span class="dot"></span>Salta · Córdoba · Todo el país</span>
-        <h1>Formate hoy, trabajá mañana</h1>
-        <p class="lead">
+        <div class="hero-brand-lockup">
+          <img src="https://i.ibb.co/LDXsp8FF/Formar-posts.png" alt="Logo Formar Capacitaciones" class="js-logo-img" />
+          <div>
+            <span class="brand-text-big">FORMAR</span>
+            <span class="brand-text-small">Cursos · Capacitaciones</span>
+          </div>
+        </div>
+
+        <span class="hero-badge" id="hero-badge"><span class="dot"></span><span id="hero-badge-text">Salta · Córdoba · Todo el país</span></span>
+        <h1 id="hero-title">Formate hoy, trabajá mañana</h1>
+        <p class="lead" id="hero-lead">
           Cursos y capacitaciones con certificación de validez nacional e
           internacional, pensados para estudiantes, profesionales y personas
           en búsqueda laboral en toda Argentina.
         </p>
         <div class="hero-actions">
-          <a href="#cursos" class="btn btn-primary">Ver cursos disponibles</a>
+          <a href="cursos.html" class="btn btn-primary">Ver cursos disponibles</a>
           <a href="#contacto" class="btn btn-outline-light">Hablar con un asesor</a>
         </div>
         <div class="hero-stats">
-          <div><strong><span data-count-to="8" data-suffix="+">0</span></strong><span>Cursos activos</span></div>
-          <div><strong><span data-count-to="100" data-suffix="%">0</span></strong><span>Validez nacional</span></div>
-          <div><strong><span data-count-to="2">0</span></strong><span>Modalidades</span></div>
+          <div><strong><span data-count-to="8" data-suffix="+" id="stat-1-value">0</span></strong><span id="stat-1-label">Cursos activos</span></div>
+          <div><strong><span data-count-to="100" data-suffix="%" id="stat-2-value">0</span></strong><span id="stat-2-label">Validez nacional</span></div>
+          <div><strong><span data-count-to="2" id="stat-3-value">0</span></strong><span id="stat-3-label">Modalidades</span></div>
         </div>
       </div>
 
       <div class="hero-graphic">
-        <!-- Ilustración SVG original: un "camino de formación" con nodos -->
         <svg viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg">
           <circle class="hero-orbit" cx="240" cy="240" r="190" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" stroke-dasharray="4 10" />
           <circle cx="240" cy="240" r="140" fill="rgba(255,255,255,0.07)" />
-
-          <!-- Camino curvo que conecta los "hitos" de la formación -->
           <path d="M100 340 C 150 240, 210 300, 240 220 S 330 140, 380 120" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 10" opacity="0.6" />
-
-          <!-- Nodo 1: Libro / estudio -->
           <g transform="translate(70 310)">
             <circle r="34" fill="#ffffff" />
             <path d="M-14 -8 L0 -14 L14 -8 L14 10 L0 16 L-14 10 Z" fill="none" stroke="#102e58" stroke-width="2.2" stroke-linejoin="round" />
             <line x1="0" y1="-14" x2="0" y2="16" stroke="#102e58" stroke-width="2" />
           </g>
-
-          <!-- Nodo 2: Certificado -->
           <g transform="translate(230 210)">
             <circle r="40" fill="#f07a04" />
             <rect x="-16" y="-14" width="32" height="22" rx="3" fill="none" stroke="#ffffff" stroke-width="2.2" />
             <circle cx="0" cy="14" r="7" fill="none" stroke="#ffffff" stroke-width="2.2" />
             <line x1="0" y1="21" x2="0" y2="28" stroke="#ffffff" stroke-width="2.2" />
           </g>
-
-          <!-- Nodo 3: Maletín / trabajo -->
           <g transform="translate(380 115)">
             <circle r="34" fill="#ffffff" />
             <rect x="-15" y="-4" width="30" height="20" rx="3" fill="none" stroke="#127b7b" stroke-width="2.2" />
             <path d="M-8 -4 V-9 a4 4 0 0 1 4 -4 h8 a4 4 0 0 1 4 4 v5" fill="none" stroke="#127b7b" stroke-width="2.2" />
           </g>
-
-          <!-- Puntos flotantes decorativos -->
           <circle cx="140" cy="120" r="5" fill="#f07a04" opacity="0.8" />
           <circle cx="380" cy="330" r="6" fill="#ffffff" opacity="0.5" />
           <circle cx="60" cy="180" r="4" fill="#ffffff" opacity="0.6" />
@@ -584,13 +655,13 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
     </svg>
   </div>
 
-  <!-- CATÁLOGO -->
+  <!-- CATÁLOGO (vista previa) -->
   <section id="cursos" class="section">
     <div class="container">
       <div class="section-header reveal">
         <span class="eyebrow">Oferta académica</span>
         <h2>Elegí el curso que impulsa tu futuro</h2>
-        <p>Cursos con certificación de validez nacional e internacional, pensados para tu inserción laboral en Salta, Córdoba y todo el país.</p>
+        <p>Cursos con certificación de validez nacional e internacional, pensados para tu inserción laboral en Salta, Córdoba y todo el país. Sumate a cientos de personas que ya dieron el salto hacia un nuevo trabajo.</p>
       </div>
 
       <div class="search-wrap reveal">
@@ -604,11 +675,30 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 
       <div class="courses-grid" id="courses-grid"></div>
       <p class="empty-state hidden" id="courses-empty">No encontramos cursos que coincidan con tu búsqueda.</p>
+
+      <div class="text-center reveal" style="margin-top:2.5rem;">
+        <a href="cursos.html" class="btn btn-outline">Ver todos los cursos y su información completa</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- EQUIPO -->
+  <section id="equipo" class="section advantages">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="eyebrow">Nuestro equipo</span>
+        <h2>Las personas detrás de tu formación</h2>
+        <p>Un equipo con experiencia real en educación, acompañándote en cada paso de tu capacitación.</p>
+      </div>
+      <div class="team-grid" id="team-grid"></div>
+      <div class="text-center reveal" style="margin-top:2.5rem;">
+        <a href="gracias.html" class="btn btn-outline">Conocé a todo nuestro equipo</a>
+      </div>
     </div>
   </section>
 
   <!-- VENTAJAS -->
-  <section id="ventajas" class="section advantages">
+  <section id="ventajas" class="section">
     <div class="container">
       <div class="section-header reveal">
         <span class="eyebrow">Por qué elegirnos</span>
@@ -621,8 +711,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
               <path d="M22 10 12 4 2 10l10 6 10-6Z" /><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5" />
             </svg>
           </div>
-          <h3>Certificación con validez nacional</h3>
-          <p>Nuestros certificados tienen reconocimiento nacional e internacional, avalando tu formación ante cualquier empleador.</p>
+          <h3 id="advantage-1-title">Certificación con validez nacional</h3>
+          <p id="advantage-1-text">Nuestros certificados tienen reconocimiento nacional e internacional, avalando tu formación ante cualquier empleador.</p>
         </div>
         <div class="advantage-card reveal reveal-delay-2">
           <div class="advantage-icon">
@@ -630,8 +720,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
               <circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20Z" />
             </svg>
           </div>
-          <h3>Modalidad presencial y online</h3>
-          <p>Estudiá desde Salta, Córdoba o cualquier punto del país con cursado presencial, virtual o mixto según tu comodidad.</p>
+          <h3 id="advantage-2-title">Modalidad presencial y online</h3>
+          <p id="advantage-2-text">Estudiá desde Salta, Córdoba o cualquier punto del país con cursado presencial, virtual o mixto según tu comodidad.</p>
         </div>
         <div class="advantage-card reveal reveal-delay-3">
           <div class="advantage-icon">
@@ -639,8 +729,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
               <rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
             </svg>
           </div>
-          <h3>Salida laboral real</h3>
-          <p>Diseñamos cada curso pensando en las demandas actuales del mercado laboral argentino, con contenido 100% práctico.</p>
+          <h3 id="advantage-3-title">Salida laboral real</h3>
+          <p id="advantage-3-text">Diseñamos cada curso pensando en las demandas actuales del mercado laboral argentino, con contenido 100% práctico.</p>
         </div>
         <div class="advantage-card reveal reveal-delay-4">
           <div class="advantage-icon">
@@ -648,9 +738,12 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
               <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
           </div>
-          <h3>Acompañamiento personalizado</h3>
-          <p>Docentes y tutores disponibles durante todo el cursado para resolver tus dudas y acompañar tu proceso de aprendizaje.</p>
+          <h3 id="advantage-4-title">Acompañamiento personalizado</h3>
+          <p id="advantage-4-text">Docentes y tutores disponibles durante todo el cursado para resolver tus dudas y acompañar tu proceso de aprendizaje.</p>
         </div>
+      </div>
+      <div class="text-center reveal" style="margin-top:2.5rem;">
+        <a href="gracias.html" class="btn btn-primary">Conocé a nuestro equipo</a>
       </div>
     </div>
   </section>
@@ -658,16 +751,18 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
   <!-- CONTACTO -->
   <section id="contacto" class="section contact">
     <div class="container">
-      <h2 class="reveal">¿Tenés dudas? Hablemos</h2>
-      <p class="reveal">Nuestro equipo te asesora sin costo sobre el curso que mejor se adapta a tu perfil y objetivos laborales.</p>
-      <a href="https://instagram.com/formar.capacitaciones" target="_blank" rel="noopener noreferrer" class="btn contact-btn reveal">
-        Escribinos por Instagram @formar.capacitaciones
-      </a>
+      <h2 class="reveal" id="contact-title">¿Tenés dudas? Hablemos</h2>
+      <p class="reveal" id="contact-text">Nuestro equipo te asesora sin costo sobre el curso que mejor se adapta a tu perfil y objetivos laborales.</p>
+      <div class="reveal" style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;">
+        <a href="https://instagram.com/formar.capacitaciones" target="_blank" rel="noopener noreferrer" class="btn contact-btn" id="contact-instagram-link">
+          Instagram <span id="contact-instagram-handle">@formar.capacitaciones</span>
+        </a>
+        <a href="gracias.html" class="btn btn-outline-light">Conocé a nuestro equipo</a>
+      </div>
     </div>
   </section>
 
   <div id="footer-root"></div>
-  <div id="cart-root"></div>
 
   <script type="module">
 // ==============================================================
@@ -680,7 +775,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://vwgwjhbkchzcawfohimu.supabase.co";
-const SUPABASE_ANON_KEY = "PEGÁ_ACÁ_TU_ANON_KEY"; // ← ver README, paso 2
+const SUPABASE_ANON_KEY = "sb_publishable_okikSztE3beBxMI6rpTgXg_s3h5tmh_";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
@@ -690,12 +785,15 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 });
 
 /**
- * URL del backend que crea la preferencia de pago en Mercado Pago.
- * Ver carpeta /server para el código de este endpoint.
- * En producción, reemplazalo por la URL donde despliegues el server
- * (ej: https://api.formarcapacitaciones.com.ar/checkout).
+ * Número de WhatsApp del negocio (solo dígitos, con código de país,
+ * SIN "+" ni espacios). Ej: Argentina +54 9 387 654-3210 → "5493876543210".
+ * ⚠️ REEMPLAZAR por el número real: se usa en TODOS los botones de
+ * "Consultar por WhatsApp" del sitio (cursos, equipo, contacto).
  */
-const CHECKOUT_API_URL = "http://localhost:4000/api/checkout";
+const WHATSAPP_NUMBER = "5493870000000";
+
+/** Logo por defecto (se puede sobreescribir desde site_content.logo_url en el admin) */
+const DEFAULT_LOGO_URL = "https://i.ibb.co/LDXsp8FF/Formar-posts.png";
 
 function formatARS(value) {
   return new Intl.NumberFormat("es-AR", {
@@ -722,6 +820,16 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+/**
+ * Genera un link de WhatsApp (wa.me) con mensaje pre-cargado.
+ * number: solo dígitos con código de país (ej: "5493876543210")
+ */
+function whatsappLink(number, message) {
+  const cleanNumber = (number || "").replace(/\D/g, "");
+  const text = encodeURIComponent(message || "Hola, quiero más información");
+  return `https://wa.me/${cleanNumber}?text=${text}`;
+}
+
 function renderHeader() {
   const el = document.getElementById("header-root");
   if (!el) return;
@@ -730,13 +838,15 @@ function renderHeader() {
     <header class="site-header">
       <div class="container">
         <a href="index.html" class="brand">
-          <span class="brand-logo">FC</span>
+          <img src="https://i.ibb.co/LDXsp8FF/Formar-posts.png" alt="Formar Capacitaciones" class="js-logo-img" style="width:36px;height:36px;object-fit:contain;border-radius:8px;" />
           <span class="brand-name">Formar<br class="mobile-only" /> Capacitaciones</span>
         </a>
         <nav class="main-nav" id="main-nav">
-          <a href="index.html#cursos">Cursos</a>
+          <a href="cursos.html">Cursos</a>
+          <a href="index.html#equipo">Equipo</a>
           <a href="index.html#ventajas">Por qué elegirnos</a>
           <a href="index.html#contacto">Contacto</a>
+          <a href="admin.html" style="opacity:0.55;font-size:0.8rem;">Admin</a>
         </nav>
         <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -777,7 +887,7 @@ function renderHeader() {
   });
 }
 
-function renderFooter() {
+function renderFooter(footerText) {
   const el = document.getElementById("footer-root");
   if (!el) return;
 
@@ -785,7 +895,7 @@ function renderFooter() {
     <footer class="site-footer">
       <div class="container">
         <p><strong>Formar Capacitaciones</strong></p>
-        <p style="margin-top:0.5rem;">Cursos y capacitaciones con validez nacional e internacional en Salta, Córdoba y toda Argentina.</p>
+        <p style="margin-top:0.5rem;" id="footer-text">${footerText || "Cursos y capacitaciones con validez nacional e internacional en Salta, Córdoba y toda Argentina."}</p>
         <p style="margin-top:1rem;">© <span id="footer-year"></span> Formar Capacitaciones. Todos los derechos reservados. ·
           <a href="admin.html">Acceso administrador</a>
         </p>
@@ -793,268 +903,6 @@ function renderFooter() {
     </footer>
   `;
   document.getElementById("footer-year").textContent = new Date().getFullYear();
-}
-
-// ==============================================================
-// FORMAR CAPACITACIONES — Carrito de compras
-// ==============================================================
-// Carrito basado en localStorage, sin dependencias externas.
-// Se usa en todas las páginas que incluyan <div id="cart-root">.
-
-
-const STORAGE_KEY = "fc_cart";
-
-function readCart() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeCart(items) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  renderCart();
-  updateCartCount();
-}
-
-/**
- * Agrega un curso al carrito (o suma 1 si ya estaba agregado).
- * course = { id, slug, title, price, image_url, modality }
- */
-function addToCart(course) {
-  const items = readCart();
-  const existing = items.find((i) => i.courseId === course.id);
-  if (existing) {
-    existing.quantity += 1;
-  } else {
-    items.push({
-      courseId: course.id,
-      slug: course.slug,
-      title: course.title,
-      price: course.price,
-      image_url: course.image_url,
-      modality: course.modality,
-      quantity: 1,
-    });
-  }
-  writeCart(items);
-  openCart();
-}
-
-function removeFromCart(courseId) {
-  writeCart(readCart().filter((i) => i.courseId !== courseId));
-}
-
-function changeQuantity(courseId, delta) {
-  const items = readCart()
-    .map((i) => (i.courseId === courseId ? { ...i, quantity: i.quantity + delta } : i))
-    .filter((i) => i.quantity > 0);
-  writeCart(items);
-}
-
-function clearCart() {
-  writeCart([]);
-}
-
-function getCartTotal() {
-  return readCart().reduce((sum, i) => sum + i.price * i.quantity, 0);
-}
-
-function getCartCount() {
-  return readCart().reduce((sum, i) => sum + i.quantity, 0);
-}
-
-/* ---------------------------------------------------------------
-   UI: inyecta el botón flotante + panel del carrito en el DOM
-   --------------------------------------------------------------- */
-
-function initCartUI() {
-  const root = document.getElementById("cart-root");
-  if (!root) return;
-
-  root.innerHTML = `
-    <button class="cart-fab" id="cart-fab" aria-label="Abrir carrito de compras">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="26" height="26">
-        <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
-        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-      </svg>
-      <span class="cart-count hidden" id="cart-count">0</span>
-    </button>
-
-    <div class="cart-overlay" id="cart-overlay"></div>
-
-    <aside class="cart-panel" id="cart-panel" aria-hidden="true">
-      <div class="cart-header">
-        <h2>Tu carrito</h2>
-        <button class="cart-close" id="cart-close" aria-label="Cerrar carrito">✕</button>
-      </div>
-      <div class="cart-items" id="cart-items"></div>
-      <div class="cart-footer hidden" id="cart-footer">
-        <div class="cart-total-row">
-          <span>Total</span>
-          <span id="cart-total">$0</span>
-        </div>
-        <div class="form-field">
-          <input type="text" id="checkout-name" placeholder="Nombre y apellido" />
-        </div>
-        <div class="form-field">
-          <input type="email" id="checkout-email" placeholder="Tu email *" required />
-        </div>
-        <div class="form-field">
-          <input type="tel" id="checkout-phone" placeholder="WhatsApp / Teléfono" />
-        </div>
-        <p class="form-error hidden" id="checkout-error"></p>
-        <button class="btn btn-primary btn-block" id="checkout-btn">Pagar con Mercado Pago</button>
-        <p class="hint">Pago 100% seguro procesado por Mercado Pago.</p>
-      </div>
-    </div>
-    </aside>
-  `;
-
-  document.getElementById("cart-fab").addEventListener("click", toggleCart);
-  document.getElementById("cart-close").addEventListener("click", closeCart);
-  document.getElementById("cart-overlay").addEventListener("click", closeCart);
-  document.getElementById("checkout-btn").addEventListener("click", handleCheckout);
-
-  renderCart();
-  updateCartCount();
-}
-
-function openCart() {
-  document.getElementById("cart-panel")?.classList.add("open");
-  document.getElementById("cart-overlay")?.classList.add("open");
-}
-
-function closeCart() {
-  document.getElementById("cart-panel")?.classList.remove("open");
-  document.getElementById("cart-overlay")?.classList.remove("open");
-}
-
-function toggleCart() {
-  const panel = document.getElementById("cart-panel");
-  if (panel?.classList.contains("open")) {
-    closeCart();
-  } else {
-    openCart();
-  }
-}
-
-function updateCartCount() {
-  const el = document.getElementById("cart-count");
-  if (!el) return;
-  const count = getCartCount();
-  el.textContent = String(count);
-  el.classList.toggle("hidden", count === 0);
-}
-
-function renderCart() {
-  const itemsEl = document.getElementById("cart-items");
-  const footerEl = document.getElementById("cart-footer");
-  if (!itemsEl) return;
-
-  const items = readCart();
-
-  if (items.length === 0) {
-    itemsEl.innerHTML = `
-      <div class="cart-empty">
-        <p>Todavía no agregaste cursos.</p>
-        <p style="font-size:0.85rem;margin-top:0.4rem;">Elegí un curso y sumalo al carrito para inscribirte.</p>
-      </div>`;
-    footerEl?.classList.add("hidden");
-    return;
-  }
-
-  footerEl?.classList.remove("hidden");
-
-  itemsEl.innerHTML = items
-    .map(
-      (item) => `
-      <div class="cart-item" data-id="${item.courseId}">
-        <img src="${escapeHtml(item.image_url || "")}" alt="${escapeHtml(item.title)}" />
-        <div class="cart-item-info">
-          <h4>${escapeHtml(item.title)}</h4>
-          <p class="modality">${escapeHtml(item.modality)}</p>
-          <div class="qty-row">
-            <div class="qty-controls">
-              <button class="qty-btn" data-action="decrement" data-id="${item.courseId}" aria-label="Restar cantidad">−</button>
-              <span>${item.quantity}</span>
-              <button class="qty-btn" data-action="increment" data-id="${item.courseId}" aria-label="Sumar cantidad">+</button>
-            </div>
-            <strong>${formatARS(item.price * item.quantity)}</strong>
-          </div>
-        </div>
-        <button class="cart-item-remove" data-action="remove" data-id="${item.courseId}" aria-label="Quitar">✕</button>
-      </div>
-    `
-    )
-    .join("");
-
-  document.getElementById("cart-total").textContent = formatARS(getCartTotal());
-
-  itemsEl.querySelectorAll("[data-action]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-id");
-      const action = btn.getAttribute("data-action");
-      if (action === "increment") changeQuantity(id, 1);
-      if (action === "decrement") changeQuantity(id, -1);
-      if (action === "remove") removeFromCart(id);
-    });
-  });
-}
-
-async function handleCheckout() {
-  const errorEl = document.getElementById("checkout-error");
-  const btn = document.getElementById("checkout-btn");
-  errorEl.classList.add("hidden");
-
-  const email = document.getElementById("checkout-email").value.trim();
-  const name = document.getElementById("checkout-name").value.trim();
-  const phone = document.getElementById("checkout-phone").value.trim();
-  const items = readCart();
-
-  if (!email) {
-    errorEl.textContent = "Ingresá tu email para continuar con la inscripción.";
-    errorEl.classList.remove("hidden");
-    return;
-  }
-  if (items.length === 0) {
-    errorEl.textContent = "Tu carrito está vacío.";
-    errorEl.classList.remove("hidden");
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = "Procesando...";
-
-  try {
-    const res = await fetch(CHECKOUT_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        student_email: email,
-        student_name: name,
-        student_phone: phone,
-        items,
-        total: getCartTotal(),
-      }),
-    });
-
-    const data = await res.json();
-    if (!res.ok || !data.init_point) {
-      throw new Error(data.error || "No se pudo iniciar el pago.");
-    }
-
-    window.location.href = data.init_point;
-  } catch (err) {
-    errorEl.textContent =
-      err.message || "Ocurrió un error al procesar la compra. Intentá nuevamente.";
-    errorEl.classList.remove("hidden");
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "Pagar con Mercado Pago";
-  }
 }
 
 // ==============================================================
@@ -1179,67 +1027,63 @@ function initAllAnimations() {
   initHeroParallax();
 }
 
+const WHATSAPP_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2Zm5.8 14.07c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.3-1.64-.6-2.88-1.24-4.76-4.15-4.9-4.34-.14-.19-1.17-1.56-1.17-2.98 0-1.42.74-2.11 1.01-2.4.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.58.81 2 .88 2.15.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.61-.07.16-.19.7-.81.88-1.09.19-.28.37-.23.62-.14.26.09 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.36Z"/></svg>`;
+
 let allCourses = [];
 let allCategories = [];
-let activeCategory = "todas";
 let searchTerm = "";
-let usingDemoData = false;
+let activeCategory = "todas";
 
-/* ---------------------------------------------------------------
-   Datos de demostración: se usan SOLO si Supabase no responde
-   (por ejemplo, si todavía no configuraste js/supabaseClient.js).
-   Así la página nunca se ve vacía mientras conectás tu proyecto real.
-   --------------------------------------------------------------- */
+const DEMO_COURSES = [
+  {
+    id: "demo-1", slug: "preceptores", title: "Preceptores",
+    short_description: "Formación integral para desempeñarte como preceptor en instituciones educativas.",
+    price: 45000, modality: "Presencial / Virtual",
+    image_url: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=1200",
+    featured: true, category_id: "demo-docencia", categories: { name: "Docencia y Educación" },
+  },
+  {
+    id: "demo-2", slug: "auxiliar-en-criminalistica", title: "Auxiliar en Criminalística",
+    short_description: "Técnicas de investigación forense, preservación de indicios y cadena de custodia.",
+    price: 48000, modality: "Presencial / Virtual",
+    image_url: "https://images.unsplash.com/photo-1589994965851-a8f479c573a4?q=80&w=1200",
+    featured: true, category_id: "demo-seguridad", categories: { name: "Seguridad y Criminalística" },
+  },
+  {
+    id: "demo-3", slug: "electricidad", title: "Electricidad",
+    short_description: "Instalaciones eléctricas domiciliarias e industriales con práctica intensiva en taller.",
+    price: 52000, modality: "Presencial",
+    image_url: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=1200",
+    featured: false, category_id: "demo-oficios", categories: { name: "Oficios" },
+  },
+];
 const DEMO_CATEGORIES = [
   { id: "demo-docencia", name: "Docencia y Educación" },
   { id: "demo-seguridad", name: "Seguridad y Criminalística" },
   { id: "demo-oficios", name: "Oficios" },
 ];
 
-const DEMO_COURSES = [
-  {
-    id: "demo-1",
-    slug: "preceptores",
-    title: "Preceptores",
-    short_description: "Formación integral para desempeñarte como preceptor en instituciones educativas.",
-    price: 45000,
-    modality: "Presencial / Virtual",
-    image_url: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=1200",
-    featured: true,
-    category_id: "demo-docencia",
-    categories: { name: "Docencia y Educación" },
-  },
-  {
-    id: "demo-2",
-    slug: "auxiliar-en-criminalistica",
-    title: "Auxiliar en Criminalística",
-    short_description: "Técnicas de investigación forense, preservación de indicios y cadena de custodia.",
-    price: 48000,
-    modality: "Presencial / Virtual",
-    image_url: "https://images.unsplash.com/photo-1589994965851-a8f479c573a4?q=80&w=1200",
-    featured: true,
-    category_id: "demo-seguridad",
-    categories: { name: "Seguridad y Criminalística" },
-  },
-  {
-    id: "demo-3",
-    slug: "electricidad",
-    title: "Electricidad",
-    short_description: "Instalaciones eléctricas domiciliarias e industriales con práctica intensiva en taller.",
-    price: 52000,
-    modality: "Presencial",
-    image_url: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=1200",
-    featured: false,
-    category_id: "demo-oficios",
-    categories: { name: "Oficios" },
-  },
-];
+let showPrices = false;
+let usingDemoData = false;
+
+async function fetchSiteContent() {
+  const { data, error } = await supabase.from("site_content").select("data").eq("id", 1).single();
+  if (error) throw error;
+  return data?.data || {};
+}
+
+async function fetchTeam() {
+  const { data, error } = await supabase
+    .from("team_members")
+    .select("*")
+    .eq("active", true)
+    .order("display_order", { ascending: true });
+  if (error) throw error;
+  return data ?? [];
+}
 
 async function fetchCategories() {
-  const { data, error } = await supabase
-    .from("categories")
-    .select("*")
-    .order("name", { ascending: true });
+  const { data, error } = await supabase.from("categories").select("*").order("name", { ascending: true });
   if (error) throw error;
   return data ?? [];
 }
@@ -1255,36 +1099,88 @@ async function fetchCourses() {
   return data ?? [];
 }
 
-function showSkeletons(count = 6) {
-  const grid = document.getElementById("courses-grid");
-  grid.innerHTML = Array.from({ length: count })
+function priceDisplay(course) {
+  if (!showPrices) return `<span class="price-placeholder">$0000</span>`;
+  return course.price > 0 ? formatARS(course.price) : "Consultar";
+}
+
+function applySiteContent(c) {
+  const set = (id, value) => {
+    const el = document.getElementById(id);
+    if (el && value !== undefined && value !== null && value !== "") el.textContent = value;
+  };
+
+  const logoUrl = c.logo_url || DEFAULT_LOGO_URL;
+  document.querySelectorAll(".js-logo-img").forEach((img) => (img.src = logoUrl));
+
+  showPrices = !!c.show_prices;
+
+  set("hero-badge-text", c.hero_badge);
+  set("hero-title", c.hero_title);
+  set("hero-lead", c.hero_lead);
+
+  const stat1 = document.getElementById("stat-1-value");
+  const stat2 = document.getElementById("stat-2-value");
+  const stat3 = document.getElementById("stat-3-value");
+  if (stat1 && c.stat_1_value !== undefined) { stat1.setAttribute("data-count-to", c.stat_1_value); stat1.setAttribute("data-suffix", c.stat_1_suffix ?? ""); }
+  if (stat2 && c.stat_2_value !== undefined) { stat2.setAttribute("data-count-to", c.stat_2_value); stat2.setAttribute("data-suffix", c.stat_2_suffix ?? ""); }
+  if (stat3 && c.stat_3_value !== undefined) { stat3.setAttribute("data-count-to", c.stat_3_value); stat3.setAttribute("data-suffix", c.stat_3_suffix ?? ""); }
+  set("stat-1-label", c.stat_1_label);
+  set("stat-2-label", c.stat_2_label);
+  set("stat-3-label", c.stat_3_label);
+
+  for (let i = 1; i <= 4; i++) {
+    set(`advantage-${i}-title`, c[`advantage_${i}_title`]);
+    set(`advantage-${i}-text`, c[`advantage_${i}_text`]);
+  }
+
+  set("contact-title", c.contact_title);
+  set("contact-text", c.contact_text);
+  set("contact-instagram-handle", c.instagram_handle);
+  set("footer-text", c.footer_text);
+
+  const igLink = document.getElementById("contact-instagram-link");
+  if (igLink && c.instagram_url) igLink.setAttribute("href", c.instagram_url);
+}
+
+function renderTeamPreview(team) {
+  const grid = document.getElementById("team-grid");
+  if (!grid) return;
+
+  if (team.length === 0) {
+    grid.parentElement.classList.add("hidden");
+    return;
+  }
+
+  grid.innerHTML = team
     .map(
-      () => `
-    <div class="skeleton-card">
-      <div class="skeleton-block media"></div>
-      <div class="skeleton-body">
-        <div class="skeleton-block line w40"></div>
-        <div class="skeleton-block line w60"></div>
-        <div class="skeleton-block line"></div>
+      (m, i) => `
+    <div class="team-card reveal reveal-delay-${(i % 4) + 1}">
+      <div class="team-card-photo">
+        ${m.photo_url ? `<img src="${escapeHtml(m.photo_url)}" alt="${escapeHtml(m.name)}" loading="lazy" />` : ""}
+      </div>
+      <div class="team-card-plaque">
+        <h3>${escapeHtml(m.name)}</h3>
+        <p>${escapeHtml(m.role)}</p>
+        <a class="btn btn-whatsapp btn-sm" href="${whatsappLink(m.whatsapp_number || WHATSAPP_NUMBER, m.whatsapp_message)}" target="_blank" rel="noopener noreferrer">
+          ${WHATSAPP_ICON} Contactar
+        </a>
       </div>
     </div>`
     )
     .join("");
+
+  initScrollReveal();
 }
 
 function renderCategoryFilters() {
   const wrap = document.getElementById("category-filters");
   if (!wrap) return;
-
   const chips = [
     `<button class="filter-chip ${activeCategory === "todas" ? "active" : ""}" data-cat="todas">Todas</button>`,
-    ...allCategories.map(
-      (cat) =>
-        `<button class="filter-chip ${activeCategory === cat.id ? "active" : ""}" data-cat="${cat.id}">${escapeHtml(cat.name)}</button>`
-    ),
+    ...allCategories.map((cat) => `<button class="filter-chip ${activeCategory === cat.id ? "active" : ""}" data-cat="${cat.id}">${escapeHtml(cat.name)}</button>`),
   ];
   wrap.innerHTML = chips.join("");
-
   wrap.querySelectorAll("[data-cat]").forEach((btn) => {
     btn.addEventListener("click", () => {
       activeCategory = btn.getAttribute("data-cat");
@@ -1292,6 +1188,30 @@ function renderCategoryFilters() {
       renderCourses();
     });
   });
+}
+
+function courseCardHtml(course, i) {
+  const message = `Hola, quiero más información sobre el curso "${course.title}"`;
+  return `
+    <article class="course-card reveal reveal-delay-${(i % 4) + 1}">
+      <a href="curso.html?slug=${encodeURIComponent(course.slug)}" class="course-card-media">
+        ${course.image_url ? `<img src="${escapeHtml(course.image_url)}" alt="${escapeHtml(course.title)}" loading="lazy" />` : ""}
+        ${course.featured ? `<span class="badge-featured"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7-6.3-3.8L5.7 21l1.7-7-5.4-4.7 7.1-.6L12 2z"/></svg>Destacado</span>` : ""}
+      </a>
+      <div class="course-card-body">
+        <span class="course-category">${escapeHtml(course.categories?.name || "Curso")}</span>
+        <a href="curso.html?slug=${encodeURIComponent(course.slug)}"><h3>${escapeHtml(course.title)}</h3></a>
+        <p class="desc">${escapeHtml(course.short_description || "")}</p>
+        <div class="course-meta-row">
+          <span class="pill">${escapeHtml(course.modality)}</span>
+          <span class="price">${priceDisplay(course)}</span>
+        </div>
+        <div class="course-card-actions">
+          <a href="curso.html?slug=${encodeURIComponent(course.slug)}" class="btn btn-outline btn-sm">Ver más</a>
+          <a href="${whatsappLink(WHATSAPP_NUMBER, message)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">${WHATSAPP_ICON}</a>
+        </div>
+      </div>
+    </article>`;
 }
 
 function renderCourses() {
@@ -1303,8 +1223,7 @@ function renderCourses() {
     const matchesSearch =
       course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (course.short_description || "").toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      activeCategory === "todas" || course.category_id === activeCategory;
+    const matchesCategory = activeCategory === "todas" || course.category_id === activeCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -1313,53 +1232,17 @@ function renderCourses() {
     emptyState.classList.remove("hidden");
     return;
   }
-
   emptyState.classList.add("hidden");
-
-  grid.innerHTML = filtered
-    .map(
-      (course, i) => `
-    <article class="course-card reveal reveal-delay-${(i % 4) + 1}">
-      <a href="curso.html?slug=${encodeURIComponent(course.slug)}" class="course-card-media">
-        ${course.image_url ? `<img src="${escapeHtml(course.image_url)}" alt="${escapeHtml(course.title)}" loading="lazy" />` : ""}
-        ${
-          course.featured
-            ? `<span class="badge-featured">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7-6.3-3.8L5.7 21l1.7-7-5.4-4.7 7.1-.6L12 2z"/></svg>
-                Destacado
-              </span>`
-            : ""
-        }
-      </a>
-      <div class="course-card-body">
-        <span class="course-category">${escapeHtml(course.categories?.name || "Curso")}</span>
-        <a href="curso.html?slug=${encodeURIComponent(course.slug)}"><h3>${escapeHtml(course.title)}</h3></a>
-        <p class="desc">${escapeHtml(course.short_description || "")}</p>
-        <div class="course-meta-row">
-          <span class="pill">${escapeHtml(course.modality)}</span>
-          <span class="price">${course.price > 0 ? formatARS(course.price) : "Consultar"}</span>
-        </div>
-        <div class="course-card-actions">
-          <a href="curso.html?slug=${encodeURIComponent(course.slug)}" class="btn btn-outline btn-sm">Ver más</a>
-          <button class="btn btn-primary btn-sm" data-add-to-cart="${course.id}">Inscribirme</button>
-        </div>
-      </div>
-    </article>
-  `
-    )
-    .join("");
-
-  grid.querySelectorAll("[data-add-to-cart]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-add-to-cart");
-      const course = allCourses.find((c) => c.id === id);
-      if (course) addToCart(course);
-    });
-  });
-
-  // Los cards se agregan dinámicamente: re-inicializamos el observer
-  // para que también aparezcan con la animación de scroll reveal.
+  grid.innerHTML = filtered.map((c, i) => courseCardHtml(c, i)).join("");
   initScrollReveal();
+}
+
+function showSkeletons(count = 6) {
+  const grid = document.getElementById("courses-grid");
+  if (!grid) return;
+  grid.innerHTML = Array.from({ length: count })
+    .map(() => `<div class="skeleton-card"><div class="skeleton-block media"></div><div class="skeleton-body"><div class="skeleton-block line w40"></div><div class="skeleton-block line w60"></div><div class="skeleton-block line"></div></div></div>`)
+    .join("");
 }
 
 function showDemoBanner() {
@@ -1367,17 +1250,21 @@ function showDemoBanner() {
   if (!header || document.getElementById("demo-banner")) return;
   const banner = document.createElement("div");
   banner.id = "demo-banner";
-  banner.style.cssText =
-    "max-width:640px;margin:0 auto 1.5rem;padding:0.75rem 1rem;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;color:#9a3412;font-size:0.82rem;text-align:center;";
-  banner.innerHTML =
-    "⚠️ Mostrando <strong>cursos de ejemplo</strong>. Conectá tu proyecto real en <code>js/supabaseClient.js</code> para ver tus datos.";
+  banner.style.cssText = "max-width:640px;margin:0 auto 1.5rem;padding:0.75rem 1rem;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;color:#9a3412;font-size:0.82rem;text-align:center;";
+  banner.innerHTML = "⚠️ Mostrando <strong>cursos de ejemplo</strong>. Conectá tu proyecto real en <code>js/supabaseClient.js</code> para ver tus datos.";
   header.insertAdjacentElement("afterend", banner);
+}
+
+function hideSplash() {
+  const splash = document.getElementById("splash-screen");
+  if (!splash) return;
+  splash.classList.add("splash-hidden");
+  setTimeout(() => splash.remove(), 600);
 }
 
 async function init() {
   renderHeader();
   renderFooter();
-  initCartUI();
   initAllAnimations();
 
   const searchInput = document.getElementById("search-input");
@@ -1389,16 +1276,26 @@ async function init() {
   showSkeletons();
 
   try {
-    [allCategories, allCourses] = await Promise.all([fetchCategories(), fetchCourses()]);
-    if (allCourses.length === 0 && allCategories.length === 0) {
-      throw new Error("Sin datos: revisá la configuración de Supabase.");
-    }
+    const content = await fetchSiteContent();
+    applySiteContent(content);
   } catch (err) {
-    console.warn(
-      "[Formar Capacitaciones] No se pudo conectar a Supabase, mostrando datos de ejemplo. " +
-        "Revisá js/supabaseClient.js. Detalle:",
-      err.message || err
-    );
+    console.warn("[Formar Capacitaciones] No se pudo cargar site_content, se usan los textos por defecto.", err.message || err);
+  }
+
+  initAllAnimations();
+
+  try {
+    const team = await fetchTeam();
+    renderTeamPreview(team);
+  } catch (err) {
+    console.warn("[Formar Capacitaciones] No se pudo cargar el equipo:", err.message || err);
+  }
+
+  try {
+    [allCategories, allCourses] = await Promise.all([fetchCategories(), fetchCourses()]);
+    if (allCourses.length === 0 && allCategories.length === 0) throw new Error("Sin datos: revisá la configuración de Supabase.");
+  } catch (err) {
+    console.warn("[Formar Capacitaciones] No se pudo conectar a Supabase, mostrando datos de ejemplo.", err.message || err);
     allCategories = DEMO_CATEGORIES;
     allCourses = DEMO_COURSES;
     usingDemoData = true;
@@ -1407,9 +1304,13 @@ async function init() {
   renderCategoryFilters();
   renderCourses();
   if (usingDemoData) showDemoBanner();
+
+  hideSplash();
 }
 
 document.addEventListener("DOMContentLoaded", init);
+// Por si algo tarda demasiado, la splash nunca queda pegada más de 4s.
+setTimeout(hideSplash, 4000);
   </script>
 </body>
 </html>
