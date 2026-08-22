@@ -467,6 +467,74 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 .hidden { display: none !important; }
 .text-center { text-align: center; }
 
+/* ---------- Splash screen ---------- */
+.splash-screen {
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--gradient-brand-diagonal);
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.splash-screen img { width: 120px; height: 120px; object-fit: contain; animation: splashPulse 1.4s ease-in-out infinite; border-radius: var(--radius-lg); background: rgba(255,255,255,0.08); padding: 0.5rem; }
+.splash-screen span { color: rgba(255,255,255,0.75); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.splash-screen.splash-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+@keyframes splashPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.85; } }
+
+/* ---------- Lockup de marca en el hero ---------- */
+.hero-brand-lockup { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.5rem; }
+.hero-brand-lockup img { width: 56px; height: 56px; object-fit: contain; border-radius: var(--radius-md); background: rgba(255,255,255,0.12); padding: 0.4rem; flex-shrink: 0; }
+.hero-brand-lockup .brand-text-big { font-family: var(--font-display); font-weight: 800; font-size: 2rem; color: var(--color-white); line-height: 1; letter-spacing: 0.02em; }
+.hero-brand-lockup .brand-text-small { display: block; font-size: 0.8rem; color: rgba(255,255,255,0.75); font-weight: 600; letter-spacing: 0.04em; margin-top: 0.2rem; }
+
+/* ---------- Botón de WhatsApp ---------- */
+.btn-whatsapp { background: #25d366; color: #ffffff; box-shadow: 0 10px 24px -8px rgba(37, 211, 102, 0.55); }
+.btn-whatsapp:hover { background: #1ebd5a; }
+.btn-whatsapp svg { flex-shrink: 0; }
+
+/* ---------- Sección Equipo ---------- */
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; }
+@media (max-width: 960px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .team-grid { grid-template-columns: 1fr; } }
+
+.team-card {
+  background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--shadow-card); text-align: center;
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+}
+.team-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); }
+.team-card-photo { height: 220px; background: var(--color-bg-soft); overflow: hidden; }
+.team-card-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-smooth); }
+.team-card:hover .team-card-photo img { transform: scale(1.06); }
+.team-card-plaque { padding: 1.1rem 1rem; }
+.team-card-plaque h3 { font-size: 1rem; margin-bottom: 0.15rem; }
+.team-card-plaque p { font-size: 0.82rem; color: var(--color-turquoise); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.9rem; }
+.team-card-plaque .btn { width: 100%; }
+
+/* Variante grande para gracias.html (equipo en primer plano) */
+.team-card.team-card-large .team-card-photo { height: 300px; }
+.team-card.team-card-large .team-card-plaque h3 { font-size: 1.2rem; }
+
+/* ---------- Precio oculto ---------- */
+.price-placeholder { letter-spacing: 0.05em; opacity: 0.85; }
+
+/* ---------- Tarjeta expandida (cursos.html) ---------- */
+.course-card-wide {
+  display: grid; grid-template-columns: 280px 1fr; gap: 0;
+  background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--shadow-card);
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+}
+.course-card-wide:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); }
+@media (max-width: 760px) { .course-card-wide { grid-template-columns: 1fr; } }
+
+.course-card-wide-media { position: relative; min-height: 220px; background: var(--color-bg-soft); overflow: hidden; }
+.course-card-wide-media img { width: 100%; height: 100%; object-fit: cover; }
+
+.course-card-wide-body { padding: 1.75rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.course-card-wide-body .desc-full { color: var(--color-text-muted); font-size: 0.92rem; }
+.course-card-wide-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.3rem; }
+.course-card-wide-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-top: auto; padding-top: 0.75rem; }
+.course-card-wide-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1; transform: none; }
@@ -498,6 +566,9 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
         Ingresar
       </button>
       <p class="hint">El usuario administrador se crea desde el panel de Supabase (Authentication → Users).</p>
+      <p class="hint" style="margin-top:0.5rem;color:#f07a04;font-weight:700;">
+        Usuario de prueba temporal: formaradministrador@formarcapacitaciones.com.ar / 12345
+      </p>
     </form>
   </div>
 
@@ -517,6 +588,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
       <div class="admin-tabs">
         <button class="admin-tab active" data-tab="cursos" id="tab-cursos">Cursos (<span id="courses-count">0</span>)</button>
         <button class="admin-tab" data-tab="categorias" id="tab-categorias">Categorías (<span id="categories-count">0</span>)</button>
+        <button class="admin-tab" data-tab="equipo" id="tab-equipo">Equipo (<span id="team-count">0</span>)</button>
+        <button class="admin-tab" data-tab="contenido" id="tab-contenido">Contenido del sitio</button>
       </div>
 
       <!-- TAB CURSOS -->
@@ -585,6 +658,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
                 <span id="upload-label-text">Subir imagen</span>
                 <input type="file" id="field-image-file" accept="image/*" />
               </label>
+              <button type="button" class="upload-btn" id="remove-image-btn" style="color:#ef4444;">Quitar imagen</button>
               <img id="image-preview" class="preview-thumb hidden" alt="Vista previa" />
             </div>
           </div>
@@ -622,6 +696,131 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 
         <div id="categories-list"></div>
       </div>
+
+      <!-- TAB EQUIPO -->
+      <div id="panel-equipo" class="hidden admin-layout">
+        <form class="admin-panel" id="team-form">
+          <h2 id="team-form-title">Nuevo miembro del equipo</h2>
+
+          <div class="form-field">
+            <label>Nombre completo *</label>
+            <input type="text" id="team-field-name" required placeholder="Ej: Lic. Tania Simkin" />
+          </div>
+          <div class="form-field">
+            <label>Rol / Cargo</label>
+            <input type="text" id="team-field-role" placeholder="Ej: Directora" />
+          </div>
+          <div class="form-field">
+            <label>Foto</label>
+            <input type="text" id="team-field-photo-url" placeholder="URL de la foto (https://...)" />
+            <div class="image-upload-row">
+              <label class="upload-btn">
+                <span id="team-upload-label-text">Subir foto</span>
+                <input type="file" id="team-field-photo-file" accept="image/*" />
+              </label>
+              <button type="button" class="upload-btn" id="team-remove-image-btn" style="color:#ef4444;">Quitar foto</button>
+              <img id="team-image-preview" class="preview-thumb hidden" alt="Vista previa" />
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Número de WhatsApp (solo dígitos, con código de país)</label>
+            <input type="text" id="team-field-whatsapp" placeholder="5493876543210" />
+          </div>
+          <div class="form-field">
+            <label>Mensaje pre-cargado de WhatsApp</label>
+            <input type="text" id="team-field-message" placeholder="Hola, quiero más información" />
+          </div>
+          <div class="form-field">
+            <label>Orden de aparición</label>
+            <input type="number" id="team-field-order" value="0" />
+          </div>
+          <div class="checkbox-row">
+            <label><input type="checkbox" id="team-field-active" checked /> Visible en la web</label>
+          </div>
+
+          <p class="form-error hidden" id="team-form-error"></p>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" style="flex:1;" id="team-submit-btn">Agregar</button>
+            <button type="button" class="btn btn-outline hidden" id="team-cancel-btn">Cancelar</button>
+          </div>
+        </form>
+
+        <div id="team-list"></div>
+      </div>
+
+      <!-- TAB CONTENIDO DEL SITIO -->
+      <div id="panel-contenido" class="hidden">
+        <form class="admin-panel" id="content-form" style="max-width:720px;">
+          <h2>Textos editables de la landing</h2>
+          <p class="muted" style="margin-bottom:1.25rem;font-size:0.85rem;">
+            Estos textos se muestran en tiempo real en la página principal (hero, estadísticas, ventajas, contacto y pie de página).
+          </p>
+
+          <h3 style="font-size:0.95rem;margin-bottom:0.6rem;">Marca y precios</h3>
+          <div class="form-field">
+            <label>URL del logo</label>
+            <input type="text" id="content-logo-url" placeholder="https://..." />
+          </div>
+          <div class="checkbox-row" style="margin-bottom:1.25rem;">
+            <label><input type="checkbox" id="content-show-prices" /> Mostrar precios reales de los cursos (si está desmarcado, se muestra "$0000")</label>
+          </div>
+
+          <h3 style="font-size:0.95rem;margin-bottom:0.6rem;">Portada (Hero)</h3>
+          <div class="form-field">
+            <label>Texto de la insignia superior</label>
+            <input type="text" id="content-hero-badge" />
+          </div>
+          <div class="form-field">
+            <label>Título principal</label>
+            <input type="text" id="content-hero-title" />
+          </div>
+          <div class="form-field">
+            <label>Bajada / descripción</label>
+            <textarea id="content-hero-lead" rows="3"></textarea>
+          </div>
+
+          <h3 style="font-size:0.95rem;margin:1.25rem 0 0.6rem;">Estadísticas</h3>
+          <div class="form-grid-3" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
+            <div class="form-field"><label>Stat 1 - Valor</label><input type="number" id="content-stat1-value" /></div>
+            <div class="form-field"><label>Sufijo</label><input type="text" id="content-stat1-suffix" placeholder="+ % etc" /></div>
+            <div class="form-field"><label>Etiqueta</label><input type="text" id="content-stat1-label" /></div>
+          </div>
+          <div class="form-grid-3" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
+            <div class="form-field"><label>Stat 2 - Valor</label><input type="number" id="content-stat2-value" /></div>
+            <div class="form-field"><label>Sufijo</label><input type="text" id="content-stat2-suffix" /></div>
+            <div class="form-field"><label>Etiqueta</label><input type="text" id="content-stat2-label" /></div>
+          </div>
+          <div class="form-grid-3" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;">
+            <div class="form-field"><label>Stat 3 - Valor</label><input type="number" id="content-stat3-value" /></div>
+            <div class="form-field"><label>Sufijo</label><input type="text" id="content-stat3-suffix" /></div>
+            <div class="form-field"><label>Etiqueta</label><input type="text" id="content-stat3-label" /></div>
+          </div>
+
+          <h3 style="font-size:0.95rem;margin:1.25rem 0 0.6rem;">Ventajas (las 4 tarjetas)</h3>
+          <div class="form-field"><label>Ventaja 1 - Título</label><input type="text" id="content-adv1-title" /></div>
+          <div class="form-field"><label>Ventaja 1 - Texto</label><textarea id="content-adv1-text" rows="2"></textarea></div>
+          <div class="form-field"><label>Ventaja 2 - Título</label><input type="text" id="content-adv2-title" /></div>
+          <div class="form-field"><label>Ventaja 2 - Texto</label><textarea id="content-adv2-text" rows="2"></textarea></div>
+          <div class="form-field"><label>Ventaja 3 - Título</label><input type="text" id="content-adv3-title" /></div>
+          <div class="form-field"><label>Ventaja 3 - Texto</label><textarea id="content-adv3-text" rows="2"></textarea></div>
+          <div class="form-field"><label>Ventaja 4 - Título</label><input type="text" id="content-adv4-title" /></div>
+          <div class="form-field"><label>Ventaja 4 - Texto</label><textarea id="content-adv4-text" rows="2"></textarea></div>
+
+          <h3 style="font-size:0.95rem;margin:1.25rem 0 0.6rem;">Contacto y pie de página</h3>
+          <div class="form-field"><label>Título de la sección de contacto</label><input type="text" id="content-contact-title" /></div>
+          <div class="form-field"><label>Texto de la sección de contacto</label><textarea id="content-contact-text" rows="2"></textarea></div>
+          <div class="form-grid-2">
+            <div class="form-field"><label>Usuario de Instagram (texto)</label><input type="text" id="content-instagram-handle" placeholder="@formar.capacitaciones" /></div>
+            <div class="form-field"><label>Link de Instagram</label><input type="text" id="content-instagram-url" placeholder="https://instagram.com/..." /></div>
+          </div>
+          <div class="form-field"><label>Texto del pie de página</label><textarea id="content-footer-text" rows="2"></textarea></div>
+
+          <p class="form-error hidden" id="content-form-error"></p>
+          <p class="hint hidden" id="content-form-success" style="color:#127b7b;font-weight:700;">✓ Cambios guardados. Ya se ven en la web.</p>
+
+          <button type="submit" class="btn btn-primary" style="margin-top:1rem;" id="content-submit-btn">Guardar cambios</button>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -636,7 +835,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://vwgwjhbkchzcawfohimu.supabase.co";
-const SUPABASE_ANON_KEY = "PEGÁ_ACÁ_TU_ANON_KEY"; // ← ver README, paso 2
+const SUPABASE_ANON_KEY = "sb_publishable_okikSztE3beBxMI6rpTgXg_s3h5tmh_";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
@@ -646,12 +845,15 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 });
 
 /**
- * URL del backend que crea la preferencia de pago en Mercado Pago.
- * Ver carpeta /server para el código de este endpoint.
- * En producción, reemplazalo por la URL donde despliegues el server
- * (ej: https://api.formarcapacitaciones.com.ar/checkout).
+ * Número de WhatsApp del negocio (solo dígitos, con código de país,
+ * SIN "+" ni espacios). Ej: Argentina +54 9 387 654-3210 → "5493876543210".
+ * ⚠️ REEMPLAZAR por el número real: se usa en TODOS los botones de
+ * "Consultar por WhatsApp" del sitio (cursos, equipo, contacto).
  */
-const CHECKOUT_API_URL = "http://localhost:4000/api/checkout";
+const WHATSAPP_NUMBER = "5493870000000";
+
+/** Logo por defecto (se puede sobreescribir desde site_content.logo_url en el admin) */
+const DEFAULT_LOGO_URL = "https://i.ibb.co/LDXsp8FF/Formar-posts.png";
 
 function formatARS(value) {
   return new Intl.NumberFormat("es-AR", {
@@ -678,13 +880,33 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+/**
+ * Genera un link de WhatsApp (wa.me) con mensaje pre-cargado.
+ * number: solo dígitos con código de país (ej: "5493876543210")
+ */
+function whatsappLink(number, message) {
+  const cleanNumber = (number || "").replace(/\D/g, "");
+  const text = encodeURIComponent(message || "Hola, quiero más información");
+  return `https://wa.me/${cleanNumber}?text=${text}`;
+}
+
 let categories = [];
 let courses = [];
+let team = [];
 let editingCourseId = null;
+let editingTeamId = null;
 
-/* ---------------------------------------------------------------
+const MODALITIES = ["Presencial", "Virtual", "Presencial / Virtual", "Online", "Consultar"];
+
+const emptyCourseForm = {
+  id: "", title: "", slug: "", description: "", short_description: "", price: "0",
+  modality: "Consultar", image_url: "", video_url: "", duration: "", location: "",
+  featured: false, active: true, category_id: "",
+};
+
+/* ============================================================
    AUTENTICACIÓN
-   --------------------------------------------------------------- */
+   ============================================================ */
 
 async function checkSession() {
   const { data } = await supabase.auth.getSession();
@@ -738,51 +960,55 @@ function initLogout() {
   });
 }
 
-/* ---------------------------------------------------------------
-   DASHBOARD: carga inicial y tabs
-   --------------------------------------------------------------- */
+/* ============================================================
+   DASHBOARD: tabs y carga general
+   ============================================================ */
 
 async function showDashboard() {
   document.getElementById("login-screen").classList.add("hidden");
   document.getElementById("dashboard-screen").classList.remove("hidden");
   await loadData();
+  await loadSiteContent();
 }
 
 function initTabs() {
   document.getElementById("tab-cursos").addEventListener("click", () => switchTab("cursos"));
   document.getElementById("tab-categorias").addEventListener("click", () => switchTab("categorias"));
+  document.getElementById("tab-equipo").addEventListener("click", () => switchTab("equipo"));
+  document.getElementById("tab-contenido").addEventListener("click", () => switchTab("contenido"));
 }
 
 function switchTab(tab) {
-  document.getElementById("tab-cursos").classList.toggle("active", tab === "cursos");
-  document.getElementById("tab-categorias").classList.toggle("active", tab === "categorias");
-  document.getElementById("panel-cursos").classList.toggle("hidden", tab !== "cursos");
-  document.getElementById("panel-categorias").classList.toggle("hidden", tab !== "categorias");
+  ["cursos", "categorias", "equipo", "contenido"].forEach((t) => {
+    document.getElementById(`tab-${t}`).classList.toggle("active", t === tab);
+    document.getElementById(`panel-${t}`).classList.toggle("hidden", t !== tab);
+  });
 }
 
 async function loadData() {
-  const [{ data: coursesData }, { data: categoriesData }] = await Promise.all([
-    supabase
-      .from("courses")
-      .select("*, categories(id, name, slug)")
-      .order("created_at", { ascending: false }),
+  const [{ data: coursesData }, { data: categoriesData }, { data: teamData }] = await Promise.all([
+    supabase.from("courses").select("*, categories(id, name, slug)").order("created_at", { ascending: false }),
     supabase.from("categories").select("*").order("name", { ascending: true }),
+    supabase.from("team_members").select("*").order("display_order", { ascending: true }),
   ]);
 
   courses = coursesData ?? [];
   categories = categoriesData ?? [];
+  team = teamData ?? [];
 
   document.getElementById("courses-count").textContent = courses.length;
   document.getElementById("categories-count").textContent = categories.length;
+  document.getElementById("team-count").textContent = team.length;
 
   renderCategorySelect();
   renderCoursesList();
   renderCategoriesList();
+  renderTeamList();
 }
 
-/* ---------------------------------------------------------------
-   FORMULARIO DE CURSOS
-   --------------------------------------------------------------- */
+/* ============================================================
+   CURSOS
+   ============================================================ */
 
 function renderCategorySelect() {
   const select = document.getElementById("field-category");
@@ -834,39 +1060,43 @@ function fillCourseForm(course) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-async function handleImageUpload(file) {
-  const uploadLabel = document.getElementById("upload-label-text");
-  uploadLabel.textContent = "Subiendo...";
-  try {
-    const ext = file.name.split(".").pop();
-    const path = `cursos/${Date.now()}-${slugify(file.name.replace(`.${ext}`, ""))}.${ext}`;
-    const { error } = await supabase.storage
-      .from("course-media")
-      .upload(path, file, { upsert: true });
-    if (error) throw error;
-
-    const { data } = supabase.storage.from("course-media").getPublicUrl(path);
-    document.getElementById("field-image-url").value = data.publicUrl;
-
-    const preview = document.getElementById("image-preview");
-    preview.src = data.publicUrl;
-    preview.classList.remove("hidden");
-  } catch (err) {
-    const errorEl = document.getElementById("course-form-error");
-    errorEl.textContent = `Error al subir la imagen: ${err.message}`;
-    errorEl.classList.remove("hidden");
-  } finally {
-    uploadLabel.textContent = "Subir imagen";
-  }
+async function uploadToStorage(file, folder) {
+  const ext = file.name.split(".").pop();
+  const path = `${folder}/${Date.now()}-${slugify(file.name.replace(`.${ext}`, ""))}.${ext}`;
+  const { error } = await supabase.storage.from("course-media").upload(path, file, { upsert: true });
+  if (error) throw error;
+  const { data } = supabase.storage.from("course-media").getPublicUrl(path);
+  return data.publicUrl;
 }
 
 function initCourseForm() {
   const form = document.getElementById("course-form");
   const errorEl = document.getElementById("course-form-error");
 
-  document.getElementById("field-image-file").addEventListener("change", (e) => {
+  document.getElementById("field-image-file").addEventListener("change", async (e) => {
     const file = e.target.files?.[0];
-    if (file) handleImageUpload(file);
+    if (!file) return;
+    const uploadLabel = document.getElementById("upload-label-text");
+    uploadLabel.textContent = "Subiendo...";
+    try {
+      const url = await uploadToStorage(file, "cursos");
+      document.getElementById("field-image-url").value = url;
+      const preview = document.getElementById("image-preview");
+      preview.src = url;
+      preview.classList.remove("hidden");
+    } catch (err) {
+      errorEl.textContent = `Error al subir la imagen: ${err.message}`;
+      errorEl.classList.remove("hidden");
+    } finally {
+      uploadLabel.textContent = "Subir imagen";
+    }
+  });
+
+  document.getElementById("remove-image-btn").addEventListener("click", () => {
+    document.getElementById("field-image-url").value = "";
+    const preview = document.getElementById("image-preview");
+    preview.src = "";
+    preview.classList.add("hidden");
   });
 
   document.getElementById("course-cancel-btn").addEventListener("click", resetCourseForm);
@@ -886,8 +1116,7 @@ function initCourseForm() {
     const slug = slugInput ? slugify(slugInput) : slugify(title);
 
     const payload = {
-      title,
-      slug,
+      title, slug,
       description: document.getElementById("field-description").value.trim(),
       short_description: document.getElementById("field-short-description").value.trim(),
       price: Number(document.getElementById("field-price").value) || 0,
@@ -910,7 +1139,6 @@ function initCourseForm() {
       : supabase.from("courses").insert(payload);
 
     const { error } = await query;
-
     submitBtn.disabled = false;
 
     if (error) {
@@ -925,13 +1153,8 @@ function initCourseForm() {
   });
 }
 
-/* ---------------------------------------------------------------
-   LISTADO DE CURSOS
-   --------------------------------------------------------------- */
-
 function renderCoursesList() {
   const wrap = document.getElementById("courses-list");
-
   if (courses.length === 0) {
     wrap.innerHTML = `<p class="muted">Todavía no cargaste ningún curso.</p>`;
     return;
@@ -954,8 +1177,7 @@ function renderCoursesList() {
         <button class="btn-edit" data-edit="${course.id}">Editar</button>
         <button class="btn-delete" data-delete="${course.id}" data-title="${escapeHtml(course.title)}">Eliminar</button>
       </div>
-    </div>
-  `
+    </div>`
     )
     .join("");
 
@@ -971,24 +1193,19 @@ function renderCoursesList() {
       const id = btn.getAttribute("data-delete");
       const title = btn.getAttribute("data-title");
       if (!confirm(`¿Eliminar el curso "${title}"? Esta acción no se puede deshacer.`)) return;
-
       const { error } = await supabase.from("courses").delete().eq("id", id);
-      if (error) {
-        alert(`No se pudo eliminar: ${error.message}`);
-        return;
-      }
+      if (error) { alert(`No se pudo eliminar: ${error.message}`); return; }
       await loadData();
     });
   });
 }
 
-/* ---------------------------------------------------------------
+/* ============================================================
    CATEGORÍAS
-   --------------------------------------------------------------- */
+   ============================================================ */
 
 function renderCategoriesList() {
   const wrap = document.getElementById("categories-list");
-
   if (categories.length === 0) {
     wrap.innerHTML = `<p class="muted">No hay categorías creadas.</p>`;
     return;
@@ -1005,8 +1222,7 @@ function renderCategoriesList() {
       <div class="admin-list-actions">
         <button class="btn-delete" data-delete-cat="${cat.id}" data-name="${escapeHtml(cat.name)}">Eliminar</button>
       </div>
-    </div>
-  `
+    </div>`
     )
     .join("");
 
@@ -1015,12 +1231,8 @@ function renderCategoriesList() {
       const id = btn.getAttribute("data-delete-cat");
       const name = btn.getAttribute("data-name");
       if (!confirm(`¿Eliminar la categoría "${name}"? Los cursos asociados quedarán sin categoría.`)) return;
-
       const { error } = await supabase.from("categories").delete().eq("id", id);
-      if (error) {
-        alert(`No se pudo eliminar: ${error.message}`);
-        return;
-      }
+      if (error) { alert(`No se pudo eliminar: ${error.message}`); return; }
       await loadData();
     });
   });
@@ -1033,24 +1245,259 @@ function initCategoryForm() {
     const name = input.value.trim();
     if (!name) return;
 
-    const { error } = await supabase.from("categories").insert({
-      name,
-      slug: slugify(name),
-    });
-
-    if (error) {
-      alert(`No se pudo crear la categoría: ${error.message}`);
-      return;
-    }
+    const { error } = await supabase.from("categories").insert({ name, slug: slugify(name) });
+    if (error) { alert(`No se pudo crear la categoría: ${error.message}`); return; }
 
     input.value = "";
     await loadData();
   });
 }
 
-/* ---------------------------------------------------------------
+/* ============================================================
+   EQUIPO
+   ============================================================ */
+
+function resetTeamForm() {
+  editingTeamId = null;
+  document.getElementById("team-form").reset();
+  document.getElementById("team-field-order").value = "0";
+  document.getElementById("team-field-active").checked = true;
+  document.getElementById("team-image-preview").classList.add("hidden");
+  document.getElementById("team-form-title").textContent = "Nuevo miembro del equipo";
+  document.getElementById("team-submit-btn").textContent = "Agregar";
+  document.getElementById("team-cancel-btn").classList.add("hidden");
+  document.getElementById("team-form-error").classList.add("hidden");
+}
+
+function fillTeamForm(member) {
+  editingTeamId = member.id;
+  document.getElementById("team-field-name").value = member.name;
+  document.getElementById("team-field-role").value = member.role || "";
+  document.getElementById("team-field-photo-url").value = member.photo_url || "";
+  document.getElementById("team-field-whatsapp").value = member.whatsapp_number || "";
+  document.getElementById("team-field-message").value = member.whatsapp_message || "";
+  document.getElementById("team-field-order").value = member.display_order || 0;
+  document.getElementById("team-field-active").checked = member.active;
+
+  const preview = document.getElementById("team-image-preview");
+  if (member.photo_url) {
+    preview.src = member.photo_url;
+    preview.classList.remove("hidden");
+  } else {
+    preview.classList.add("hidden");
+  }
+
+  document.getElementById("team-form-title").textContent = "Editar miembro del equipo";
+  document.getElementById("team-submit-btn").textContent = "Guardar cambios";
+  document.getElementById("team-cancel-btn").classList.remove("hidden");
+  document.getElementById("team-form-error").classList.add("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function initTeamForm() {
+  const form = document.getElementById("team-form");
+  const errorEl = document.getElementById("team-form-error");
+
+  document.getElementById("team-field-photo-file").addEventListener("change", async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const uploadLabel = document.getElementById("team-upload-label-text");
+    uploadLabel.textContent = "Subiendo...";
+    try {
+      const url = await uploadToStorage(file, "equipo");
+      document.getElementById("team-field-photo-url").value = url;
+      const preview = document.getElementById("team-image-preview");
+      preview.src = url;
+      preview.classList.remove("hidden");
+    } catch (err) {
+      errorEl.textContent = `Error al subir la foto: ${err.message}`;
+      errorEl.classList.remove("hidden");
+    } finally {
+      uploadLabel.textContent = "Subir foto";
+    }
+  });
+
+  document.getElementById("team-remove-image-btn").addEventListener("click", () => {
+    document.getElementById("team-field-photo-url").value = "";
+    const preview = document.getElementById("team-image-preview");
+    preview.src = "";
+    preview.classList.add("hidden");
+  });
+
+  document.getElementById("team-cancel-btn").addEventListener("click", resetTeamForm);
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorEl.classList.add("hidden");
+
+    const name = document.getElementById("team-field-name").value.trim();
+    if (!name) {
+      errorEl.textContent = "El nombre es obligatorio.";
+      errorEl.classList.remove("hidden");
+      return;
+    }
+
+    const payload = {
+      name,
+      role: document.getElementById("team-field-role").value.trim(),
+      photo_url: document.getElementById("team-field-photo-url").value.trim() || null,
+      whatsapp_number: document.getElementById("team-field-whatsapp").value.trim() || null,
+      whatsapp_message: document.getElementById("team-field-message").value.trim() || "Hola, quiero más información",
+      display_order: Number(document.getElementById("team-field-order").value) || 0,
+      active: document.getElementById("team-field-active").checked,
+    };
+
+    const submitBtn = document.getElementById("team-submit-btn");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Guardando...";
+
+    const query = editingTeamId
+      ? supabase.from("team_members").update(payload).eq("id", editingTeamId)
+      : supabase.from("team_members").insert(payload);
+
+    const { error } = await query;
+    submitBtn.disabled = false;
+
+    if (error) {
+      errorEl.textContent = `No se pudo guardar: ${error.message}`;
+      errorEl.classList.remove("hidden");
+      submitBtn.textContent = editingTeamId ? "Guardar cambios" : "Agregar";
+      return;
+    }
+
+    resetTeamForm();
+    await loadData();
+  });
+}
+
+function renderTeamList() {
+  const wrap = document.getElementById("team-list");
+  if (team.length === 0) {
+    wrap.innerHTML = `<p class="muted">Todavía no cargaste miembros del equipo.</p>`;
+    return;
+  }
+
+  wrap.innerHTML = team
+    .map(
+      (m) => `
+    <div class="admin-list-item">
+      <img src="${escapeHtml(m.photo_url || "")}" alt="${escapeHtml(m.name)}" />
+      <div class="admin-list-info">
+        <h4>${escapeHtml(m.name)} ${!m.active ? '<span class="mini-badge hidden-badge">Oculto</span>' : ""}</h4>
+        <p>${escapeHtml(m.role || "")} ${m.whatsapp_number ? `· 📱 ${escapeHtml(m.whatsapp_number)}` : ""}</p>
+      </div>
+      <div class="admin-list-actions">
+        <button class="btn-edit" data-edit-team="${m.id}">Editar</button>
+        <button class="btn-delete" data-delete-team="${m.id}" data-name="${escapeHtml(m.name)}">Eliminar</button>
+      </div>
+    </div>`
+    )
+    .join("");
+
+  wrap.querySelectorAll("[data-edit-team]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const member = team.find((m) => m.id === btn.getAttribute("data-edit-team"));
+      if (member) fillTeamForm(member);
+    });
+  });
+
+  wrap.querySelectorAll("[data-delete-team]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const id = btn.getAttribute("data-delete-team");
+      const name = btn.getAttribute("data-name");
+      if (!confirm(`¿Eliminar a "${name}" del equipo?`)) return;
+      const { error } = await supabase.from("team_members").delete().eq("id", id);
+      if (error) { alert(`No se pudo eliminar: ${error.message}`); return; }
+      await loadData();
+    });
+  });
+}
+
+/* ============================================================
+   CONTENIDO DEL SITIO
+   ============================================================ */
+
+const CONTENT_FIELD_MAP = {
+  "content-logo-url": "logo_url",
+  "content-hero-badge": "hero_badge",
+  "content-hero-title": "hero_title",
+  "content-hero-lead": "hero_lead",
+  "content-stat1-value": "stat_1_value",
+  "content-stat1-suffix": "stat_1_suffix",
+  "content-stat1-label": "stat_1_label",
+  "content-stat2-value": "stat_2_value",
+  "content-stat2-suffix": "stat_2_suffix",
+  "content-stat2-label": "stat_2_label",
+  "content-stat3-value": "stat_3_value",
+  "content-stat3-suffix": "stat_3_suffix",
+  "content-stat3-label": "stat_3_label",
+  "content-adv1-title": "advantage_1_title",
+  "content-adv1-text": "advantage_1_text",
+  "content-adv2-title": "advantage_2_title",
+  "content-adv2-text": "advantage_2_text",
+  "content-adv3-title": "advantage_3_title",
+  "content-adv3-text": "advantage_3_text",
+  "content-adv4-title": "advantage_4_title",
+  "content-adv4-text": "advantage_4_text",
+  "content-contact-title": "contact_title",
+  "content-contact-text": "contact_text",
+  "content-instagram-handle": "instagram_handle",
+  "content-instagram-url": "instagram_url",
+  "content-footer-text": "footer_text",
+};
+const NUMBER_FIELDS = ["stat_1_value", "stat_2_value", "stat_3_value"];
+
+async function loadSiteContent() {
+  const { data, error } = await supabase.from("site_content").select("data").eq("id", 1).single();
+  if (error || !data) { console.warn("No se pudo cargar site_content:", error?.message); return; }
+
+  const content = data.data || {};
+  Object.entries(CONTENT_FIELD_MAP).forEach(([fieldId, key]) => {
+    const el = document.getElementById(fieldId);
+    if (el && content[key] !== undefined && content[key] !== null) el.value = content[key];
+  });
+  document.getElementById("content-show-prices").checked = !!content.show_prices;
+}
+
+function initContentForm() {
+  const form = document.getElementById("content-form");
+  const errorEl = document.getElementById("content-form-error");
+  const successEl = document.getElementById("content-form-success");
+  const submitBtn = document.getElementById("content-submit-btn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorEl.classList.add("hidden");
+    successEl.classList.add("hidden");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Guardando...";
+
+    const payload = { show_prices: document.getElementById("content-show-prices").checked };
+    Object.entries(CONTENT_FIELD_MAP).forEach(([fieldId, key]) => {
+      const el = document.getElementById(fieldId);
+      if (!el) return;
+      payload[key] = NUMBER_FIELDS.includes(key) ? Number(el.value) || 0 : el.value.trim();
+    });
+
+    const { error } = await supabase.from("site_content").upsert({ id: 1, data: payload }, { onConflict: "id" });
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Guardar cambios";
+
+    if (error) {
+      errorEl.textContent = `No se pudo guardar: ${error.message}`;
+      errorEl.classList.remove("hidden");
+      return;
+    }
+
+    successEl.classList.remove("hidden");
+    setTimeout(() => successEl.classList.add("hidden"), 3000);
+  });
+}
+
+/* ============================================================
    INIT
-   --------------------------------------------------------------- */
+   ============================================================ */
 
 function init() {
   initLoginForm();
@@ -1058,11 +1505,12 @@ function init() {
   initTabs();
   initCourseForm();
   initCategoryForm();
+  initTeamForm();
+  initContentForm();
   checkSession();
 }
 
 document.addEventListener("DOMContentLoaded", init);
   </script>
 </body>
-
 </html>
