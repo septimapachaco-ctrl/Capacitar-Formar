@@ -286,6 +286,19 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 }
 .search-wrap input:focus { border-color: var(--color-turquoise); box-shadow: 0 0 0 4px rgba(18, 123, 123, 0.12); }
 
+/* Variante del buscador para el hero (fondo oscuro) */
+.hero-search-wrap { max-width: 420px; margin: 0 0 1.7rem; position: relative; z-index: 20; animation: fadeInUp 0.8s var(--ease-smooth) 0.2s both; }
+.hero-search-wrap svg { position: absolute; left: 1.1rem; top: 50%; transform: translateY(-50%); color: rgba(255, 255, 255, 0.75); pointer-events: none; }
+.hero-search-wrap input {
+  width: 100%; padding: 0.85rem 1rem 0.85rem 2.75rem; border-radius: var(--radius-full);
+  border: 1.5px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px); color: var(--color-white); font-size: 0.9rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+.hero-search-wrap input::placeholder { color: rgba(255, 255, 255, 0.65); }
+.hero-search-wrap input:focus { outline: none; border-color: rgba(255, 255, 255, 0.6); background: rgba(255, 255, 255, 0.18); box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12); }
+.hero-search-wrap .search-results { color: var(--color-text); }
+
 .search-results {
   position: absolute; top: calc(100% + 0.6rem); left: 0; right: 0; z-index: 30;
   background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg);
@@ -570,13 +583,18 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 
 /* ---------- Splash screen ---------- */
 .splash-screen {
-  position: fixed; inset: 0; z-index: 200;
-  background: var(--gradient-brand-diagonal);
+  position: fixed; inset: 0; z-index: 200; overflow: hidden;
+  background: var(--color-white);
   display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem;
   transition: opacity 0.5s ease, visibility 0.5s ease;
 }
-.splash-screen img { width: min(78vw, 78vh); height: min(78vw, 78vh); object-fit: contain; animation: splashPulse 1.4s ease-in-out infinite; border-radius: var(--radius-lg); }
-.splash-screen span { color: rgba(255,255,255,0.75); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.splash-blob { position: absolute; z-index: 0; filter: blur(2px); }
+.splash-blob.b1 { top: -8%; right: -6%; width: 420px; animation: floatY 12s ease-in-out infinite; }
+.splash-blob.b2 { bottom: -10%; left: -8%; width: 380px; animation: floatYSlow 16s ease-in-out infinite; }
+.splash-ring { position: absolute; z-index: 0; width: min(88vw, 88vh); height: min(88vw, 88vh); top: 50%; left: 50%; transform: translate(-50%, -50%); }
+.splash-ring circle { animation: spinSlow 44s linear infinite; transform-origin: center; }
+.splash-screen img { position: relative; z-index: 1; width: min(78vw, 78vh); height: min(78vw, 78vh); object-fit: contain; animation: splashPulse 1.4s ease-in-out infinite; border-radius: var(--radius-lg); }
+.splash-screen span { position: relative; z-index: 1; color: var(--color-blue); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
 .splash-screen.splash-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 @keyframes splashPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.85; } }
 
@@ -668,6 +686,15 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 <body>
   <!-- SPLASH -->
   <div class="splash-screen" id="splash-screen">
+    <svg class="splash-blob b1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <path fill="var(--color-orange)" opacity="0.12" d="M45.4,-58.3C58.2,-49.9,67.4,-34.9,71.6,-18.4C75.8,-1.9,75,16.1,67.1,30.4C59.2,44.7,44.2,55.3,27.9,62.1C11.6,68.9,-6,71.9,-22.4,67.7C-38.8,63.5,-53.9,52.1,-62.6,37.1C-71.3,22.1,-73.6,3.5,-69.9,-13.2C-66.2,-29.9,-56.5,-44.7,-43.3,-53.1C-30.1,-61.5,-15.1,-63.5,1.4,-65.2C17.9,-66.9,35.8,-68.3,45.4,-58.3Z" transform="translate(100 100)" />
+    </svg>
+    <svg class="splash-blob b2" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <path fill="var(--color-turquoise)" opacity="0.12" d="M39.5,-50.6C51.3,-42.6,60.7,-29.9,64.6,-15.4C68.5,-0.9,66.9,15.4,59.6,28.6C52.3,41.8,39.3,51.9,24.9,58.2C10.5,64.5,-5.3,67,-20.5,63.5C-35.7,60,-50.3,50.5,-59.1,37.1C-67.9,23.7,-70.9,6.4,-68.1,-9.8C-65.3,-26,-56.7,-41.1,-44.4,-49.3C-32.1,-57.5,-16.1,-58.8,-0.4,-58.2C15.3,-57.6,27.7,-58.6,39.5,-50.6Z" transform="translate(100 100)" />
+    </svg>
+    <svg class="splash-ring" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="240" cy="240" r="190" fill="none" stroke="rgba(16, 46, 88, 0.14)" stroke-width="1.5" stroke-dasharray="4 10" />
+    </svg>
     <img src="formarsinfondo.png" alt="Formar Capacitaciones" class="js-logo-img" />
     <span>Formar Capacitaciones</span>
   </div>
@@ -705,6 +732,15 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
           horarios fijos. También contamos con propuestas presenciales en
           Salta Capital.
         </p>
+
+        <div class="hero-search-wrap" id="hero-search-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+          </svg>
+          <input type="text" id="hero-search-input" placeholder="Buscar un curso..." autocomplete="off" />
+          <div class="search-results" id="hero-search-results"></div>
+        </div>
+
         <div class="hero-actions">
           <a href="cursos.html" class="btn btn-primary">Ver cursos online asincrónicos</a>
           <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light" id="hero-whatsapp-link">Consultar por WhatsApp</a>
@@ -1096,6 +1132,7 @@ function renderFooter(footerText) {
         <p style="margin-top:1rem;">© <span id="footer-year"></span> Formar Capacitaciones. Todos los derechos reservados. ·
           <a href="admin.html">Acceso administrador</a>
         </p>
+        <p style="margin-top:0.6rem;font-size:0.72rem;opacity:0.55;">Creado por Septimapacha</p>
       </div>
     </footer>
   `;
@@ -1227,7 +1264,6 @@ function initAllAnimations() {
 const WHATSAPP_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2Zm5.8 14.07c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.3-1.64-.6-2.88-1.24-4.76-4.15-4.9-4.34-.14-.19-1.17-1.56-1.17-2.98 0-1.42.74-2.11 1.01-2.4.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.58.81 2 .88 2.15.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.61-.07.16-.19.7-.81.88-1.09.19-.28.37-.23.62-.14.26.09 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.36Z"/></svg>`;
 
 let allCourses = [];
-let searchTerm = "";
 
 const DEMO_COURSES = [
   {
@@ -1419,79 +1455,94 @@ function renderTeamPreview(team) {
 }
 
 /**
- * Muestra hasta 8 resultados de búsqueda en el dropdown debajo del
- * input. Cada resultado enlaza directo a curso.html?slug=... — no hay
- * grilla de cursos en el index, solo este buscador.
+ * Crea un buscador de cursos independiente (input + dropdown de
+ * resultados que enlazan a curso.html?slug=...). Se usa dos veces en
+ * esta página: una en el hero y otra en la sección "Cursos", cada una
+ * con su propio estado.
  */
-function renderSearchResults(list) {
-  const wrap = document.getElementById("search-results");
-  if (!wrap) return;
+function createCourseSearch({ wrapId, inputId, resultsId }) {
+  let term = "";
 
-  if (!searchTerm.trim()) {
-    wrap.classList.remove("open");
-    wrap.innerHTML = "";
-    return;
-  }
+  function renderResults(list) {
+    const wrap = document.getElementById(resultsId);
+    if (!wrap) return;
 
-  if (list.length === 0) {
-    wrap.innerHTML = `<p class="search-results-empty">No encontramos cursos que coincidan con "${escapeHtml(searchTerm)}".</p>`;
+    if (!term.trim()) {
+      wrap.classList.remove("open");
+      wrap.innerHTML = "";
+      return;
+    }
+
+    if (list.length === 0) {
+      wrap.innerHTML = `<p class="search-results-empty">No encontramos cursos que coincidan con "${escapeHtml(term)}".</p>`;
+      wrap.classList.add("open");
+      return;
+    }
+
+    wrap.innerHTML = list
+      .slice(0, 8)
+      .map(
+        (course) => `
+      <a class="search-result-item" href="curso.html?slug=${encodeURIComponent(course.slug)}">
+        <span class="sr-title">${escapeHtml(course.title)}</span>
+        <span class="sr-cat">${escapeHtml(course.categories?.name || course.modality || "")}</span>
+      </a>`
+      )
+      .join("");
     wrap.classList.add("open");
-    return;
   }
 
-  wrap.innerHTML = list
-    .slice(0, 8)
-    .map(
-      (course) => `
-    <a class="search-result-item" href="curso.html?slug=${encodeURIComponent(course.slug)}">
-      <span class="sr-title">${escapeHtml(course.title)}</span>
-      <span class="sr-cat">${escapeHtml(course.categories?.name || course.modality || "")}</span>
-    </a>`
-    )
-    .join("");
-  wrap.classList.add("open");
+  function filterCourses() {
+    const t = term.trim().toLowerCase();
+    if (!t) return [];
+    return allCourses.filter(
+      (course) =>
+        course.title.toLowerCase().includes(t) ||
+        (course.short_description || "").toLowerCase().includes(t) ||
+        (course.categories?.name || "").toLowerCase().includes(t)
+    );
+  }
+
+  function init() {
+    const input = document.getElementById(inputId);
+    const wrap = document.getElementById(wrapId);
+    if (!input) return;
+
+    input.addEventListener("input", (e) => {
+      term = e.target.value;
+      renderResults(filterCourses());
+    });
+
+    input.addEventListener("focus", () => {
+      if (term.trim()) renderResults(filterCourses());
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter") return;
+      const matches = filterCourses();
+      if (matches.length > 0) {
+        window.location.href = `curso.html?slug=${encodeURIComponent(matches[0].slug)}`;
+      } else if (term.trim()) {
+        window.location.href = `cursos.html?buscar=${encodeURIComponent(term.trim())}`;
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      if (wrap && !wrap.contains(e.target)) {
+        document.getElementById(resultsId)?.classList.remove("open");
+      }
+    });
+  }
+
+  return { init };
 }
 
-function filterCourses() {
-  const term = searchTerm.trim().toLowerCase();
-  if (!term) return [];
-  return allCourses.filter(
-    (course) =>
-      course.title.toLowerCase().includes(term) ||
-      (course.short_description || "").toLowerCase().includes(term) ||
-      (course.categories?.name || "").toLowerCase().includes(term)
-  );
-}
+const cursosSearch = createCourseSearch({ wrapId: "search-wrap", inputId: "search-input", resultsId: "search-results" });
+const heroSearch = createCourseSearch({ wrapId: "hero-search-wrap", inputId: "hero-search-input", resultsId: "hero-search-results" });
 
 function initCourseSearch() {
-  const searchInput = document.getElementById("search-input");
-  const searchWrap = document.getElementById("search-wrap");
-  if (!searchInput) return;
-
-  searchInput.addEventListener("input", (e) => {
-    searchTerm = e.target.value;
-    renderSearchResults(filterCourses());
-  });
-
-  searchInput.addEventListener("focus", () => {
-    if (searchTerm.trim()) renderSearchResults(filterCourses());
-  });
-
-  searchInput.addEventListener("keydown", (e) => {
-    if (e.key !== "Enter") return;
-    const matches = filterCourses();
-    if (matches.length > 0) {
-      window.location.href = `curso.html?slug=${encodeURIComponent(matches[0].slug)}`;
-    } else if (searchTerm.trim()) {
-      window.location.href = `cursos.html?buscar=${encodeURIComponent(searchTerm.trim())}`;
-    }
-  });
-
-  document.addEventListener("click", (e) => {
-    if (searchWrap && !searchWrap.contains(e.target)) {
-      document.getElementById("search-results")?.classList.remove("open");
-    }
-  });
+  cursosSearch.init();
+  heroSearch.init();
 }
 
 function hideSplash() {
@@ -1529,6 +1580,7 @@ function initFaqAccordion() {
 }
 
 async function init() {
+  const initStartedAt = Date.now();
   renderHeader();
   renderFooter();
   initAllAnimations();
@@ -1575,12 +1627,21 @@ async function init() {
     allCourses = DEMO_COURSES;
   }
 
+  // El splash se muestra un mínimo de MIN_SPLASH_MS (1s más de lo que
+  // tardan en cargarse los datos), para que el logo no desaparezca de
+  // golpe si la conexión es muy rápida.
+  const MIN_SPLASH_MS = 2000;
+  const elapsed = Date.now() - initStartedAt;
+  if (elapsed < MIN_SPLASH_MS) {
+    await new Promise((resolve) => setTimeout(resolve, MIN_SPLASH_MS - elapsed));
+  }
+
   hideSplash();
 }
 
 document.addEventListener("DOMContentLoaded", init);
-// Por si algo tarda demasiado, la splash nunca queda pegada más de 4s.
-setTimeout(hideSplash, 4000);
+// Por si algo tarda demasiado, la splash nunca queda pegada más de 5s.
+setTimeout(hideSplash, 5000);
   </script>
 </body>
 </html>
