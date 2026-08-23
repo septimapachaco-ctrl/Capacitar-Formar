@@ -202,6 +202,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 .site-header .container { display: flex; align-items: center; justify-content: space-between; padding-top: 0.9rem; padding-bottom: 0.9rem; }
 
 .brand { display: flex; align-items: center; gap: 0.65rem; }
+.brand-wordmark-img { height: 38px; width: auto; display: block; object-fit: contain; }
 .brand-logo {
   width: 44px; height: 44px; border-radius: var(--radius-md); background: var(--gradient-brand); color: var(--color-white);
   display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; font-size: 1rem;
@@ -260,6 +261,12 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 
 .hero-graphic { position: relative; animation: fadeInUp 1s var(--ease-smooth) 0.3s both; }
 .hero-graphic svg { width: 100%; height: auto; filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.25)); }
+.hero-graphic-logo {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 58%; aspect-ratio: 1 / 1; border-radius: 50%; object-fit: cover;
+  background: var(--color-white); border: 6px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.45);
+}
 .hero-orbit { animation: spinSlow 40s linear infinite; transform-origin: center; }
 @media (max-width: 960px) { .hero-graphic { display: none; } }
 
@@ -568,26 +575,26 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
   display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem;
   transition: opacity 0.5s ease, visibility 0.5s ease;
 }
-.splash-screen img { width: 120px; height: 120px; object-fit: contain; animation: splashPulse 1.4s ease-in-out infinite; border-radius: var(--radius-lg); background: rgba(255,255,255,0.08); padding: 0.5rem; }
+.splash-screen img { width: min(78vw, 78vh); height: min(78vw, 78vh); object-fit: contain; animation: splashPulse 1.4s ease-in-out infinite; border-radius: var(--radius-lg); }
 .splash-screen span { color: rgba(255,255,255,0.75); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; }
 .splash-screen.splash-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 @keyframes splashPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.85; } }
 
 /* ---------- Lockup de marca en el hero ---------- */
-.hero-brand-lockup { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1.5rem; }
+.hero-brand-lockup { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
 .hero-brand-lockup img.hero-logo-round {
-  width: 60px; height: 60px; object-fit: cover; border-radius: 50%;
+  width: 92px; height: 92px; object-fit: cover; border-radius: 50%;
   background: var(--color-white); flex-shrink: 0;
   border: 2px solid rgba(255, 255, 255, 0.45);
   box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.4);
 }
-.hero-wordmark-wrap { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; }
+.hero-wordmark-wrap { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
 .hero-wordmark-box {
   display: flex; align-items: center; justify-content: center;
   background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: var(--radius-md); padding: 0.45rem 1.2rem; backdrop-filter: blur(6px);
+  border-radius: var(--radius-md); padding: 0.22rem 0.32rem; backdrop-filter: blur(6px);
 }
-.hero-wordmark-img { height: 30px; width: auto; display: block; }
+.hero-wordmark-img { height: 58px; width: auto; display: block; }
 .hero-brand-lockup .brand-text-small { display: block; font-size: 0.8rem; color: rgba(255,255,255,0.75); font-weight: 600; letter-spacing: 0.04em; margin-top: 0; text-align: center; }
 
 /* ---------- Botón de WhatsApp ---------- */
@@ -607,7 +614,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 }
 .team-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); }
 .team-card-photo { height: 220px; background: var(--color-bg-soft); overflow: hidden; }
-.team-card-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-smooth); }
+.team-card-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; transition: transform 0.5s var(--ease-smooth); }
 .team-card:hover .team-card-photo img { transform: scale(1.06); }
 .team-card-plaque { padding: 1.1rem 1rem; }
 .team-card-plaque .role-plaque {
@@ -719,28 +726,12 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
       <div class="hero-graphic">
         <svg viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg">
           <circle class="hero-orbit" cx="240" cy="240" r="190" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" stroke-dasharray="4 10" />
-          <circle cx="240" cy="240" r="140" fill="rgba(255,255,255,0.07)" />
-          <path d="M100 340 C 150 240, 210 300, 240 220 S 330 140, 380 120" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 10" opacity="0.6" />
-          <g transform="translate(70 310)">
-            <circle r="34" fill="#ffffff" />
-            <path d="M-14 -8 L0 -14 L14 -8 L14 10 L0 16 L-14 10 Z" fill="none" stroke="#102e58" stroke-width="2.2" stroke-linejoin="round" />
-            <line x1="0" y1="-14" x2="0" y2="16" stroke="#102e58" stroke-width="2" />
-          </g>
-          <g transform="translate(230 210)">
-            <circle r="40" fill="#f07a04" />
-            <rect x="-16" y="-14" width="32" height="22" rx="3" fill="none" stroke="#ffffff" stroke-width="2.2" />
-            <circle cx="0" cy="14" r="7" fill="none" stroke="#ffffff" stroke-width="2.2" />
-            <line x1="0" y1="21" x2="0" y2="28" stroke="#ffffff" stroke-width="2.2" />
-          </g>
-          <g transform="translate(380 115)">
-            <circle r="34" fill="#ffffff" />
-            <rect x="-15" y="-4" width="30" height="20" rx="3" fill="none" stroke="#127b7b" stroke-width="2.2" />
-            <path d="M-8 -4 V-9 a4 4 0 0 1 4 -4 h8 a4 4 0 0 1 4 4 v5" fill="none" stroke="#127b7b" stroke-width="2.2" />
-          </g>
+          <circle cx="240" cy="240" r="150" fill="rgba(255,255,255,0.08)" />
           <circle cx="140" cy="120" r="5" fill="#f07a04" opacity="0.8" />
           <circle cx="380" cy="330" r="6" fill="#ffffff" opacity="0.5" />
           <circle cx="60" cy="180" r="4" fill="#ffffff" opacity="0.6" />
         </svg>
+        <img src="formarsinfondo.png" alt="Formar Capacitaciones" class="hero-graphic-logo js-logo-img" />
       </div>
     </div>
 
@@ -1042,8 +1033,7 @@ function renderHeader() {
     <header class="site-header">
       <div class="container">
         <a href="index.html" class="brand">
-          <img src="formarsinfondo.png" alt="Formar Capacitaciones" class="js-logo-img" style="width:36px;height:36px;object-fit:contain;border-radius:8px;" />
-          <span class="brand-name">Formar<br class="mobile-only" /> Capacitaciones</span>
+          <img src="formar.jpg" alt="Formar Capacitaciones" class="brand-wordmark-img" />
         </a>
         <nav class="main-nav" id="main-nav">
           <a href="cursos.html">Cursos</a>
