@@ -581,20 +581,14 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 @keyframes splashPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.85; } }
 
 /* ---------- Lockup de marca en el hero ---------- */
-.hero-brand-lockup { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
-.hero-brand-lockup img.hero-logo-round {
-  width: 92px; height: 92px; object-fit: cover; border-radius: 50%;
-  background: var(--color-white); flex-shrink: 0;
-  border: 2px solid rgba(255, 255, 255, 0.45);
-  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.4);
-}
+.hero-brand-lockup { display: flex; align-items: center; margin-bottom: 1.5rem; }
 .hero-wordmark-wrap { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
 .hero-wordmark-box {
   display: flex; align-items: center; justify-content: center;
   background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: var(--radius-md); padding: 0.22rem 0.32rem; backdrop-filter: blur(6px);
 }
-.hero-wordmark-img { height: 58px; width: auto; display: block; }
+.hero-wordmark-img { height: 84px; width: auto; display: block; }
 .hero-brand-lockup .brand-text-small { display: block; font-size: 0.8rem; color: rgba(255,255,255,0.75); font-weight: 600; letter-spacing: 0.04em; margin-top: 0; text-align: center; }
 
 /* ---------- Botón de WhatsApp ---------- */
@@ -694,7 +688,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
     <div class="container">
       <div>
         <div class="hero-brand-lockup">
-          <img src="formarsinfondo.png" alt="Logo Formar Capacitaciones" class="js-logo-img hero-logo-round" />
           <div class="hero-wordmark-wrap">
             <span class="hero-wordmark-box">
               <img src="formar.jpg" alt="FORMAR" class="hero-wordmark-img" />
@@ -730,6 +723,16 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
           <circle cx="140" cy="120" r="5" fill="#f07a04" opacity="0.8" />
           <circle cx="380" cy="330" r="6" fill="#ffffff" opacity="0.5" />
           <circle cx="60" cy="180" r="4" fill="#ffffff" opacity="0.6" />
+
+          <!-- Conector lateral izquierdo -->
+          <line x1="46" y1="234" x2="102" y2="234" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.55" />
+          <line x1="46" y1="246" x2="102" y2="246" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.55" />
+          <circle cx="40" cy="240" r="9" fill="#ffffff" opacity="0.9" />
+
+          <!-- Conector lateral derecho -->
+          <line x1="378" y1="234" x2="434" y2="234" stroke="#f07a04" stroke-width="2.5" stroke-linecap="round" opacity="0.85" />
+          <line x1="378" y1="246" x2="434" y2="246" stroke="#f07a04" stroke-width="2.5" stroke-linecap="round" opacity="0.85" />
+          <circle cx="440" cy="240" r="9" fill="#f07a04" />
         </svg>
         <img src="formarsinfondo.png" alt="Formar Capacitaciones" class="hero-graphic-logo js-logo-img" />
       </div>
@@ -1355,6 +1358,28 @@ function applySiteContent(c) {
   if (igLink && c.instagram_url) igLink.setAttribute("href", c.instagram_url);
 }
 
+/**
+ * Si el campo "role" (o el WhatsApp) viene vacío desde Supabase —por
+ * ejemplo porque todavía no corriste el UPDATE de schema.sql—, esta
+ * función completa esos datos cruzando por nombre con DEMO_TEAM, que
+ * tiene los 4 puestos y WhatsApp reales cargados. Así la placa nunca
+ * aparece vacía, sin importar el estado de la base de datos.
+ */
+function fillMissingTeamFields(team) {
+  return team.map((m) => {
+    const known = DEMO_TEAM.find(
+      (d) => d.name.trim().toLowerCase() === (m.name || "").trim().toLowerCase()
+    );
+    if (!known) return m;
+    return {
+      ...m,
+      role: m.role && m.role.trim() ? m.role : known.role,
+      whatsapp_number: m.whatsapp_number && m.whatsapp_number.trim() ? m.whatsapp_number : known.whatsapp_number,
+      whatsapp_message: m.whatsapp_message && m.whatsapp_message.trim() ? m.whatsapp_message : known.whatsapp_message,
+    };
+  });
+}
+
 function renderTeamPreview(team) {
   const grid = document.getElementById("team-grid");
   if (!grid) return;
@@ -1372,7 +1397,7 @@ function renderTeamPreview(team) {
         ${m.photo_url ? `<img src="${escapeHtml(m.photo_url)}" alt="${escapeHtml(m.name)}" loading="lazy" />` : ""}
       </div>
       <div class="team-card-plaque">
-        <span class="role-plaque">${escapeHtml(m.role)}</span>
+        ${m.role && m.role.trim() ? `<span class="role-plaque">${escapeHtml(m.role)}</span>` : ""}
         <h3>${escapeHtml(m.name)}</h3>
         <a class="btn btn-whatsapp btn-sm" href="${whatsappLink(m.whatsapp_number || WHATSAPP_NUMBER, m.whatsapp_message)}" target="_blank" rel="noopener noreferrer">
           ${WHATSAPP_ICON} Contactar por WhatsApp
@@ -1528,7 +1553,7 @@ async function init() {
 
   try {
     const team = await fetchTeam();
-    renderTeamPreview(team.length > 0 ? team : DEMO_TEAM);
+    renderTeamPreview(team.length > 0 ? fillMissingTeamFields(team) : DEMO_TEAM);
   } catch (err) {
     console.warn("[Formar Capacitaciones] No se pudo cargar el equipo, se muestran los datos de referencia.", err.message || err);
     renderTeamPreview(DEMO_TEAM);
