@@ -503,11 +503,16 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 }
 .team-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); }
 .team-card-photo { height: 220px; background: var(--color-bg-soft); overflow: hidden; }
-.team-card-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-smooth); }
+.team-card-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; transition: transform 0.5s var(--ease-smooth); }
 .team-card:hover .team-card-photo img { transform: scale(1.06); }
 .team-card-plaque { padding: 1.1rem 1rem; }
-.team-card-plaque h3 { font-size: 1rem; margin-bottom: 0.15rem; }
-.team-card-plaque p { font-size: 0.82rem; color: var(--color-turquoise); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.9rem; }
+.team-card-plaque .role-plaque {
+  display: inline-block; background: var(--gradient-brand); color: var(--color-white);
+  font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 0.32rem 0.85rem; border-radius: var(--radius-full); margin-bottom: 0.65rem;
+  box-shadow: 0 6px 14px -6px rgba(16, 46, 88, 0.5);
+}
+.team-card-plaque h3 { font-size: 1rem; margin-bottom: 0.9rem; }
 .team-card-plaque .btn { width: 100%; }
 
 /* Variante grande para gracias.html (equipo en primer plano) */
@@ -610,7 +615,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
  * ⚠️ REEMPLAZAR por el número real: se usa en TODOS los botones de
  * "Consultar por WhatsApp" del sitio (cursos, equipo, contacto).
  */
-const WHATSAPP_NUMBER = "5493870000000";
+const WHATSAPP_NUMBER = "5493876236285"; // 📲 WhatsApp principal de contacto: 3876 23-6285
 
 /** Logo por defecto (se puede sobreescribir desde site_content.logo_url en el admin) */
 const DEFAULT_LOGO_URL = "https://i.ibb.co/LDXsp8FF/Formar-posts.png";
@@ -876,8 +881,8 @@ function initAllAnimations() {
               ${m.photo_url ? `<img src="${escapeHtml(m.photo_url)}" alt="${escapeHtml(m.name)}" loading="lazy" />` : ""}
             </div>
             <div class="team-card-plaque">
+              <span class="role-plaque">${escapeHtml(m.role)}</span>
               <h3>${escapeHtml(m.name)}</h3>
-              <p>${escapeHtml(m.role)}</p>
               <a class="btn btn-whatsapp" href="${whatsappLink(m.whatsapp_number || WHATSAPP_NUMBER, m.whatsapp_message)}" target="_blank" rel="noopener noreferrer">
                 ${WHATSAPP_ICON} Contactar por WhatsApp
               </a>
