@@ -416,10 +416,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 .login-card h1 { text-align: center; font-size: 1.28rem; }
 .login-card .sub { text-align: center; color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 1.6rem; }
 .login-card label { display: block; font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 0.32rem; margin-top: 0.9rem; }
-.captcha-row { background: var(--color-bg-soft); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 0.75rem 0.9rem 0.9rem; margin-top: 1rem; }
-.captcha-row label { margin-top: 0 !important; }
-#captcha-question { color: var(--color-blue); font-weight: 800; font-family: var(--font-display); }
-#captcha-refresh { flex-shrink: 0; font-size: 1.1rem; line-height: 1; padding: 0.5rem 0.75rem; }
 .login-locked-msg { text-align: center; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-md); padding: 0.75rem 1rem; font-size: 0.85rem; font-weight: 600; margin-top: 1rem; }
 
 .admin-topbar { position: sticky; top: 0; z-index: 20; background: var(--color-white); border-bottom: 1px solid var(--color-border); padding: 1.05rem 0; }
@@ -564,16 +560,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 
       <label for="login-password">Contraseña</label>
       <input type="password" id="login-password" required />
-
-      <div class="captcha-row" id="captcha-row">
-        <label for="captcha-answer" style="margin-top:0.9rem;">
-          Verificación: <span id="captcha-question">¿?</span>
-        </label>
-        <div style="display:flex;gap:0.5rem;align-items:center;">
-          <input type="text" id="captcha-answer" inputmode="numeric" autocomplete="off" required style="flex:1;" />
-          <button type="button" id="captcha-refresh" class="upload-btn" title="Nueva pregunta" aria-label="Nueva pregunta">↻</button>
-        </div>
-      </div>
 
       <p class="form-error hidden" id="login-error"></p>
 
@@ -958,25 +944,8 @@ async function checkSession() {
 }
 
 /* ============================================================
-   CAPTCHA simple (anti-bots) + bloqueo por intentos fallidos
+   Bloqueo por intentos fallidos (anti fuerza bruta)
    ============================================================ */
-
-let currentCaptchaAnswer = null;
-
-function generateCaptcha() {
-  const a = Math.floor(Math.random() * 9) + 1;
-  const b = Math.floor(Math.random() * 9) + 1;
-  const ops = [
-    { symbol: "+", fn: (x, y) => x + y },
-    { symbol: "−", fn: (x, y) => Math.max(x, y) - Math.min(x, y) },
-  ];
-  const op = ops[Math.floor(Math.random() * ops.length)];
-  currentCaptchaAnswer = op.fn(a, b);
-  const questionEl = document.getElementById("captcha-question");
-  if (questionEl) questionEl.textContent = `${a} ${op.symbol} ${b} =`;
-  const answerInput = document.getElementById("captcha-answer");
-  if (answerInput) answerInput.value = "";
-}
 
 const LOGIN_LOCK_KEY = "formar_admin_login_lock";
 const MAX_LOGIN_ATTEMPTS = 5;
@@ -1018,14 +987,13 @@ function getRemainingLockMs() {
 }
 
 function applyLockUI() {
-  const form = document.getElementById("login-form");
   const submitBtn = document.getElementById("login-submit");
   const errorEl = document.getElementById("login-error");
   const remaining = getRemainingLockMs();
 
   if (remaining <= 0) {
     submitBtn.disabled = false;
-    return null;
+    return;
   }
 
   submitBtn.disabled = true;
@@ -1038,10 +1006,8 @@ function applyLockUI() {
       clearInterval(interval);
       submitBtn.disabled = false;
       errorEl.classList.add("hidden");
-      generateCaptcha();
     }
   }, 1000);
-  return interval;
 }
 
 function initLoginForm() {
@@ -1049,8 +1015,6 @@ function initLoginForm() {
   const errorEl = document.getElementById("login-error");
   const submitBtn = document.getElementById("login-submit");
 
-  generateCaptcha();
-  document.getElementById("captcha-refresh")?.addEventListener("click", generateCaptcha);
   applyLockUI();
 
   form.addEventListener("submit", async (e) => {
@@ -1059,15 +1023,6 @@ function initLoginForm() {
 
     if (getRemainingLockMs() > 0) {
       applyLockUI();
-      return;
-    }
-
-    const captchaInput = document.getElementById("captcha-answer");
-    const captchaValue = Number((captchaInput?.value || "").trim());
-    if (Number.isNaN(captchaValue) || captchaValue !== currentCaptchaAnswer) {
-      errorEl.textContent = "La verificación no es correcta. Resolvé la cuenta de nuevo.";
-      errorEl.classList.remove("hidden");
-      generateCaptcha();
       return;
     }
 
@@ -1084,7 +1039,6 @@ function initLoginForm() {
 
     if (error) {
       registerFailedAttempt();
-      generateCaptcha();
       if (getRemainingLockMs() > 0) {
         applyLockUI();
       } else {
