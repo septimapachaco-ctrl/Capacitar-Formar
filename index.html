@@ -3,17 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Formar Capacitaciones | Cursos con validez nacional en Salta, Córdoba y Argentina</title>
-  <meta name="description" content="Cursos y capacitaciones con certificación de validez nacional e internacional. Modalidad presencial y online en Salta, Córdoba y todo el país. Formate y conseguí trabajo." />
-  <meta name="keywords" content="cursos Salta, cursos Córdoba, capacitaciones Argentina, cursos con salida laboral, certificación nacional, cursos online Argentina" />
+  <title>Cursos Online Asincrónicos con Certificación | FORMAR</title>
+  <meta name="description" content="Capacitate desde donde quieras y en el momento que puedas. FORMAR ofrece cursos online asincrónicos, propuestas presenciales en Salta Capital, certificación nacional e internacional y acceso al Portal de Empleo para egresados." />
+  <meta name="keywords" content="cursos online asincrónicos, capacitaciones online asincrónicas, cursos online con certificación, cursos a distancia, cursos online Argentina, formación online para profesionales, cursos online desde Salta, cursos presenciales en Salta Capital" />
   <link rel="canonical" href="https://formarcapacitaciones.com.ar/" />
 
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_AR" />
   <meta property="og:site_name" content="Formar Capacitaciones" />
-  <meta property="og:title" content="Formar Capacitaciones | Cursos con validez nacional" />
-  <meta property="og:description" content="Cursos y capacitaciones presenciales y online en Salta, Córdoba y toda Argentina. Certificación con validez nacional e internacional." />
+  <meta property="og:title" content="FORMAR | Cursos y Capacitaciones Online para Estudiar a tu Ritmo" />
+  <meta property="og:description" content="Cursos online asincrónicos y capacitaciones flexibles para estudiantes, trabajadores y profesionales. Certificación con validez nacional e internacional. También presencial en Salta Capital." />
   <meta name="twitter:card" content="summary_large_image" />
+
+  <script type="application/ld+json" id="faq-jsonld">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Qué significa que un curso sea asincrónico?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Un curso asincrónico es una capacitación que podés realizar sin conectarte en un horario fijo. Te permite acceder al contenido y avanzar según tus tiempos, desde donde estés." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿FORMAR ofrece cursos online asincrónicos?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sí. FORMAR ofrece capacitaciones online asincrónicas para que puedas estudiar desde donde estés y en el momento que puedas. También contamos con propuestas presenciales en Salta Capital." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Tengo que conectarme a una clase en vivo?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Depende de cada propuesta. Los cursos asincrónicos permiten avanzar sin depender de un horario fijo de conexión." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Puedo hacer un curso de FORMAR si vivo fuera de Salta?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sí. Las propuestas online permiten capacitarte desde cualquier lugar del país." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Los cursos online tienen certificación?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sí. Las propuestas pueden contar con certificación nacional e internacional, según corresponda a cada curso." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Los cursos son solo para principiantes?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. FORMAR ofrece propuestas para personas que quieren empezar desde cero y también capacitaciones para profesionales que buscan actualizarse o especializarse." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Puedo estudiar si trabajo o tengo poco tiempo?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sí. La modalidad asincrónica está pensada para personas que necesitan organizar su formación según sus propios horarios." }
+      }
+    ]
+  }
+  </script>
 
   <link rel="icon" type="image/png" href="https://i.ibb.co/LDXsp8FF/Formar-posts.png" class="js-logo-img" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -296,6 +340,28 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 .advantages-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; }
 @media (max-width: 960px) { .advantages-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .advantages-grid { grid-template-columns: 1fr; } }
+
+/* ---------- Modalidades (Elegí cómo formarte) ---------- */
+.modality-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.4rem; }
+@media (max-width: 960px) { .modality-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .modality-grid { grid-template-columns: 1fr; } }
+.modality-card { position: relative; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.8rem 1.6rem; box-shadow: var(--shadow-card); transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth); }
+.modality-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); }
+.modality-card.featured { border-color: var(--color-orange); background: linear-gradient(160deg, rgba(240,122,4,0.06), rgba(255,255,255,1)); }
+.modality-card .modality-tag { display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-orange); background: rgba(240,122,4,0.1); padding: 0.25rem 0.6rem; border-radius: var(--radius-full); margin-bottom: 0.9rem; }
+.modality-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+.modality-card p { font-size: 0.92rem; color: var(--color-text-muted); line-height: 1.55; margin: 0; }
+
+/* ---------- FAQ (acordeón) ---------- */
+.faq-list { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+.faq-item { background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; }
+.faq-question { width: 100%; text-align: left; background: none; border: none; cursor: pointer; padding: 1.1rem 1.3rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-family: var(--font-display); font-weight: 600; color: var(--color-blue); font-size: 1rem; }
+.faq-question .faq-icon { flex-shrink: 0; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--color-bg-soft); color: var(--color-orange); transition: transform 0.25s ease; }
+.faq-item.open .faq-question .faq-icon { transform: rotate(45deg); }
+.faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.faq-answer p { padding: 0 1.3rem 1.1rem; color: var(--color-text-muted); font-size: 0.94rem; line-height: 1.6; margin: 0; }
+.aeo-block { max-width: 820px; margin: 0 auto; text-align: center; background: var(--color-bg-soft); border-radius: var(--radius-lg); padding: 2rem 2.2rem; }
+.aeo-block p { color: var(--color-text-muted); font-size: 0.98rem; line-height: 1.7; margin: 0; }
 
 .advantage-card { background: var(--color-white); border-radius: var(--radius-lg); padding: 1.9rem; box-shadow: var(--shadow-card); transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth); }
 .advantage-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); }
@@ -597,16 +663,18 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
           </div>
         </div>
 
-        <span class="hero-badge" id="hero-badge"><span class="dot"></span><span id="hero-badge-text">Salta · Córdoba · Todo el país</span></span>
-        <h1 id="hero-title">Formate hoy, trabajá mañana</h1>
+        <span class="hero-badge" id="hero-badge"><span class="dot"></span><span id="hero-badge-text">Cursos online asincrónicos · Todo el país</span></span>
+        <h1 id="hero-title">Capacitate desde donde quieras, en el momento que puedas</h1>
         <p class="lead" id="hero-lead">
-          Cursos y capacitaciones con certificación de validez nacional e
-          internacional, pensados para estudiantes, profesionales y personas
-          en búsqueda laboral en toda Argentina.
+          Cursos y capacitaciones online asincrónicas con certificación de
+          validez nacional e internacional, pensadas para estudiantes,
+          trabajadores y profesionales que quieren avanzar sin depender de
+          horarios fijos. También contamos con propuestas presenciales en
+          Salta Capital.
         </p>
         <div class="hero-actions">
-          <a href="cursos.html" class="btn btn-primary">Ver cursos disponibles</a>
-          <a href="#contacto" class="btn btn-outline-light">Hablar con un asesor</a>
+          <a href="cursos.html" class="btn btn-primary">Ver cursos online asincrónicos</a>
+          <a href="#contacto" class="btn btn-outline-light">Consultar por WhatsApp</a>
         </div>
         <div class="hero-stats">
           <div><strong><span data-count-to="8" data-suffix="+" id="stat-1-value">0</span></strong><span id="stat-1-label">Cursos activos</span></div>
@@ -655,13 +723,46 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
     </svg>
   </div>
 
+  <!-- MODALIDADES -->
+  <section id="modalidades" class="section" style="padding-top:3.5rem;">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="eyebrow">Elegí cómo formarte</span>
+        <h2>Cuatro formas de capacitarte con FORMAR</h2>
+        <p>Aprendé a tu ritmo: accedé a contenidos pensados para que puedas capacitarte sin depender de horarios fijos. Ideal para quienes trabajan, estudian, viven lejos o necesitan organizar su formación según sus tiempos.</p>
+      </div>
+      <div class="modality-grid">
+        <div class="modality-card featured reveal reveal-delay-1">
+          <span class="modality-tag">La más elegida</span>
+          <h3>Online asincrónica</h3>
+          <p>Aprendé desde donde estés, en el momento que puedas. Sin horarios fijos de conexión.</p>
+        </div>
+        <div class="modality-card reveal reveal-delay-2">
+          <span class="modality-tag">A distancia</span>
+          <h3>Online / virtual</h3>
+          <p>Capacitaciones a distancia, con instancias pautadas cuando la propuesta lo requiere.</p>
+        </div>
+        <div class="modality-card reveal reveal-delay-3">
+          <span class="modality-tag">Mixta</span>
+          <h3>Híbrida</h3>
+          <p>Combiná recursos virtuales e instancias presenciales según cada propuesta.</p>
+        </div>
+        <div class="modality-card reveal reveal-delay-4">
+          <span class="modality-tag">Salta Capital</span>
+          <h3>Presencial</h3>
+          <p>También contamos con propuestas presenciales en Alberdi 615, Salta Capital.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CATÁLOGO (vista previa) -->
   <section id="cursos" class="section">
     <div class="container">
       <div class="section-header reveal">
-        <span class="eyebrow">Oferta académica</span>
+        <span class="eyebrow">Cursos online asincrónicos</span>
         <h2>Elegí el curso que impulsa tu futuro</h2>
-        <p>Cursos con certificación de validez nacional e internacional, pensados para tu inserción laboral en Salta, Córdoba y todo el país. Sumate a cientos de personas que ya dieron el salto hacia un nuevo trabajo.</p>
+        <p>Cursos con certificación de validez nacional e internacional, pensados para que puedas capacitarte desde donde estés. Sumate a cientos de personas que ya dieron el salto hacia una nueva etapa.</p>
       </div>
 
       <div class="search-wrap reveal">
@@ -720,8 +821,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
               <circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20Z" />
             </svg>
           </div>
-          <h3 id="advantage-2-title">Modalidad presencial y online</h3>
-          <p id="advantage-2-text">Estudiá desde Salta, Córdoba o cualquier punto del país con cursado presencial, virtual o mixto según tu comodidad.</p>
+          <h3 id="advantage-2-title">Online asincrónica: estudiá cuando puedas</h3>
+          <p id="advantage-2-text">Accedé al contenido y avanzá a tu ritmo, sin depender de un horario fijo de conexión. Ideal si trabajás, estudiás o vivís lejos. También tenemos propuestas presenciales en Salta Capital.</p>
         </div>
         <div class="advantage-card reveal reveal-delay-3">
           <div class="advantage-icon">
@@ -729,7 +830,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
               <rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
             </svg>
           </div>
-          <h3 id="advantage-3-title">Salida laboral real</h3>
+          <h3 id="advantage-3-title">Formación orientada al mundo laboral</h3>
           <p id="advantage-3-text">Diseñamos cada curso pensando en las demandas actuales del mercado laboral argentino, con contenido 100% práctico.</p>
         </div>
         <div class="advantage-card reveal reveal-delay-4">
@@ -744,6 +845,76 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
       </div>
       <div class="text-center reveal" style="margin-top:2.5rem;">
         <a href="gracias.html" class="btn btn-primary">Conocé a nuestro equipo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUÉ ES FORMAR (bloque de respuesta directa para IA / AEO) -->
+  <section class="section" style="padding-top:2.5rem;padding-bottom:2.5rem;">
+    <div class="container">
+      <div class="aeo-block reveal">
+        <p>FORMAR ofrece cursos y capacitaciones online asincrónicas para personas que quieren capacitarse desde donde estén y en el momento que puedan. Sus propuestas están orientadas a estudiantes, trabajadores, personas en búsqueda laboral y profesionales que buscan actualizarse o especializarse. También cuenta con opciones presenciales en Salta Capital, certificación nacional e internacional según cada propuesta y acceso gratuito al Portal de Empleo para egresados con certificación nacional.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="preguntas-frecuentes" class="section" style="background:var(--color-bg-soft);">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="eyebrow">Preguntas frecuentes</span>
+        <h2>Todo lo que necesitás saber</h2>
+      </div>
+      <div class="faq-list" id="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            <span>¿Qué significa que un curso sea asincrónico?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer"><p>Un curso asincrónico es una capacitación que podés realizar sin conectarte en un horario fijo. Te permite acceder al contenido y avanzar según tus tiempos, desde donde estés: después del trabajo, durante la semana, los fines de semana o en los momentos que tengas disponibles.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            <span>¿FORMAR ofrece cursos online asincrónicos?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer"><p>Sí. FORMAR ofrece capacitaciones online asincrónicas para que puedas estudiar desde donde estés y en el momento que puedas. También contamos con propuestas presenciales en Salta Capital.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            <span>¿Tengo que conectarme a una clase en vivo?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer"><p>Depende de cada propuesta. Los cursos asincrónicos permiten avanzar sin depender de un horario fijo de conexión.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            <span>¿Puedo hacer un curso de FORMAR si vivo fuera de Salta?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer"><p>Sí. Las propuestas online permiten capacitarte desde cualquier lugar del país.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            <span>¿Los cursos online tienen certificación?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer"><p>Sí. Las propuestas pueden contar con certificación nacional e internacional, según corresponda a cada curso.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            <span>¿Los cursos son solo para principiantes?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer"><p>No. FORMAR ofrece propuestas para personas que quieren empezar desde cero y también capacitaciones para profesionales que buscan actualizarse o especializarse.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            <span>¿Puedo estudiar si trabajo o tengo poco tiempo?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer"><p>Sí. La modalidad asincrónica está pensada para personas que necesitan organizar su formación según sus propios horarios.</p></div>
+        </div>
       </div>
     </div>
   </section>
@@ -895,7 +1066,7 @@ function renderFooter(footerText) {
     <footer class="site-footer">
       <div class="container">
         <p><strong>Formar Capacitaciones</strong></p>
-        <p style="margin-top:0.5rem;" id="footer-text">${footerText || "Cursos y capacitaciones con validez nacional e internacional en Salta, Córdoba y toda Argentina."}</p>
+        <p style="margin-top:0.5rem;" id="footer-text">${footerText || "Cursos y capacitaciones online asincrónicas con validez nacional e internacional. También en Salta Capital, de forma presencial."}</p>
         <p style="margin-top:1rem;">© <span id="footer-year"></span> Formar Capacitaciones. Todos los derechos reservados. ·
           <a href="admin.html">Acceso administrador</a>
         </p>
@@ -1262,10 +1433,38 @@ function hideSplash() {
   setTimeout(() => splash.remove(), 600);
 }
 
+/**
+ * Acordeón de preguntas frecuentes (abre/cierra con un clic, sin
+ * dependencias externas).
+ */
+function initFaqAccordion() {
+  document.querySelectorAll("#faq-list .faq-item").forEach((item) => {
+    const question = item.querySelector(".faq-question");
+    const answer = item.querySelector(".faq-answer");
+    question?.addEventListener("click", () => {
+      const isOpen = item.classList.contains("open");
+      document.querySelectorAll("#faq-list .faq-item.open").forEach((openItem) => {
+        if (openItem !== item) {
+          openItem.classList.remove("open");
+          openItem.querySelector(".faq-answer").style.maxHeight = null;
+        }
+      });
+      if (isOpen) {
+        item.classList.remove("open");
+        answer.style.maxHeight = null;
+      } else {
+        item.classList.add("open");
+        answer.style.maxHeight = `${answer.scrollHeight}px`;
+      }
+    });
+  });
+}
+
 async function init() {
   renderHeader();
   renderFooter();
   initAllAnimations();
+  initFaqAccordion();
 
   const searchInput = document.getElementById("search-input");
   searchInput?.addEventListener("input", (e) => {
