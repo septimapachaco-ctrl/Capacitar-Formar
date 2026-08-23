@@ -1305,7 +1305,15 @@ async function fetchTeam() {
     .eq("active", true)
     .order("display_order", { ascending: true });
   if (error) throw error;
-  return data ?? [];
+  // La tabla real en Supabase usa las columnas "profession" y "whatsapp"
+  // (no "role" / "whatsapp_number"). Los normalizamos acá para que el
+  // resto del código (renderTeamPreview, etc.) no tenga que cambiar.
+  return (data ?? []).map((m) => ({
+    ...m,
+    role: m.role || m.profession || "",
+    whatsapp_number: m.whatsapp_number || m.whatsapp || "",
+    whatsapp_message: m.whatsapp_message || `Hola ${(m.name || "").split(" ").filter((w) => !/\.$/.test(w)).slice(-1)[0] || ""}, quiero más información sobre los cursos de Formar Capacitaciones`,
+  }));
 }
 
 async function fetchCourses() {
