@@ -1,3 +1,4 @@
+
 -- ============================================================
 -- FORMAR CAPACITACIONES - Esquema de Base de Datos (Supabase/PostgreSQL)
 -- ============================================================
@@ -26,7 +27,7 @@ create table if not exists public.courses (
   description   text not null default '',
   short_description text not null default '',
   price         numeric(12, 2) not null default 0,
-  modality      text not null default 'Consultar', -- 'Presencial' | 'Virtual' | 'Presencial / Virtual' | 'Online' | 'Consultar'
+  modality      text not null default 'Online asincrónica', -- 'Online asincrónica' | 'Online / virtual (en vivo)' | 'Híbrida (online + presencial)' | 'Presencial' | 'Presencial / Virtual' | 'Consultar'
   image_url     text,
   video_url     text,
   duration      text, -- ej: "6 meses"
@@ -52,7 +53,7 @@ create table if not exists public.orders (
   student_phone   text,
   items           jsonb not null default '[]'::jsonb, -- [{course_id, title, price, quantity}]
   total           numeric(12, 2) not null default 0,
-  status          text not null default 'pending', -- 'pending' | 'approved' | 'rejected' | 'cancelled'
+  status          text not null default 'pending', -- 'pending' (nueva) | 'contacted' (ya contactada)
   mp_payment_id   text,
   mp_preference_id text,
   created_at      timestamptz not null default now()
@@ -60,6 +61,54 @@ create table if not exists public.orders (
 
 create index if not exists orders_status_idx on public.orders (status);
 create index if not exists orders_email_idx on public.orders (student_email);
+
+-- ------------------------------------------------------------
+-- 3B. TABLA: site_content (textos editables de la web)
+-- ------------------------------------------------------------
+-- Guarda en una sola fila (id = 1) todos los textos de la landing que
+-- el admin puede editar desde /admin: hero, estadísticas, ventajas,
+-- contacto y footer. El frontend lee esta fila al cargar la página.
+create table if not exists public.site_content (
+  id          integer primary key default 1,
+  data        jsonb not null default '{}'::jsonb,
+  updated_at  timestamptz not null default now(),
+  constraint site_content_single_row check (id = 1)
+);
+
+drop trigger if exists trg_site_content_updated_at on public.site_content;
+create trigger trg_site_content_updated_at
+  before update on public.site_content
+  for each row execute function public.set_updated_at();
+
+-- ------------------------------------------------------------
+-- 3C. TABLA: team_members (equipo / profesionales)
+-- ------------------------------------------------------------
+create table if not exists public.team_members (
+  id              uuid primary key default gen_random_uuid(),
+  name            text not null,
+  role            text not null default '',
+  photo_url       text,
+  whatsapp_number text,   -- solo dígitos, con código de país. Ej: 5493876543210
+  whatsapp_message text default 'Hola, quiero más información',
+  display_order   integer not null default 0,
+  active          boolean not null default true,
+  created_at      timestamptz not null default now()
+);
+
+create index if not exists team_members_order_idx on public.team_members (display_order);
+
+alter table public.team_members enable row level security;
+
+drop policy if exists "public_read_team_members" on public.team_members;
+create policy "public_read_team_members"
+  on public.team_members for select
+  using (active = true);
+
+drop policy if exists "admin_all_team_members" on public.team_members;
+create policy "admin_all_team_members"
+  on public.team_members for all
+  using (auth.role() = 'authenticated')
+  with check (auth.role() = 'authenticated');
 
 -- ------------------------------------------------------------
 -- 4. TRIGGER: actualizar updated_at en courses
@@ -122,6 +171,33 @@ create policy "admin_read_orders"
 drop policy if exists "admin_update_orders" on public.orders;
 create policy "admin_update_orders"
   on public.orders for update
+  using (auth.role() = 'authenticated');
+
+drop policy if exists "admin_delete_orders" on public.orders;
+create policy "admin_delete_orders"
+  on public.orders for delete
+  using (auth.role() = 'authenticated');
+-- Nota: la tabla "orders" queda del sistema de carrito anterior (ya
+-- desactivado, ahora se usa WhatsApp). Se deja creada por compatibilidad
+-- pero no se usa desde el frontend actual.
+
+-- site_content: lectura pública (la landing la necesita sin login),
+-- edición solo para administradores autenticados.
+alter table public.site_content enable row level security;
+
+drop policy if exists "public_read_site_content" on public.site_content;
+create policy "public_read_site_content"
+  on public.site_content for select
+  using (true);
+
+drop policy if exists "admin_write_site_content" on public.site_content;
+create policy "admin_write_site_content"
+  on public.site_content for insert
+  with check (auth.role() = 'authenticated');
+
+drop policy if exists "admin_update_site_content" on public.site_content;
+create policy "admin_update_site_content"
+  on public.site_content for update
   using (auth.role() = 'authenticated');
 
 -- ------------------------------------------------------------
@@ -287,102 +363,92 @@ values
   true,
   true,
   (select id from public.categories where slug = 'docencia-y-educacion')
-);
+)
+on conflict (slug) do nothing;
 
 -- ============================================================
--- 9. TABLA: team_members (equipo / profesionales)
+-- 9. SEMILLA DE DATOS (CONTENIDO EDITABLE DE LA WEB)
 -- ============================================================
-create table if not exists public.team_members (
-  id             uuid primary key default gen_random_uuid(),
-  name           text not null,
-  profession     text not null,
-  photo_url      text,
-  whatsapp       text, -- opcional: si está vacío, se usa site_settings.whatsapp_number
-  bio            text,
-  display_order  integer not null default 0,
-  active         boolean not null default true,
-  created_at     timestamptz not null default now(),
-  updated_at     timestamptz not null default now()
-);
-
-create index if not exists team_members_active_idx on public.team_members (active);
-create index if not exists team_members_order_idx on public.team_members (display_order);
-
-drop trigger if exists trg_team_members_updated_at on public.team_members;
-create trigger trg_team_members_updated_at
-  before update on public.team_members
-  for each row execute function public.set_updated_at();
-
-alter table public.team_members enable row level security;
-
-drop policy if exists "public_read_team_members" on public.team_members;
-create policy "public_read_team_members"
-  on public.team_members for select
-  using (active = true);
-
-drop policy if exists "admin_all_team_members" on public.team_members;
-create policy "admin_all_team_members"
-  on public.team_members for all
-  using (auth.role() = 'authenticated')
-  with check (auth.role() = 'authenticated');
-
--- ============================================================
--- 10. TABLA: site_settings (fila única de configuración editable)
--- ============================================================
-create table if not exists public.site_settings (
-  id                smallint primary key default 1 check (id = 1),
-  logo_url          text,
-  whatsapp_number   text default '', -- formato E.164 sin '+', ej: 5493876000000
-  hero_title        text not null default 'FORMAR',
-  hero_subtitle     text not null default 'Cursos · Capacitaciones',
-  show_prices       boolean not null default true,
-  price_placeholder text not null default '$0000',
-  splash_enabled    boolean not null default true,
-  updated_at        timestamptz not null default now()
-);
-
-drop trigger if exists trg_site_settings_updated_at on public.site_settings;
-create trigger trg_site_settings_updated_at
-  before update on public.site_settings
-  for each row execute function public.set_updated_at();
-
-alter table public.site_settings enable row level security;
-
-drop policy if exists "public_read_site_settings" on public.site_settings;
-create policy "public_read_site_settings"
-  on public.site_settings for select
-  using (true);
-
-drop policy if exists "admin_update_site_settings" on public.site_settings;
-create policy "admin_update_site_settings"
-  on public.site_settings for update
-  using (auth.role() = 'authenticated')
-  with check (auth.role() = 'authenticated');
-
-drop policy if exists "admin_insert_site_settings" on public.site_settings;
-create policy "admin_insert_site_settings"
-  on public.site_settings for insert
-  with check (auth.role() = 'authenticated');
-
--- ============================================================
--- 11. SEED: configuración del sitio y equipo
--- ============================================================
-insert into public.site_settings (id, logo_url, whatsapp_number, hero_title, hero_subtitle, show_prices, price_placeholder, splash_enabled)
-values (
+insert into public.site_content (id, data) values (
   1,
-  'https://i.ibb.co/LDXsp8FF/Formar-posts.png',
-  '',
-  'FORMAR',
-  'Cursos · Capacitaciones',
-  true,
-  '$0000',
-  true
+  '{
+    "logo_url": "https://i.ibb.co/LDXsp8FF/Formar-posts.png",
+    "show_prices": false,
+    "hero_badge": "Cursos online asincrónicos · Todo el país",
+    "hero_title": "Capacitate desde donde quieras, en el momento que puedas",
+    "hero_lead": "Cursos y capacitaciones online asincrónicas con certificación de validez nacional e internacional, pensadas para estudiantes, trabajadores y profesionales que quieren avanzar sin depender de horarios fijos. También contamos con propuestas presenciales en Salta Capital.",
+    "stat_1_value": 8, "stat_1_suffix": "+", "stat_1_label": "Cursos activos",
+    "stat_2_value": 100, "stat_2_suffix": "%", "stat_2_label": "Validez nacional",
+    "stat_3_value": 2, "stat_3_suffix": "", "stat_3_label": "Modalidades",
+    "advantage_1_title": "Certificación con validez nacional",
+    "advantage_1_text": "Nuestros certificados tienen reconocimiento nacional e internacional, avalando tu formación ante cualquier empleador.",
+    "advantage_2_title": "Online asincrónica: estudiá cuando puedas",
+    "advantage_2_text": "Accedé al contenido y avanzá a tu ritmo, sin depender de un horario fijo de conexión. Ideal si trabajás, estudiás o vivís lejos. También tenemos propuestas presenciales en Salta Capital.",
+    "advantage_3_title": "Formación orientada al mundo laboral",
+    "advantage_3_text": "Diseñamos cada curso pensando en las demandas actuales del mercado laboral argentino, con contenido 100% práctico.",
+    "advantage_4_title": "Acompañamiento personalizado",
+    "advantage_4_text": "Docentes y tutores disponibles durante todo el cursado para resolver tus dudas y acompañar tu proceso de aprendizaje.",
+    "contact_title": "¿Tenés dudas? Hablemos",
+    "contact_text": "Nuestro equipo te asesora sin costo sobre el curso que mejor se adapta a tu perfil, tus tiempos y tus objetivos.",
+    "instagram_handle": "@formar.capacitaciones",
+    "instagram_url": "https://instagram.com/formar.capacitaciones",
+    "footer_text": "Cursos y capacitaciones online asincrónicas con validez nacional e internacional. También en Salta Capital, de forma presencial."
+  }'::jsonb
 )
 on conflict (id) do nothing;
 
-insert into public.team_members (name, profession, photo_url, display_order, active) values
-  ('Lic. Tania Simkin', 'Directora', 'https://i.ibb.co/DHVQFYWR/Lic-Tania-Simkin-Directora.jpg', 1, true),
-  ('Cra. Sol Camila Montenegro Trogliero', 'Vicedirectora', 'https://i.ibb.co/gLMMKntm/Contadora-Sol-Camila-Montenegro-Trogliero-Vivedirectora.jpg', 2, true),
-  ('Lic. Dalia Korman', 'Coordinadora', 'https://i.ibb.co/k29Dpdhb/Lic-Dalia-Korman-Coordinadora.jpg', 3, true),
-  ('Lic. Damián Simkin', 'Recursos Humanos', 'https://i.ibb.co/kgzZZQ04/Lic-Dami-n-Simkin-RRHH.jpg', 4, true)
+-- Si la tabla site_content ya existía con datos previos (sitio ya en
+-- producción), el INSERT de arriba no pisa nada por el "on conflict do
+-- nothing". Corré este UPDATE para aplicar el nuevo mensaje (online
+-- asincrónico primero) sobre los datos ya cargados, sin perder el resto
+-- de la configuración (logo, WhatsApp, splash, etc. no se tocan):
+update public.site_content
+set data = data || '{
+  "hero_badge": "Cursos online asincrónicos · Todo el país",
+  "hero_title": "Capacitate desde donde quieras, en el momento que puedas",
+  "hero_lead": "Cursos y capacitaciones online asincrónicas con certificación de validez nacional e internacional, pensadas para estudiantes, trabajadores y profesionales que quieren avanzar sin depender de horarios fijos. También contamos con propuestas presenciales en Salta Capital.",
+  "advantage_2_title": "Online asincrónica: estudiá cuando puedas",
+  "advantage_2_text": "Accedé al contenido y avanzá a tu ritmo, sin depender de un horario fijo de conexión. Ideal si trabajás, estudiás o vivís lejos. También tenemos propuestas presenciales en Salta Capital.",
+  "advantage_3_title": "Formación orientada al mundo laboral",
+  "advantage_3_text": "Diseñamos cada curso pensando en las demandas actuales del mercado laboral argentino, con contenido 100% práctico.",
+  "footer_text": "Cursos y capacitaciones online asincrónicas con validez nacional e internacional. También en Salta Capital, de forma presencial."
+}'::jsonb
+where id = 1;
+
+-- ============================================================
+-- 10. SEMILLA DE DATOS (EQUIPO / PROFESIONALES)
+-- ============================================================
+insert into public.team_members (name, role, photo_url, whatsapp_number, whatsapp_message, display_order) values
+(
+  'Cra. Sol Camila Montenegro Trogliero',
+  'Vicedirectora',
+  'https://i.ibb.co/gLMMKntm/Contadora-Sol-Camila-Montenegro-Trogliero-Vivedirectora.jpg',
+  '5493870000000',
+  'Hola Sol, quiero más información sobre los cursos de Formar Capacitaciones',
+  1
+),
+(
+  'Lic. Tania Simkin',
+  'Directora',
+  'https://i.ibb.co/DHVQFYWR/Lic-Tania-Simkin-Directora.jpg',
+  '5493870000000',
+  'Hola Tania, quiero más información sobre los cursos de Formar Capacitaciones',
+  2
+),
+(
+  'Lic. Dalia Korman',
+  'Coordinadora',
+  'https://i.ibb.co/k29Dpdhb/Lic-Dalia-Korman-Coordinadora.jpg',
+  '5493870000000',
+  'Hola Dalia, quiero más información sobre los cursos de Formar Capacitaciones',
+  3
+),
+(
+  'Lic. Damián Simkin',
+  'Recursos Humanos',
+  'https://i.ibb.co/kgzZZQ04/Lic-Dami-n-Simkin-RRHH.jpg',
+  '5493870000000',
+  'Hola Damián, quiero más información sobre los cursos de Formar Capacitaciones',
+  4
+)
 on conflict do nothing;
