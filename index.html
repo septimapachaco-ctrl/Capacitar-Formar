@@ -279,6 +279,21 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 }
 .search-wrap input:focus { border-color: var(--color-turquoise); box-shadow: 0 0 0 4px rgba(18, 123, 123, 0.12); }
 
+.search-results {
+  position: absolute; top: calc(100% + 0.6rem); left: 0; right: 0; z-index: 30;
+  background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card-hover); max-height: 340px; overflow-y: auto;
+  opacity: 0; visibility: hidden; transform: translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+.search-results.open { opacity: 1; visibility: visible; transform: translateY(0); }
+.search-result-item { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; padding: 0.85rem 1.15rem; border-bottom: 1px solid var(--color-border); transition: background 0.15s ease; }
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--color-bg-soft); }
+.search-result-item .sr-title { font-weight: 700; color: var(--color-blue); font-size: 0.92rem; }
+.search-result-item .sr-cat { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--color-turquoise); flex-shrink: 0; }
+.search-results-empty { padding: 1.1rem 1.15rem; color: var(--color-text-muted); font-size: 0.88rem; text-align: center; }
+
 .filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.55rem; margin-bottom: 3rem; }
 .filter-chip {
   padding: 0.55rem 1.2rem; border-radius: var(--radius-full); background: var(--color-bg-soft); color: var(--color-text-muted);
@@ -584,8 +599,13 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 .team-card-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-smooth); }
 .team-card:hover .team-card-photo img { transform: scale(1.06); }
 .team-card-plaque { padding: 1.1rem 1rem; }
-.team-card-plaque h3 { font-size: 1rem; margin-bottom: 0.15rem; }
-.team-card-plaque p { font-size: 0.82rem; color: var(--color-turquoise); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.9rem; }
+.team-card-plaque .role-plaque {
+  display: inline-block; background: var(--gradient-brand); color: var(--color-white);
+  font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 0.32rem 0.85rem; border-radius: var(--radius-full); margin-bottom: 0.65rem;
+  box-shadow: 0 6px 14px -6px rgba(16, 46, 88, 0.5);
+}
+.team-card-plaque h3 { font-size: 1rem; margin-bottom: 0.9rem; }
 .team-card-plaque .btn { width: 100%; }
 
 /* Variante grande para gracias.html (equipo en primer plano) */
@@ -674,7 +694,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
         </p>
         <div class="hero-actions">
           <a href="cursos.html" class="btn btn-primary">Ver cursos online asincrónicos</a>
-          <a href="#contacto" class="btn btn-outline-light">Consultar por WhatsApp</a>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light" id="hero-whatsapp-link">Consultar por WhatsApp</a>
         </div>
         <div class="hero-stats">
           <div><strong><span data-count-to="8" data-suffix="+" id="stat-1-value">0</span></strong><span id="stat-1-label">Cursos activos</span></div>
@@ -756,33 +776,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
     </div>
   </section>
 
-  <!-- CATÁLOGO (vista previa) -->
-  <section id="cursos" class="section">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="eyebrow">Cursos online asincrónicos</span>
-        <h2>Elegí el curso que impulsa tu futuro</h2>
-        <p>Cursos con certificación de validez nacional e internacional, pensados para que puedas capacitarte desde donde estés. Sumate a cientos de personas que ya dieron el salto hacia una nueva etapa.</p>
-      </div>
-
-      <div class="search-wrap reveal">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-          <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-        </svg>
-        <input type="text" id="search-input" placeholder="Buscar curso: preceptores, electricidad, criminalística..." />
-      </div>
-
-      <div class="filters reveal" id="category-filters"></div>
-
-      <div class="courses-grid" id="courses-grid"></div>
-      <p class="empty-state hidden" id="courses-empty">No encontramos cursos que coincidan con tu búsqueda.</p>
-
-      <div class="text-center reveal" style="margin-top:2.5rem;">
-        <a href="cursos.html" class="btn btn-outline">Ver todos los cursos y su información completa</a>
-      </div>
-    </div>
-  </section>
-
   <!-- EQUIPO -->
   <section id="equipo" class="section advantages">
     <div class="container">
@@ -798,7 +791,31 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
     </div>
   </section>
 
+  <!-- CURSOS (buscador) -->
+  <section id="cursos" class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="eyebrow">Cursos online asincrónicos</span>
+        <h2>Buscá el curso que impulsa tu futuro</h2>
+        <p>Escribí el nombre del curso que te interesa y accedé directo a toda su información: modalidad, duración, certificación e inscripción.</p>
+      </div>
+
+      <div class="search-wrap reveal" id="search-wrap">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+          <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+        </svg>
+        <input type="text" id="search-input" placeholder="Buscar curso: preceptores, electricidad, criminalística..." autocomplete="off" />
+        <div class="search-results" id="search-results"></div>
+      </div>
+
+      <div class="text-center reveal" style="margin-top:2rem;">
+        <a href="cursos.html" class="btn btn-outline">Ver todos los cursos y su información completa</a>
+      </div>
+    </div>
+  </section>
+
   <!-- VENTAJAS -->
+
   <section id="ventajas" class="section">
     <div class="container">
       <div class="section-header reveal">
@@ -925,6 +942,9 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
       <h2 class="reveal" id="contact-title">¿Tenés dudas? Hablemos</h2>
       <p class="reveal" id="contact-text">Nuestro equipo te asesora sin costo sobre el curso que mejor se adapta a tu perfil y objetivos laborales.</p>
       <div class="reveal" style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;">
+        <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" id="contact-whatsapp-link">
+          Consultar por WhatsApp
+        </a>
         <a href="https://instagram.com/formar.capacitaciones" target="_blank" rel="noopener noreferrer" class="btn contact-btn" id="contact-instagram-link">
           Instagram <span id="contact-instagram-handle">@formar.capacitaciones</span>
         </a>
@@ -961,7 +981,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
  * ⚠️ REEMPLAZAR por el número real: se usa en TODOS los botones de
  * "Consultar por WhatsApp" del sitio (cursos, equipo, contacto).
  */
-const WHATSAPP_NUMBER = "5493870000000";
+const WHATSAPP_NUMBER = "5493876236285"; // 📲 WhatsApp principal de contacto: 3876 23-6285
 
 /** Logo por defecto (se puede sobreescribir desde site_content.logo_url en el admin) */
 const DEFAULT_LOGO_URL = "https://i.ibb.co/LDXsp8FF/Formar-posts.png";
@@ -1201,22 +1221,20 @@ function initAllAnimations() {
 const WHATSAPP_ICON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2Zm5.8 14.07c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.3-1.64-.6-2.88-1.24-4.76-4.15-4.9-4.34-.14-.19-1.17-1.56-1.17-2.98 0-1.42.74-2.11 1.01-2.4.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.58.81 2 .88 2.15.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.61-.07.16-.19.7-.81.88-1.09.19-.28.37-.23.62-.14.26.09 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.36Z"/></svg>`;
 
 let allCourses = [];
-let allCategories = [];
 let searchTerm = "";
-let activeCategory = "todas";
 
 const DEMO_COURSES = [
   {
     id: "demo-1", slug: "preceptores", title: "Preceptores",
     short_description: "Formación integral para desempeñarte como preceptor en instituciones educativas.",
-    price: 45000, modality: "Presencial / Virtual",
+    price: 45000, modality: "Online asincrónica",
     image_url: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=1200",
     featured: true, category_id: "demo-docencia", categories: { name: "Docencia y Educación" },
   },
   {
     id: "demo-2", slug: "auxiliar-en-criminalistica", title: "Auxiliar en Criminalística",
     short_description: "Técnicas de investigación forense, preservación de indicios y cadena de custodia.",
-    price: 48000, modality: "Presencial / Virtual",
+    price: 48000, modality: "Online asincrónica",
     image_url: "https://images.unsplash.com/photo-1589994965851-a8f479c573a4?q=80&w=1200",
     featured: true, category_id: "demo-seguridad", categories: { name: "Seguridad y Criminalística" },
   },
@@ -1228,14 +1246,45 @@ const DEMO_COURSES = [
     featured: false, category_id: "demo-oficios", categories: { name: "Oficios" },
   },
 ];
-const DEMO_CATEGORIES = [
-  { id: "demo-docencia", name: "Docencia y Educación" },
-  { id: "demo-seguridad", name: "Seguridad y Criminalística" },
-  { id: "demo-oficios", name: "Oficios" },
+
+/**
+ * Equipo de respaldo: se muestra solo si por algún motivo no se pudo
+ * leer la tabla team_members de Supabase (o mientras no la hayas
+ * actualizado ahí). Fuente de verdad real: panel de administración,
+ * pestaña "Equipo".
+ */
+const DEMO_TEAM = [
+  {
+    id: "demo-team-1", name: "Lic. Tania Simkin", role: "Directora",
+    photo_url: "https://i.ibb.co/DHVQFYWR/Lic-Tania-Simkin-Directora.jpg",
+    whatsapp_number: "5493491530328",
+    whatsapp_message: "Hola Tania, quiero más información sobre los cursos de Formar Capacitaciones",
+    display_order: 1,
+  },
+  {
+    id: "demo-team-2", name: "Lic. Dalia Korman", role: "Coordinadora Pedagógica",
+    photo_url: "https://i.ibb.co/k29Dpdhb/Lic-Dalia-Korman-Coordinadora.jpg",
+    whatsapp_number: "5493876054669",
+    whatsapp_message: "Hola Dalia, quiero más información sobre los cursos de Formar Capacitaciones",
+    display_order: 2,
+  },
+  {
+    id: "demo-team-3", name: "Lic. Damián Simkin", role: "RRHH",
+    photo_url: "https://i.ibb.co/kgzZZQ04/Lic-Dami-n-Simkin-RRHH.jpg",
+    whatsapp_number: "5493874537157",
+    whatsapp_message: "Hola Damián, quiero más información sobre los cursos de Formar Capacitaciones",
+    display_order: 3,
+  },
+  {
+    id: "demo-team-4", name: "Cra. Sol Camila Montenegro Trogliero", role: "Vicedirectora",
+    photo_url: "https://i.ibb.co/gLMMKntm/Contadora-Sol-Camila-Montenegro-Trogliero-Vivedirectora.jpg",
+    whatsapp_number: "5493876236285",
+    whatsapp_message: "Hola Sol, quiero más información sobre los cursos de Formar Capacitaciones",
+    display_order: 4,
+  },
 ];
 
 let showPrices = false;
-let usingDemoData = false;
 
 async function fetchSiteContent() {
   const { data, error } = await supabase.from("site_content").select("data").eq("id", 1).single();
@@ -1253,12 +1302,6 @@ async function fetchTeam() {
   return data ?? [];
 }
 
-async function fetchCategories() {
-  const { data, error } = await supabase.from("categories").select("*").order("name", { ascending: true });
-  if (error) throw error;
-  return data ?? [];
-}
-
 async function fetchCourses() {
   const { data, error } = await supabase
     .from("courses")
@@ -1268,11 +1311,6 @@ async function fetchCourses() {
     .order("created_at", { ascending: false });
   if (error) throw error;
   return data ?? [];
-}
-
-function priceDisplay(course) {
-  if (!showPrices) return `<span class="price-placeholder">$0000</span>`;
-  return course.price > 0 ? formatARS(course.price) : "Consultar";
 }
 
 function applySiteContent(c) {
@@ -1331,10 +1369,10 @@ function renderTeamPreview(team) {
         ${m.photo_url ? `<img src="${escapeHtml(m.photo_url)}" alt="${escapeHtml(m.name)}" loading="lazy" />` : ""}
       </div>
       <div class="team-card-plaque">
+        <span class="role-plaque">${escapeHtml(m.role)}</span>
         <h3>${escapeHtml(m.name)}</h3>
-        <p>${escapeHtml(m.role)}</p>
         <a class="btn btn-whatsapp btn-sm" href="${whatsappLink(m.whatsapp_number || WHATSAPP_NUMBER, m.whatsapp_message)}" target="_blank" rel="noopener noreferrer">
-          ${WHATSAPP_ICON} Contactar
+          ${WHATSAPP_ICON} Contactar por WhatsApp
         </a>
       </div>
     </div>`
@@ -1344,86 +1382,80 @@ function renderTeamPreview(team) {
   initScrollReveal();
 }
 
-function renderCategoryFilters() {
-  const wrap = document.getElementById("category-filters");
+/**
+ * Muestra hasta 8 resultados de búsqueda en el dropdown debajo del
+ * input. Cada resultado enlaza directo a curso.html?slug=... — no hay
+ * grilla de cursos en el index, solo este buscador.
+ */
+function renderSearchResults(list) {
+  const wrap = document.getElementById("search-results");
   if (!wrap) return;
-  const chips = [
-    `<button class="filter-chip ${activeCategory === "todas" ? "active" : ""}" data-cat="todas">Todas</button>`,
-    ...allCategories.map((cat) => `<button class="filter-chip ${activeCategory === cat.id ? "active" : ""}" data-cat="${cat.id}">${escapeHtml(cat.name)}</button>`),
-  ];
-  wrap.innerHTML = chips.join("");
-  wrap.querySelectorAll("[data-cat]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      activeCategory = btn.getAttribute("data-cat");
-      renderCategoryFilters();
-      renderCourses();
-    });
-  });
-}
 
-function courseCardHtml(course, i) {
-  const message = `Hola, quiero más información sobre el curso "${course.title}"`;
-  return `
-    <article class="course-card reveal reveal-delay-${(i % 4) + 1}">
-      <a href="curso.html?slug=${encodeURIComponent(course.slug)}" class="course-card-media">
-        ${course.image_url ? `<img src="${escapeHtml(course.image_url)}" alt="${escapeHtml(course.title)}" loading="lazy" />` : ""}
-        ${course.featured ? `<span class="badge-featured"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7-6.3-3.8L5.7 21l1.7-7-5.4-4.7 7.1-.6L12 2z"/></svg>Destacado</span>` : ""}
-      </a>
-      <div class="course-card-body">
-        <span class="course-category">${escapeHtml(course.categories?.name || "Curso")}</span>
-        <a href="curso.html?slug=${encodeURIComponent(course.slug)}"><h3>${escapeHtml(course.title)}</h3></a>
-        <p class="desc">${escapeHtml(course.short_description || "")}</p>
-        <div class="course-meta-row">
-          <span class="pill">${escapeHtml(course.modality)}</span>
-          <span class="price">${priceDisplay(course)}</span>
-        </div>
-        <div class="course-card-actions">
-          <a href="curso.html?slug=${encodeURIComponent(course.slug)}" class="btn btn-outline btn-sm">Ver más</a>
-          <a href="${whatsappLink(WHATSAPP_NUMBER, message)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">${WHATSAPP_ICON}</a>
-        </div>
-      </div>
-    </article>`;
-}
-
-function renderCourses() {
-  const grid = document.getElementById("courses-grid");
-  const emptyState = document.getElementById("courses-empty");
-  if (!grid) return;
-
-  const filtered = allCourses.filter((course) => {
-    const matchesSearch =
-      course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (course.short_description || "").toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = activeCategory === "todas" || course.category_id === activeCategory;
-    return matchesSearch && matchesCategory;
-  });
-
-  if (filtered.length === 0) {
-    grid.innerHTML = "";
-    emptyState.classList.remove("hidden");
+  if (!searchTerm.trim()) {
+    wrap.classList.remove("open");
+    wrap.innerHTML = "";
     return;
   }
-  emptyState.classList.add("hidden");
-  grid.innerHTML = filtered.map((c, i) => courseCardHtml(c, i)).join("");
-  initScrollReveal();
-}
 
-function showSkeletons(count = 6) {
-  const grid = document.getElementById("courses-grid");
-  if (!grid) return;
-  grid.innerHTML = Array.from({ length: count })
-    .map(() => `<div class="skeleton-card"><div class="skeleton-block media"></div><div class="skeleton-body"><div class="skeleton-block line w40"></div><div class="skeleton-block line w60"></div><div class="skeleton-block line"></div></div></div>`)
+  if (list.length === 0) {
+    wrap.innerHTML = `<p class="search-results-empty">No encontramos cursos que coincidan con "${escapeHtml(searchTerm)}".</p>`;
+    wrap.classList.add("open");
+    return;
+  }
+
+  wrap.innerHTML = list
+    .slice(0, 8)
+    .map(
+      (course) => `
+    <a class="search-result-item" href="curso.html?slug=${encodeURIComponent(course.slug)}">
+      <span class="sr-title">${escapeHtml(course.title)}</span>
+      <span class="sr-cat">${escapeHtml(course.categories?.name || course.modality || "")}</span>
+    </a>`
+    )
     .join("");
+  wrap.classList.add("open");
 }
 
-function showDemoBanner() {
-  const header = document.querySelector(".section-header");
-  if (!header || document.getElementById("demo-banner")) return;
-  const banner = document.createElement("div");
-  banner.id = "demo-banner";
-  banner.style.cssText = "max-width:640px;margin:0 auto 1.5rem;padding:0.75rem 1rem;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;color:#9a3412;font-size:0.82rem;text-align:center;";
-  banner.innerHTML = "⚠️ Mostrando <strong>cursos de ejemplo</strong>. Conectá tu proyecto real en <code>js/supabaseClient.js</code> para ver tus datos.";
-  header.insertAdjacentElement("afterend", banner);
+function filterCourses() {
+  const term = searchTerm.trim().toLowerCase();
+  if (!term) return [];
+  return allCourses.filter(
+    (course) =>
+      course.title.toLowerCase().includes(term) ||
+      (course.short_description || "").toLowerCase().includes(term) ||
+      (course.categories?.name || "").toLowerCase().includes(term)
+  );
+}
+
+function initCourseSearch() {
+  const searchInput = document.getElementById("search-input");
+  const searchWrap = document.getElementById("search-wrap");
+  if (!searchInput) return;
+
+  searchInput.addEventListener("input", (e) => {
+    searchTerm = e.target.value;
+    renderSearchResults(filterCourses());
+  });
+
+  searchInput.addEventListener("focus", () => {
+    if (searchTerm.trim()) renderSearchResults(filterCourses());
+  });
+
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    const matches = filterCourses();
+    if (matches.length > 0) {
+      window.location.href = `curso.html?slug=${encodeURIComponent(matches[0].slug)}`;
+    } else if (searchTerm.trim()) {
+      window.location.href = `cursos.html?buscar=${encodeURIComponent(searchTerm.trim())}`;
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (searchWrap && !searchWrap.contains(e.target)) {
+      document.getElementById("search-results")?.classList.remove("open");
+    }
+  });
 }
 
 function hideSplash() {
@@ -1465,14 +1497,22 @@ async function init() {
   renderFooter();
   initAllAnimations();
   initFaqAccordion();
+  initCourseSearch();
 
-  const searchInput = document.getElementById("search-input");
-  searchInput?.addEventListener("input", (e) => {
-    searchTerm = e.target.value;
-    renderCourses();
-  });
-
-  showSkeletons();
+  const contactWhatsapp = document.getElementById("contact-whatsapp-link");
+  if (contactWhatsapp) {
+    contactWhatsapp.setAttribute(
+      "href",
+      whatsappLink(WHATSAPP_NUMBER, "Hola, quiero más información sobre los cursos de Formar Capacitaciones")
+    );
+  }
+  const heroWhatsapp = document.getElementById("hero-whatsapp-link");
+  if (heroWhatsapp) {
+    heroWhatsapp.setAttribute(
+      "href",
+      whatsappLink(WHATSAPP_NUMBER, "Hola, quiero más información sobre los cursos de Formar Capacitaciones")
+    );
+  }
 
   try {
     const content = await fetchSiteContent();
@@ -1485,24 +1525,19 @@ async function init() {
 
   try {
     const team = await fetchTeam();
-    renderTeamPreview(team);
+    renderTeamPreview(team.length > 0 ? team : DEMO_TEAM);
   } catch (err) {
-    console.warn("[Formar Capacitaciones] No se pudo cargar el equipo:", err.message || err);
+    console.warn("[Formar Capacitaciones] No se pudo cargar el equipo, se muestran los datos de referencia.", err.message || err);
+    renderTeamPreview(DEMO_TEAM);
   }
 
   try {
-    [allCategories, allCourses] = await Promise.all([fetchCategories(), fetchCourses()]);
-    if (allCourses.length === 0 && allCategories.length === 0) throw new Error("Sin datos: revisá la configuración de Supabase.");
+    allCourses = await fetchCourses();
+    if (allCourses.length === 0) throw new Error("Sin cursos: revisá la configuración de Supabase.");
   } catch (err) {
-    console.warn("[Formar Capacitaciones] No se pudo conectar a Supabase, mostrando datos de ejemplo.", err.message || err);
-    allCategories = DEMO_CATEGORIES;
+    console.warn("[Formar Capacitaciones] No se pudo conectar a Supabase, el buscador usa cursos de ejemplo.", err.message || err);
     allCourses = DEMO_COURSES;
-    usingDemoData = true;
   }
-
-  renderCategoryFilters();
-  renderCourses();
-  if (usingDemoData) showDemoBanner();
 
   hideSplash();
 }
