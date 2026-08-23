@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title id="page-title">Curso | Formar Capacitaciones</title>
-  <meta id="meta-description" name="description" content="Cursos y capacitaciones con certificación de validez nacional e internacional en toda Argentina." />
+  <title id="page-title">Curso online asincrónico | Formar Capacitaciones</title>
+  <meta id="meta-description" name="description" content="Cursos y capacitaciones online asincrónicas con certificación de validez nacional e internacional. Estudiá desde donde estés, en el momento que puedas." />
   <link id="canonical-link" rel="canonical" href="https://formarcapacitaciones.com.ar/curso.html" />
 
   <meta id="og-title" property="og:title" content="Formar Capacitaciones" />
@@ -701,7 +701,7 @@ function renderFooter(footerText) {
     <footer class="site-footer">
       <div class="container">
         <p><strong>Formar Capacitaciones</strong></p>
-        <p style="margin-top:0.5rem;" id="footer-text">${footerText || "Cursos y capacitaciones con validez nacional e internacional en Salta, Córdoba y toda Argentina."}</p>
+        <p style="margin-top:0.5rem;" id="footer-text">${footerText || "Cursos y capacitaciones online asincrónicas con validez nacional e internacional. También en Salta Capital, de forma presencial."}</p>
         <p style="margin-top:1rem;">© <span id="footer-year"></span> Formar Capacitaciones. Todos los derechos reservados. ·
           <a href="admin.html">Acceso administrador</a>
         </p>
@@ -879,10 +879,15 @@ function priceDisplay(course) {
 }
 
 function applySEO(course) {
-  const title = `${course.title} | Curso con validez nacional`;
+  const isAsync = /asincr/i.test(course.modality || "");
+  const title = isAsync
+    ? `${course.title} | Curso online asincrónico con certificación`
+    : `${course.title} | Curso con validez nacional`;
   const description =
     course.short_description ||
-    `Formate en ${course.title} con Formar Capacitaciones. Modalidad ${course.modality}. Certificación con validez nacional e internacional.`;
+    (isAsync
+      ? `Formate en ${course.title} de forma online asincrónica: estudiá desde donde quieras, en el momento que puedas. Certificación con validez nacional e internacional.`
+      : `Formate en ${course.title} con Formar Capacitaciones. Modalidad ${course.modality}. Certificación con validez nacional e internacional.`);
   const url = `${SITE_URL}/curso.html?slug=${encodeURIComponent(course.slug)}`;
 
   document.title = title;
@@ -940,6 +945,15 @@ function renderCourse(course, related) {
         ${course.location ? `<p class="course-location">📍 ${escapeHtml(course.location)}</p>` : ""}
 
         <p class="course-description">${escapeHtml(course.description)}</p>
+
+        ${
+          /asincr/i.test(course.modality || "")
+            ? `<div class="video-wrap">
+                <h2>¿Cómo se cursa?</h2>
+                <p class="course-description">Este curso es <strong>online asincrónico</strong>: accedés al contenido y avanzás según tus tiempos, sin depender de un horario fijo de conexión. Podés estudiar desde donde estés, en el momento que puedas.</p>
+              </div>`
+            : ""
+        }
 
         ${
           course.video_url
