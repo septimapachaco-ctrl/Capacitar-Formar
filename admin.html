@@ -596,6 +596,13 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
       <div id="panel-cursos" class="admin-layout">
         <form class="admin-panel" id="course-form">
           <h2 id="course-form-title">Nuevo curso</h2>
+          <p class="muted" style="font-size:0.82rem;margin-top:-0.5rem;margin-bottom:1.2rem;line-height:1.5;">
+            Cada curso que cargues acá genera automáticamente su propia página
+            (<code>curso.html?slug=...</code>). No hace falta crear ni duplicar
+            archivos HTML: completá este formulario y el curso ya queda
+            publicado. ¿Querés partir de un curso parecido? Usá el botón
+            <strong>Duplicar</strong> en la lista de abajo.
+          </p>
 
           <div class="form-field">
             <label>Título *</label>
@@ -625,12 +632,18 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
             <div class="form-field">
               <label>Modalidad</label>
               <select id="field-modality">
+                <option selected>Online asincrónica</option>
+                <option>Online / virtual (en vivo)</option>
+                <option>Híbrida (online + presencial)</option>
                 <option>Presencial</option>
-                <option>Virtual</option>
                 <option>Presencial / Virtual</option>
-                <option>Online</option>
-                <option selected>Consultar</option>
+                <option>Consultar</option>
               </select>
+              <p class="muted" style="font-size:0.78rem;margin-top:0.35rem;">
+                "Online asincrónica" significa que el alumno avanza cuando
+                puede, sin horario fijo de conexión. Usalo como opción por
+                defecto salvo que el curso tenga clases en vivo.
+              </p>
             </div>
           </div>
 
@@ -1060,6 +1073,44 @@ function fillCourseForm(course) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+/**
+ * Clona un curso existente adentro del formulario, listo para editar,
+ * en lugar de duplicar archivos HTML. Al guardar, crea un curso NUEVO
+ * (editingCourseId queda en null), con su propia página automática en
+ * curso.html?slug=... El admin solo tiene que ajustar título, precio,
+ * descripción e imagen antes de guardar.
+ */
+function duplicateCourseIntoForm(course) {
+  editingCourseId = null;
+  document.getElementById("field-title").value = `${course.title} (copia)`;
+  document.getElementById("field-slug").value = "";
+  document.getElementById("field-short-description").value = course.short_description || "";
+  document.getElementById("field-description").value = course.description || "";
+  document.getElementById("field-price").value = course.price || 0;
+  document.getElementById("field-modality").value = course.modality;
+  document.getElementById("field-category").value = course.category_id || "";
+  document.getElementById("field-duration").value = course.duration || "";
+  document.getElementById("field-location").value = course.location || "";
+  document.getElementById("field-image-url").value = course.image_url || "";
+  document.getElementById("field-video-url").value = course.video_url || "";
+  document.getElementById("field-featured").checked = false;
+  document.getElementById("field-active").checked = false;
+
+  const preview = document.getElementById("image-preview");
+  if (course.image_url) {
+    preview.src = course.image_url;
+    preview.classList.remove("hidden");
+  } else {
+    preview.classList.add("hidden");
+  }
+
+  document.getElementById("course-form-title").textContent = "Nuevo curso (copiado de otro)";
+  document.getElementById("course-submit-btn").textContent = "Crear curso";
+  document.getElementById("course-cancel-btn").classList.remove("hidden");
+  document.getElementById("course-form-error").classList.add("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 async function uploadToStorage(file, folder) {
   const ext = file.name.split(".").pop();
   const path = `${folder}/${Date.now()}-${slugify(file.name.replace(`.${ext}`, ""))}.${ext}`;
@@ -1175,6 +1226,7 @@ function renderCoursesList() {
       </div>
       <div class="admin-list-actions">
         <button class="btn-edit" data-edit="${course.id}">Editar</button>
+        <button class="btn-edit" data-duplicate="${course.id}">Duplicar</button>
         <button class="btn-delete" data-delete="${course.id}" data-title="${escapeHtml(course.title)}">Eliminar</button>
       </div>
     </div>`
@@ -1185,6 +1237,13 @@ function renderCoursesList() {
     btn.addEventListener("click", () => {
       const course = courses.find((c) => c.id === btn.getAttribute("data-edit"));
       if (course) fillCourseForm(course);
+    });
+  });
+
+  wrap.querySelectorAll("[data-duplicate]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const course = courses.find((c) => c.id === btn.getAttribute("data-duplicate"));
+      if (course) duplicateCourseIntoForm(course);
     });
   });
 
