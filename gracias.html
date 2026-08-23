@@ -873,7 +873,16 @@ function initAllAnimations() {
           return;
         }
 
-        grid.innerHTML = data
+        // La tabla real en Supabase usa "profession" y "whatsapp" (no
+        // "role" / "whatsapp_number"); los normalizamos acá.
+        const team = data.map((m) => ({
+          ...m,
+          role: m.role || m.profession || "",
+          whatsapp_number: m.whatsapp_number || m.whatsapp || "",
+          whatsapp_message: m.whatsapp_message || `Hola, quiero más información sobre los cursos de Formar Capacitaciones`,
+        }));
+
+        grid.innerHTML = team
           .map(
             (m) => `
           <div class="team-card team-card-large reveal">
@@ -881,7 +890,7 @@ function initAllAnimations() {
               ${m.photo_url ? `<img src="${escapeHtml(m.photo_url)}" alt="${escapeHtml(m.name)}" loading="lazy" />` : ""}
             </div>
             <div class="team-card-plaque">
-              <span class="role-plaque">${escapeHtml(m.role)}</span>
+              ${m.role ? `<span class="role-plaque">${escapeHtml(m.role)}</span>` : ""}
               <h3>${escapeHtml(m.name)}</h3>
               <a class="btn btn-whatsapp" href="${whatsappLink(m.whatsapp_number || WHATSAPP_NUMBER, m.whatsapp_message)}" target="_blank" rel="noopener noreferrer">
                 ${WHATSAPP_ICON} Contactar por WhatsApp
