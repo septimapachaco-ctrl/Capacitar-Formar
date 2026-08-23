@@ -863,7 +863,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
  * ⚠️ REEMPLAZAR por el número real: se usa en TODOS los botones de
  * "Consultar por WhatsApp" del sitio (cursos, equipo, contacto).
  */
-const WHATSAPP_NUMBER = "5493870000000";
+const WHATSAPP_NUMBER = "5493876236285"; // 📲 WhatsApp principal de contacto: 3876 23-6285
 
 /** Logo por defecto (se puede sobreescribir desde site_content.logo_url en el admin) */
 const DEFAULT_LOGO_URL = "https://i.ibb.co/LDXsp8FF/Formar-posts.png";
@@ -1331,9 +1331,9 @@ function resetTeamForm() {
 function fillTeamForm(member) {
   editingTeamId = member.id;
   document.getElementById("team-field-name").value = member.name;
-  document.getElementById("team-field-role").value = member.role || "";
+  document.getElementById("team-field-role").value = member.profession || member.role || "";
   document.getElementById("team-field-photo-url").value = member.photo_url || "";
-  document.getElementById("team-field-whatsapp").value = member.whatsapp_number || "";
+  document.getElementById("team-field-whatsapp").value = member.whatsapp || member.whatsapp_number || "";
   document.getElementById("team-field-message").value = member.whatsapp_message || "";
   document.getElementById("team-field-order").value = member.display_order || 0;
   document.getElementById("team-field-active").checked = member.active;
@@ -1398,9 +1398,9 @@ function initTeamForm() {
 
     const payload = {
       name,
-      role: document.getElementById("team-field-role").value.trim(),
+      profession: document.getElementById("team-field-role").value.trim(),
       photo_url: document.getElementById("team-field-photo-url").value.trim() || null,
-      whatsapp_number: document.getElementById("team-field-whatsapp").value.trim() || null,
+      whatsapp: document.getElementById("team-field-whatsapp").value.trim() || null,
       whatsapp_message: document.getElementById("team-field-message").value.trim() || "Hola, quiero más información",
       display_order: Number(document.getElementById("team-field-order").value) || 0,
       active: document.getElementById("team-field-active").checked,
@@ -1443,7 +1443,7 @@ function renderTeamList() {
       <img src="${escapeHtml(m.photo_url || "")}" alt="${escapeHtml(m.name)}" />
       <div class="admin-list-info">
         <h4>${escapeHtml(m.name)} ${!m.active ? '<span class="mini-badge hidden-badge">Oculto</span>' : ""}</h4>
-        <p>${escapeHtml(m.role || "")} ${m.whatsapp_number ? `· 📱 ${escapeHtml(m.whatsapp_number)}` : ""}</p>
+        <p>${escapeHtml(m.profession || m.role || "")} ${(m.whatsapp || m.whatsapp_number) ? `· 📱 ${escapeHtml(m.whatsapp || m.whatsapp_number)}` : ""}</p>
       </div>
       <div class="admin-list-actions">
         <button class="btn-edit" data-edit-team="${m.id}">Editar</button>
