@@ -59,7 +59,7 @@
   }
   </script>
 
-  <link rel="icon" type="image/png" href="https://i.ibb.co/LDXsp8FF/Formar-posts.png" class="js-logo-img" />
+  <link rel="icon" type="image/png" href="formarsinfondo.png" class="js-logo-img" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -574,10 +574,21 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 @keyframes splashPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.85; } }
 
 /* ---------- Lockup de marca en el hero ---------- */
-.hero-brand-lockup { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.5rem; }
-.hero-brand-lockup img { width: 56px; height: 56px; object-fit: contain; border-radius: var(--radius-md); background: rgba(255,255,255,0.12); padding: 0.4rem; flex-shrink: 0; }
-.hero-brand-lockup .brand-text-big { font-family: var(--font-display); font-weight: 800; font-size: 2rem; color: var(--color-white); line-height: 1; letter-spacing: 0.02em; }
-.hero-brand-lockup .brand-text-small { display: block; font-size: 0.8rem; color: rgba(255,255,255,0.75); font-weight: 600; letter-spacing: 0.04em; margin-top: 0.2rem; }
+.hero-brand-lockup { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1.5rem; }
+.hero-brand-lockup img.hero-logo-round {
+  width: 60px; height: 60px; object-fit: cover; border-radius: 50%;
+  background: var(--color-white); flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.4);
+}
+.hero-wordmark-wrap { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; }
+.hero-wordmark-box {
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--radius-md); padding: 0.45rem 1.2rem; backdrop-filter: blur(6px);
+}
+.hero-wordmark-img { height: 30px; width: auto; display: block; }
+.hero-brand-lockup .brand-text-small { display: block; font-size: 0.8rem; color: rgba(255,255,255,0.75); font-weight: 600; letter-spacing: 0.04em; margin-top: 0; text-align: center; }
 
 /* ---------- Botón de WhatsApp ---------- */
 .btn-whatsapp { background: #25d366; color: #ffffff; box-shadow: 0 10px 24px -8px rgba(37, 211, 102, 0.55); }
@@ -656,7 +667,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 <body>
   <!-- SPLASH -->
   <div class="splash-screen" id="splash-screen">
-    <img src="https://i.ibb.co/LDXsp8FF/Formar-posts.png" alt="Formar Capacitaciones" class="js-logo-img" />
+    <img src="formarsinfondo.png" alt="Formar Capacitaciones" class="js-logo-img" />
     <span>Formar Capacitaciones</span>
   </div>
 
@@ -676,9 +687,11 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
     <div class="container">
       <div>
         <div class="hero-brand-lockup">
-          <img src="https://i.ibb.co/LDXsp8FF/Formar-posts.png" alt="Logo Formar Capacitaciones" class="js-logo-img" />
-          <div>
-            <span class="brand-text-big">FORMAR</span>
+          <img src="formarsinfondo.png" alt="Logo Formar Capacitaciones" class="js-logo-img hero-logo-round" />
+          <div class="hero-wordmark-wrap">
+            <span class="hero-wordmark-box">
+              <img src="formar.jpg" alt="FORMAR" class="hero-wordmark-img" />
+            </span>
             <span class="brand-text-small">Cursos · Capacitaciones</span>
           </div>
         </div>
@@ -984,7 +997,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 const WHATSAPP_NUMBER = "5493876236285"; // 📲 WhatsApp principal de contacto: 3876 23-6285
 
 /** Logo por defecto (se puede sobreescribir desde site_content.logo_url en el admin) */
-const DEFAULT_LOGO_URL = "https://i.ibb.co/LDXsp8FF/Formar-posts.png";
+const DEFAULT_LOGO_URL = "formarsinfondo.png";
 
 function formatARS(value) {
   return new Intl.NumberFormat("es-AR", {
@@ -1029,7 +1042,7 @@ function renderHeader() {
     <header class="site-header">
       <div class="container">
         <a href="index.html" class="brand">
-          <img src="https://i.ibb.co/LDXsp8FF/Formar-posts.png" alt="Formar Capacitaciones" class="js-logo-img" style="width:36px;height:36px;object-fit:contain;border-radius:8px;" />
+          <img src="formarsinfondo.png" alt="Formar Capacitaciones" class="js-logo-img" style="width:36px;height:36px;object-fit:contain;border-radius:8px;" />
           <span class="brand-name">Formar<br class="mobile-only" /> Capacitaciones</span>
         </a>
         <nav class="main-nav" id="main-nav">
