@@ -219,6 +219,33 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 
 .nav-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--color-blue); }
 
+/* ---------- Acceso a Educación Formal (Instituto Jean Piaget) ---------- */
+.formal-access { position: relative; }
+.formal-access-trigger {
+  display: flex; align-items: center; gap: 0.55rem; padding: 0.4rem 0.7rem 0.4rem 0.4rem;
+  border: 1px solid var(--color-border); border-radius: var(--radius-full); background: var(--color-bg-soft);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.formal-access-trigger:hover, .formal-access:focus-within .formal-access-trigger { border-color: var(--color-turquoise); background: #eef5f5; }
+.formal-access-logo {
+  width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  background: var(--color-blue); color: var(--color-white); font-size: 0.68rem; font-weight: 800; flex-shrink: 0; overflow: hidden;
+}
+.formal-access-logo img { width: 100%; height: 100%; object-fit: cover; }
+.formal-access-label { font-size: 0.68rem; line-height: 1.25; color: var(--color-text-muted); }
+.formal-access-label strong { display: block; font-size: 0.78rem; color: var(--color-blue); }
+.formal-access-menu {
+  position: absolute; top: calc(100% + 10px); right: 0; min-width: 230px; background: var(--color-white);
+  border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: 0 16px 30px -16px rgba(16, 46, 58, 0.3);
+  padding: 1rem; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: all 0.2s ease; z-index: 50;
+}
+.formal-access:hover .formal-access-menu, .formal-access:focus-within .formal-access-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+.formal-access-menu p { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); margin-bottom: 0.5rem; }
+.formal-access-menu ul { list-style: none; padding: 0; margin: 0 0 0.85rem; display: flex; flex-direction: column; gap: 0.35rem; }
+.formal-access-menu li { font-size: 0.86rem; color: var(--color-text); padding-left: 1rem; position: relative; }
+.formal-access-menu li::before { content: "•"; position: absolute; left: 0; color: var(--color-orange); font-weight: 700; }
+@media (max-width: 860px) { .formal-access-label { display: none; } }
+
 @media (max-width: 860px) {
   .main-nav { display: none; }
   .nav-toggle { display: block; }
@@ -258,6 +285,11 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 .hero-stats { display: grid; grid-template-columns: repeat(3, auto); gap: 2.2rem; border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 1.6rem; max-width: 440px; animation: fadeInUp 0.8s var(--ease-smooth) 0.32s both; }
 .hero-stats strong { display: block; font-family: var(--font-display); font-size: 1.85rem; font-weight: 800; }
 .hero-stats span { font-size: 0.8rem; color: rgba(255, 255, 255, 0.7); }
+
+.hero-seals { list-style: none; display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 1.75rem; padding: 0; animation: fadeInUp 0.8s var(--ease-smooth) 0.4s both; }
+.hero-seals li { display: flex; align-items: center; gap: 0.55rem; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.22); backdrop-filter: blur(6px); border-radius: var(--radius-md); padding: 0.5rem 0.85rem; font-size: 0.72rem; color: rgba(255, 255, 255, 0.85); line-height: 1.35; max-width: 230px; }
+.hero-seals strong { color: var(--color-white); font-weight: 700; }
+.hero-seal-icon { font-size: 1.3rem; line-height: 1; flex-shrink: 0; }
 
 .hero-graphic { position: relative; animation: fadeInUp 1s var(--ease-smooth) 0.3s both; }
 .hero-graphic svg { width: 100%; height: auto; filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.25)); }
@@ -723,14 +755,11 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
           </div>
         </div>
 
-        <span class="hero-badge" id="hero-badge"><span class="dot"></span><span id="hero-badge-text">Cursos online asincrónicos · Todo el país</span></span>
-        <h1 id="hero-title">Capacitate desde donde quieras, en el momento que puedas</h1>
+        <span class="hero-badge" id="hero-badge"><span class="dot"></span><span id="hero-badge-text">Educación No Formal · Todo el país</span></span>
+        <h1 id="hero-title">Educación No Formal</h1>
         <p class="lead" id="hero-lead">
-          Cursos y capacitaciones online asincrónicas con certificación de
-          validez nacional e internacional, pensadas para estudiantes,
-          trabajadores y profesionales que quieren avanzar sin depender de
-          horarios fijos. También contamos con propuestas presenciales en
-          Salta Capital.
+          Fórmate a distancia, desde cualquier rincón del país, en tu tiempo
+          disponible, a tu ritmo y en el área que elijas.
         </p>
 
         <div class="hero-search-wrap" id="hero-search-wrap">
@@ -750,6 +779,21 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
           <div><strong><span data-count-to="100" data-suffix="%" id="stat-2-value">0</span></strong><span id="stat-2-label">Validez nacional</span></div>
           <div><strong><span data-count-to="2" id="stat-3-value">0</span></strong><span id="stat-3-label">Modalidades</span></div>
         </div>
+
+        <ul class="hero-seals" aria-label="Certificaciones y avales institucionales">
+          <li>
+            <span class="hero-seal-icon">🏛️</span>
+            <span>Certificación Nacional<br /><strong>Cámara Argentina para la Formación Profesional y la Capacitación Laboral</strong></span>
+          </li>
+          <li>
+            <span class="hero-seal-icon">🌎</span>
+            <span>Certificación Internacional<br /><strong>OIEP</strong></span>
+          </li>
+          <li>
+            <span class="hero-seal-icon">✔️</span>
+            <span>Calidad certificada<br /><strong>Normas ISO 9001:2015</strong></span>
+          </li>
+        </ul>
       </div>
 
       <div class="hero-graphic">
@@ -1029,6 +1073,15 @@ const WHATSAPP_NUMBER = "5493876236285"; // 📲 WhatsApp principal de contacto:
 /** Logo por defecto (se puede sobreescribir desde site_content.logo_url en el admin) */
 const DEFAULT_LOGO_URL = "formarsinfondo.png";
 
+/**
+ * Acceso a "Educación Formal" (Instituto Jean Piaget) en el header.
+ * PIAGET_LOGO_URL: si queda vacío, se muestra un badge con las
+ * iniciales "JP" en lugar del logo. Completar con la URL del logo
+ * (por ejemplo, subido a Supabase Storage o a un hosting de imágenes).
+ */
+const PIAGET_URL = "https://piagetsalta.com.ar/";
+const PIAGET_LOGO_URL = "";
+
 function formatARS(value) {
   return new Intl.NumberFormat("es-AR", {
     style: "currency",
@@ -1086,6 +1139,23 @@ function renderHeader() {
             <path d="M4 7h16M4 12h16M4 17h16" />
           </svg>
         </button>
+        <div class="formal-access" id="formal-access">
+          <a href="${PIAGET_URL}" target="_blank" rel="noopener noreferrer" class="formal-access-trigger">
+            <span class="formal-access-logo">${PIAGET_LOGO_URL ? `<img src="${PIAGET_LOGO_URL}" alt="Instituto Jean Piaget" />` : "JP"}</span>
+            <span class="formal-access-label">Educación Formal<br /><strong>Instituto Jean Piaget</strong></span>
+          </a>
+          <div class="formal-access-menu">
+            <p>Oferta educativa formal</p>
+            <ul>
+              <li>Nivel Inicial</li>
+              <li>Primario</li>
+              <li>Secundario</li>
+              <li>Carreras</li>
+              <li>Postítulos</li>
+            </ul>
+            <a href="${PIAGET_URL}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="width:100%;">Visitar sitio oficial</a>
+          </div>
+        </div>
         <a href="https://instagram.com/formar.capacitaciones" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm header-cta">
           Consultar ahora
         </a>
