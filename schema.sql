@@ -32,6 +32,7 @@ create table if not exists public.courses (
   video_url     text,
   duration      text, -- ej: "6 meses"
   location      text, -- ej: "Salta y Córdoba"
+  whatsapp_number text, -- solo dígitos, con código de país. Si es NULL, se usa el WhatsApp general del negocio.
   featured      boolean not null default false,
   active        boolean not null default true,
   category_id   uuid references public.categories(id) on delete set null,
@@ -42,6 +43,25 @@ create table if not exists public.courses (
 create index if not exists courses_category_id_idx on public.courses (category_id);
 create index if not exists courses_slug_idx on public.courses (slug);
 create index if not exists courses_active_idx on public.courses (active);
+
+-- Valida el formato del WhatsApp del curso: solo dígitos, entre 10 y 15
+-- caracteres (código de país + número, sin "+" ni espacios).
+create or replace function public.validate_course_whatsapp_number()
+returns trigger as $$
+begin
+  if new.whatsapp_number is not null and new.whatsapp_number <> '' then
+    if new.whatsapp_number !~ '^[0-9]{10,15}$' then
+      raise exception 'whatsapp_number inválido: debe contener solo dígitos (10 a 15), con código de país. Valor recibido: %', new.whatsapp_number;
+    end if;
+  end if;
+  return new;
+end;
+$$ language plpgsql;
+
+drop trigger if exists trg_courses_validate_whatsapp on public.courses;
+create trigger trg_courses_validate_whatsapp
+  before insert or update on public.courses
+  for each row execute function public.validate_course_whatsapp_number();
 
 -- ------------------------------------------------------------
 -- 3. TABLA: orders
