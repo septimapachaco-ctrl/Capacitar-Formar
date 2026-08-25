@@ -567,10 +567,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
         Ingresar
       </button>
       <p class="hint">El usuario administrador se crea desde el panel de Supabase (Authentication → Users).</p>
-      <p class="hint" style="margin-top:0.5rem;color:#f07a04;font-weight:700;">
-        Usuario de prueba temporal: septimapacha.co@gmail.com / FormarTest#2026
-        <br />(cambiar antes de pasar a producción)
-      </p>
     </form>
   </div>
 
@@ -681,6 +677,14 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
           <div class="form-field">
             <label>Video (URL embed, YouTube/Vimeo)</label>
             <input type="text" id="field-video-url" placeholder="https://www.youtube.com/embed/..." />
+          </div>
+
+          <div class="form-field">
+            <label>Número de WhatsApp del curso (opcional, solo dígitos con código de país)</label>
+            <input type="text" id="field-whatsapp" placeholder="5493876543210" pattern="[0-9]{10,15}" />
+            <p class="muted" style="font-size:0.78rem;margin-top:0.35rem;">
+              Si lo dejás vacío, el botón "Consultar por WhatsApp" de este curso usa el número general del negocio.
+            </p>
           </div>
 
           <div class="checkbox-row">
@@ -1139,6 +1143,7 @@ function fillCourseForm(course) {
   document.getElementById("field-location").value = course.location || "";
   document.getElementById("field-image-url").value = course.image_url || "";
   document.getElementById("field-video-url").value = course.video_url || "";
+  document.getElementById("field-whatsapp").value = course.whatsapp_number || "";
   document.getElementById("field-featured").checked = course.featured;
   document.getElementById("field-active").checked = course.active;
 
@@ -1177,6 +1182,7 @@ function duplicateCourseIntoForm(course) {
   document.getElementById("field-location").value = course.location || "";
   document.getElementById("field-image-url").value = course.image_url || "";
   document.getElementById("field-video-url").value = course.video_url || "";
+  document.getElementById("field-whatsapp").value = course.whatsapp_number || "";
   document.getElementById("field-featured").checked = false;
   document.getElementById("field-active").checked = false;
 
@@ -1250,6 +1256,13 @@ function initCourseForm() {
     const slugInput = document.getElementById("field-slug").value.trim();
     const slug = slugInput ? slugify(slugInput) : slugify(title);
 
+    const whatsappNumber = document.getElementById("field-whatsapp").value.trim();
+    if (whatsappNumber && !/^[0-9]{10,15}$/.test(whatsappNumber)) {
+      errorEl.textContent = "El WhatsApp del curso debe tener solo dígitos (10 a 15), con código de país. Ej: 5493876543210";
+      errorEl.classList.remove("hidden");
+      return;
+    }
+
     const payload = {
       title, slug,
       description: document.getElementById("field-description").value.trim(),
@@ -1260,6 +1273,7 @@ function initCourseForm() {
       video_url: document.getElementById("field-video-url").value.trim() || null,
       duration: document.getElementById("field-duration").value.trim() || null,
       location: document.getElementById("field-location").value.trim() || null,
+      whatsapp_number: whatsappNumber || null,
       featured: document.getElementById("field-featured").checked,
       active: document.getElementById("field-active").checked,
       category_id: document.getElementById("field-category").value || null,
