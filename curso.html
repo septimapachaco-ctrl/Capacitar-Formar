@@ -991,7 +991,7 @@ function renderCourse(course, related) {
         <p class="price">${priceDisplay(course)}</p>
         <p class="modality-line">Modalidad: <strong>${escapeHtml(course.modality)}</strong></p>
 
-        <a href="${whatsappLink(WHATSAPP_NUMBER, message)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-block">
+        <a href="${whatsappLink(course.whatsapp_number || WHATSAPP_NUMBER, message)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-block">
           ${WHATSAPP_ICON} Consultar por WhatsApp
         </a>
         <a href="https://instagram.com/formar.capacitaciones" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
@@ -1039,3 +1039,4 @@ document.addEventListener("DOMContentLoaded", init);
   </script>
 </body>
 </html>
+
