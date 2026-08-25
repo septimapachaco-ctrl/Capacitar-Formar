@@ -964,7 +964,7 @@ function renderCourses() {
             <span class="price">${priceDisplay(course)}</span>
             <div class="course-card-wide-actions">
               <a href="curso.html?slug=${encodeURIComponent(course.slug)}" class="btn btn-outline btn-sm">Ver detalle completo</a>
-              <a href="${whatsappLink(WHATSAPP_NUMBER, message)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">${WHATSAPP_ICON} Consultar</a>
+              <a href="${whatsappLink(course.whatsapp_number || WHATSAPP_NUMBER, message)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">${WHATSAPP_ICON} Consultar</a>
             </div>
           </div>
         </div>
