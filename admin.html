@@ -786,6 +786,18 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 
           <h3 style="font-size:0.95rem;margin-bottom:0.6rem;">Portada (Hero)</h3>
           <div class="form-field">
+            <label>Imagen del logo en la portada (hero-brand-lockup)</label>
+            <input type="text" id="content-hero-logo-url" placeholder="https://..." />
+            <div class="image-upload-row">
+              <label class="upload-btn">
+                <span id="hero-logo-upload-label-text">Subir imagen</span>
+                <input type="file" id="hero-logo-file" accept="image/*" />
+              </label>
+              <button type="button" class="upload-btn" id="hero-logo-remove-btn" style="color:#ef4444;">Quitar imagen</button>
+              <img id="hero-logo-preview" alt="" style="height:48px;width:auto;border-radius:8px;object-fit:contain;" class="hidden" />
+            </div>
+          </div>
+          <div class="form-field">
             <label>Texto de la insignia superior</label>
             <input type="text" id="content-hero-badge" />
           </div>
@@ -1576,6 +1588,7 @@ function renderTeamList() {
 
 const CONTENT_FIELD_MAP = {
   "content-logo-url": "logo_url",
+  "content-hero-logo-url": "hero_logo_url",
   "content-hero-badge": "hero_badge",
   "content-hero-title": "hero_title",
   "content-hero-lead": "hero_lead",
@@ -1614,6 +1627,19 @@ async function loadSiteContent() {
     if (el && content[key] !== undefined && content[key] !== null) el.value = content[key];
   });
   document.getElementById("content-show-prices").checked = !!content.show_prices;
+
+  updateHeroLogoPreview(content.hero_logo_url || "");
+}
+
+function updateHeroLogoPreview(url) {
+  const preview = document.getElementById("hero-logo-preview");
+  if (url) {
+    preview.src = url;
+    preview.classList.remove("hidden");
+  } else {
+    preview.src = "";
+    preview.classList.add("hidden");
+  }
 }
 
 function initContentForm() {
@@ -1621,6 +1647,29 @@ function initContentForm() {
   const errorEl = document.getElementById("content-form-error");
   const successEl = document.getElementById("content-form-success");
   const submitBtn = document.getElementById("content-submit-btn");
+
+  document.getElementById("hero-logo-file").addEventListener("change", async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const uploadLabel = document.getElementById("hero-logo-upload-label-text");
+    uploadLabel.textContent = "Subiendo...";
+    try {
+      const url = await uploadToStorage(file, "marca");
+      document.getElementById("content-hero-logo-url").value = url;
+      updateHeroLogoPreview(url);
+    } catch (err) {
+      errorEl.textContent = `Error al subir la imagen: ${err.message}`;
+      errorEl.classList.remove("hidden");
+    } finally {
+      uploadLabel.textContent = "Subir imagen";
+      e.target.value = "";
+    }
+  });
+
+  document.getElementById("hero-logo-remove-btn").addEventListener("click", () => {
+    document.getElementById("content-hero-logo-url").value = "";
+    updateHeroLogoPreview("");
+  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();

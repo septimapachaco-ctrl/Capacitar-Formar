@@ -9,8 +9,14 @@
 
   <meta id="og-title" property="og:title" content="Formar Capacitaciones" />
   <meta id="og-description" property="og:description" content="Cursos y capacitaciones con validez nacional en Argentina." />
-  <meta id="og-image" property="og:image" content="" />
+  <meta id="og-image" property="og:image" content="https://i.ibb.co/LDXsp8FF/Formar-posts.png" />
   <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:site_name" content="Formar Capacitaciones" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta id="twitter-title" name="twitter:title" content="Formar Capacitaciones" />
+  <meta id="twitter-description" name="twitter:description" content="Cursos y capacitaciones con validez nacional en Argentina." />
+  <meta id="twitter-image" name="twitter:image" content="https://i.ibb.co/LDXsp8FF/Formar-posts.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -896,8 +902,11 @@ function applySEO(course) {
   document.getElementById("canonical-link").setAttribute("href", url);
   document.getElementById("og-title").setAttribute("content", title);
   document.getElementById("og-description").setAttribute("content", description);
+  document.getElementById("twitter-title").setAttribute("content", title);
+  document.getElementById("twitter-description").setAttribute("content", description);
   if (course.image_url) {
     document.getElementById("og-image").setAttribute("content", course.image_url);
+    document.getElementById("twitter-image").setAttribute("content", course.image_url);
   }
   document.getElementById("breadcrumb-current").textContent = course.title;
 

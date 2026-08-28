@@ -11,9 +11,14 @@
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_AR" />
   <meta property="og:site_name" content="Formar Capacitaciones" />
+  <meta property="og:url" content="https://formarcapacitaciones.com.ar/" />
   <meta property="og:title" content="FORMAR | Cursos y Capacitaciones Online para Estudiar a tu Ritmo" />
   <meta property="og:description" content="Cursos online asincrónicos y capacitaciones flexibles para estudiantes, trabajadores y profesionales. Certificación con validez nacional e internacional. También presencial en Salta Capital." />
+  <meta property="og:image" content="https://i.ibb.co/LDXsp8FF/Formar-posts.png" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="FORMAR | Cursos y Capacitaciones Online para Estudiar a tu Ritmo" />
+  <meta name="twitter:description" content="Cursos online asincrónicos y capacitaciones flexibles para estudiantes, trabajadores y profesionales. Certificación con validez nacional e internacional." />
+  <meta name="twitter:image" content="https://i.ibb.co/LDXsp8FF/Formar-posts.png" />
 
   <script type="application/ld+json" id="faq-jsonld">
   {
@@ -749,7 +754,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
         <div class="hero-brand-lockup">
           <div class="hero-wordmark-wrap">
             <span class="hero-wordmark-box">
-              <img src="formar.jpg" alt="FORMAR" class="hero-wordmark-img" />
+              <img src="https://i.ibb.co/sv8S8Gmr/logo-poster.jpg" alt="FORMAR" class="hero-wordmark-img js-hero-logo-img" />
             </span>
             <span class="brand-text-small">Cursos · Capacitaciones</span>
           </div>
@@ -1073,6 +1078,9 @@ const WHATSAPP_NUMBER = "5493876236285"; // 📲 WhatsApp principal de contacto:
 /** Logo por defecto (se puede sobreescribir desde site_content.logo_url en el admin) */
 const DEFAULT_LOGO_URL = "formarsinfondo.png";
 
+/** Logo del hero por defecto (se puede sobreescribir desde site_content.hero_logo_url en el admin) */
+const DEFAULT_HERO_LOGO_URL = "https://i.ibb.co/sv8S8Gmr/logo-poster.jpg";
+
 /**
  * Acceso a "Educación Formal" (Instituto Jean Piaget) en el header.
  * PIAGET_LOGO_URL: si queda vacío, se muestra un badge con las
@@ -1125,7 +1133,7 @@ function renderHeader() {
     <header class="site-header">
       <div class="container">
         <a href="index.html" class="brand">
-          <img src="formar.jpg" alt="Formar Capacitaciones" class="brand-wordmark-img" />
+          <img src="https://i.ibb.co/sv8S8Gmr/logo-poster.jpg" alt="Formar Capacitaciones" class="brand-wordmark-img js-hero-logo-img" />
         </a>
         <nav class="main-nav" id="main-nav">
           <a href="cursos.html">Cursos</a>
@@ -1441,6 +1449,9 @@ function applySiteContent(c) {
 
   const logoUrl = c.logo_url || DEFAULT_LOGO_URL;
   document.querySelectorAll(".js-logo-img").forEach((img) => (img.src = logoUrl));
+
+  const heroLogoUrl = c.hero_logo_url || DEFAULT_HERO_LOGO_URL;
+  document.querySelectorAll(".js-hero-logo-img").forEach((img) => (img.src = heroLogoUrl));
 
   showPrices = !!c.show_prices;
 

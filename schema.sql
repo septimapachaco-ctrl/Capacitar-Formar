@@ -393,6 +393,7 @@ insert into public.site_content (id, data) values (
   1,
   '{
     "logo_url": "https://i.ibb.co/LDXsp8FF/Formar-posts.png",
+    "hero_logo_url": "",
     "show_prices": false,
     "hero_badge": "Cursos online asincrónicos · Todo el país",
     "hero_title": "Capacitate desde donde quieras, en el momento que puedas",
