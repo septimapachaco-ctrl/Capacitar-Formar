@@ -566,7 +566,49 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
       <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.25rem;" id="login-submit">
         Ingresar
       </button>
-      <p class="hint">El usuario administrador se crea desde el panel de Supabase (Authentication → Users).</p>
+      <p class="hint" style="text-align:center;margin-top:0.9rem;">
+        <a href="#" id="forgot-password-link">¿Olvidaste tu contraseña?</a>
+      </p>
+    </form>
+
+    <form class="login-card hidden" id="forgot-password-form">
+      <span class="brand-logo" style="margin:0 auto 0.75rem;display:flex;">FC</span>
+      <h1>Recuperar contraseña</h1>
+      <p class="sub">Te enviamos un email para que elijas una nueva.</p>
+
+      <label for="forgot-email">Email</label>
+      <input type="email" id="forgot-email" required />
+
+      <p class="form-error hidden" id="forgot-error"></p>
+      <p class="hint hidden" id="forgot-success" style="color:#127b7b;font-weight:700;"></p>
+
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.25rem;" id="forgot-submit">
+        Enviar correo de recuperación
+      </button>
+      <p class="hint" style="text-align:center;margin-top:0.9rem;">
+        <a href="#" id="back-to-login-link">Volver a iniciar sesión</a>
+      </p>
+    </form>
+  </div>
+
+  <!-- RECUPERACIÓN: elegir nueva contraseña (llegás acá desde el link del email) -->
+  <div id="recovery-screen" class="login-wrap hidden">
+    <form class="login-card" id="recovery-form">
+      <span class="brand-logo" style="margin:0 auto 0.75rem;display:flex;">FC</span>
+      <h1>Elegí una nueva contraseña</h1>
+      <p class="sub">Formar Capacitaciones</p>
+
+      <label for="recovery-password">Nueva contraseña</label>
+      <input type="password" id="recovery-password" required minlength="8" />
+
+      <label for="recovery-password-confirm">Repetí la contraseña</label>
+      <input type="password" id="recovery-password-confirm" required minlength="8" />
+
+      <p class="form-error hidden" id="recovery-error"></p>
+
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.25rem;" id="recovery-submit">
+        Guardar nueva contraseña
+      </button>
     </form>
   </div>
 
@@ -588,6 +630,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
         <button class="admin-tab" data-tab="categorias" id="tab-categorias">Categorías (<span id="categories-count">0</span>)</button>
         <button class="admin-tab" data-tab="equipo" id="tab-equipo">Equipo (<span id="team-count">0</span>)</button>
         <button class="admin-tab" data-tab="contenido" id="tab-contenido">Contenido del sitio</button>
+        <button class="admin-tab" data-tab="cuenta" id="tab-cuenta">Mi cuenta</button>
       </div>
 
       <!-- TAB CURSOS -->
@@ -852,6 +895,35 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
           <button type="submit" class="btn btn-primary" style="margin-top:1rem;" id="content-submit-btn">Guardar cambios</button>
         </form>
       </div>
+
+      <!-- TAB MI CUENTA -->
+      <div id="panel-cuenta" class="hidden">
+        <form class="admin-panel" id="account-form" style="max-width:480px;">
+          <h2>Mi cuenta</h2>
+          <div class="form-field">
+            <label>Email de acceso</label>
+            <input type="email" id="account-email" disabled />
+          </div>
+
+          <h3 style="font-size:0.95rem;margin:1.25rem 0 0.6rem;">Cambiar contraseña</h3>
+          <p class="muted" style="font-size:0.82rem;margin-top:-0.5rem;margin-bottom:1rem;">
+            Elegí una nueva contraseña de al menos 8 caracteres.
+          </p>
+          <div class="form-field">
+            <label>Nueva contraseña</label>
+            <input type="password" id="account-new-password" minlength="8" required />
+          </div>
+          <div class="form-field">
+            <label>Repetí la nueva contraseña</label>
+            <input type="password" id="account-new-password-confirm" minlength="8" required />
+          </div>
+
+          <p class="form-error hidden" id="account-form-error"></p>
+          <p class="hint hidden" id="account-form-success" style="color:#127b7b;font-weight:700;">✓ Contraseña actualizada.</p>
+
+          <button type="submit" class="btn btn-primary" style="margin-top:1rem;" id="account-submit-btn">Actualizar contraseña</button>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -939,21 +1011,37 @@ const emptyCourseForm = {
    AUTENTICACIÓN
    ============================================================ */
 
+function showRecoveryScreen() {
+  document.getElementById("login-screen").classList.add("hidden");
+  document.getElementById("dashboard-screen").classList.add("hidden");
+  document.getElementById("recovery-screen").classList.remove("hidden");
+}
+
 async function checkSession() {
   const { data } = await supabase.auth.getSession();
   document.getElementById("loading-screen").classList.add("hidden");
 
-  if (data.session) {
+  // El link del email de "recuperar contraseña" vuelve acá con
+  // "#type=recovery" en la URL: mostramos directamente el formulario
+  // para elegir una nueva contraseña, sin pasar por el dashboard.
+  const isRecovery = window.location.hash.includes("type=recovery");
+
+  if (isRecovery) {
+    showRecoveryScreen();
+  } else if (data.session) {
     showDashboard();
   } else {
     document.getElementById("login-screen").classList.remove("hidden");
   }
 
-  supabase.auth.onAuthStateChange((_event, session) => {
-    if (session) {
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === "PASSWORD_RECOVERY") {
+      showRecoveryScreen();
+    } else if (session) {
       showDashboard();
     } else {
       document.getElementById("dashboard-screen").classList.add("hidden");
+      document.getElementById("recovery-screen").classList.add("hidden");
       document.getElementById("login-screen").classList.remove("hidden");
     }
   });
@@ -1067,6 +1155,158 @@ function initLoginForm() {
   });
 }
 
+/**
+ * "¿Olvidaste tu contraseña?": el admin ingresa su email y Supabase le
+ * manda un correo con un link para elegir una nueva contraseña (vuelve
+ * a este mismo admin.html con un token de recuperación en la URL).
+ */
+function initForgotPasswordForm() {
+  const loginForm = document.getElementById("login-form");
+  const forgotForm = document.getElementById("forgot-password-form");
+  const forgotLink = document.getElementById("forgot-password-link");
+  const backLink = document.getElementById("back-to-login-link");
+  const errorEl = document.getElementById("forgot-error");
+  const successEl = document.getElementById("forgot-success");
+  const submitBtn = document.getElementById("forgot-submit");
+
+  forgotLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    errorEl.classList.add("hidden");
+    successEl.classList.add("hidden");
+    document.getElementById("forgot-email").value = document.getElementById("login-email").value.trim();
+    loginForm.classList.add("hidden");
+    forgotForm.classList.remove("hidden");
+  });
+
+  backLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    forgotForm.classList.add("hidden");
+    loginForm.classList.remove("hidden");
+  });
+
+  forgotForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorEl.classList.add("hidden");
+    successEl.classList.add("hidden");
+
+    const email = document.getElementById("forgot-email").value.trim();
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Enviando...";
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + window.location.pathname,
+    });
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Enviar correo de recuperación";
+
+    if (error) {
+      errorEl.textContent = "No pudimos enviar el correo: " + error.message;
+      errorEl.classList.remove("hidden");
+      return;
+    }
+
+    successEl.textContent = `Listo. Revisá ${email} y seguí el link del correo para elegir una nueva contraseña.`;
+    successEl.classList.remove("hidden");
+  });
+}
+
+/**
+ * Formulario que aparece al volver del link del email de recuperación:
+ * permite elegir y guardar la nueva contraseña.
+ */
+function initRecoveryForm() {
+  const form = document.getElementById("recovery-form");
+  const errorEl = document.getElementById("recovery-error");
+  const submitBtn = document.getElementById("recovery-submit");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorEl.classList.add("hidden");
+
+    const password = document.getElementById("recovery-password").value;
+    const confirmPassword = document.getElementById("recovery-password-confirm").value;
+
+    if (password.length < 8) {
+      errorEl.textContent = "La contraseña debe tener al menos 8 caracteres.";
+      errorEl.classList.remove("hidden");
+      return;
+    }
+    if (password !== confirmPassword) {
+      errorEl.textContent = "Las contraseñas no coinciden.";
+      errorEl.classList.remove("hidden");
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Guardando...";
+
+    const { error } = await supabase.auth.updateUser({ password });
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Guardar nueva contraseña";
+
+    if (error) {
+      errorEl.textContent = "No se pudo actualizar la contraseña: " + error.message;
+      errorEl.classList.remove("hidden");
+      return;
+    }
+
+    form.reset();
+    history.replaceState(null, "", window.location.pathname);
+    showDashboard();
+  });
+}
+
+/**
+ * Pestaña "Mi cuenta" del dashboard: cambiar la contraseña estando
+ * logueado (sin pasar por el email de recuperación).
+ */
+function initAccountForm() {
+  const form = document.getElementById("account-form");
+  const errorEl = document.getElementById("account-form-error");
+  const successEl = document.getElementById("account-form-success");
+  const submitBtn = document.getElementById("account-submit-btn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorEl.classList.add("hidden");
+    successEl.classList.add("hidden");
+
+    const newPassword = document.getElementById("account-new-password").value;
+    const confirmPassword = document.getElementById("account-new-password-confirm").value;
+
+    if (newPassword.length < 8) {
+      errorEl.textContent = "La contraseña debe tener al menos 8 caracteres.";
+      errorEl.classList.remove("hidden");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      errorEl.textContent = "Las contraseñas no coinciden.";
+      errorEl.classList.remove("hidden");
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Actualizando...";
+
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Actualizar contraseña";
+
+    if (error) {
+      errorEl.textContent = "No se pudo actualizar la contraseña: " + error.message;
+      errorEl.classList.remove("hidden");
+      return;
+    }
+
+    form.reset();
+    successEl.classList.remove("hidden");
+    setTimeout(() => successEl.classList.add("hidden"), 4000);
+  });
+}
+
 function initLogout() {
   document.getElementById("logout-btn").addEventListener("click", async () => {
     await supabase.auth.signOut();
@@ -1079,7 +1319,13 @@ function initLogout() {
 
 async function showDashboard() {
   document.getElementById("login-screen").classList.add("hidden");
+  document.getElementById("recovery-screen").classList.add("hidden");
   document.getElementById("dashboard-screen").classList.remove("hidden");
+
+  const { data: { user } } = await supabase.auth.getUser();
+  const accountEmailField = document.getElementById("account-email");
+  if (accountEmailField && user) accountEmailField.value = user.email;
+
   await loadData();
   await loadSiteContent();
 }
@@ -1089,10 +1335,11 @@ function initTabs() {
   document.getElementById("tab-categorias").addEventListener("click", () => switchTab("categorias"));
   document.getElementById("tab-equipo").addEventListener("click", () => switchTab("equipo"));
   document.getElementById("tab-contenido").addEventListener("click", () => switchTab("contenido"));
+  document.getElementById("tab-cuenta").addEventListener("click", () => switchTab("cuenta"));
 }
 
 function switchTab(tab) {
-  ["cursos", "categorias", "equipo", "contenido"].forEach((t) => {
+  ["cursos", "categorias", "equipo", "contenido", "cuenta"].forEach((t) => {
     document.getElementById(`tab-${t}`).classList.toggle("active", t === tab);
     document.getElementById(`panel-${t}`).classList.toggle("hidden", t !== tab);
   });
@@ -1707,12 +1954,15 @@ function initContentForm() {
 
 function init() {
   initLoginForm();
+  initForgotPasswordForm();
+  initRecoveryForm();
   initLogout();
   initTabs();
   initCourseForm();
   initCategoryForm();
   initTeamForm();
   initContentForm();
+  initAccountForm();
   checkSession();
 }
 
