@@ -3,6 +3,8 @@
 -- FORMAR CAPACITACIONES - Esquema de Base de Datos (Supabase/PostgreSQL)
 -- ============================================================
 -- Ejecutar este script completo en el SQL Editor de Supabase.
+-- Refleja fielmente la estructura del proyecto en producción
+-- (vwgwjhbkchzcawfohimu / formar-capacitaciones) al día de hoy.
 
 -- Extensión necesaria para generar UUIDs
 create extension if not exists "pgcrypto";
@@ -12,7 +14,7 @@ create extension if not exists "pgcrypto";
 -- ------------------------------------------------------------
 create table if not exists public.categories (
   id          uuid primary key default gen_random_uuid(),
-  name        text not null unique,
+  name        text not null,
   slug        text not null unique,
   created_at  timestamptz not null default now()
 );
@@ -27,7 +29,7 @@ create table if not exists public.courses (
   description   text not null default '',
   short_description text not null default '',
   price         numeric(12, 2) not null default 0,
-  modality      text not null default 'Online asincrónica', -- 'Online asincrónica' | 'Online / virtual (en vivo)' | 'Híbrida (online + presencial)' | 'Presencial' | 'Presencial / Virtual' | 'Consultar'
+  modality      text not null default 'Consultar', -- 'Online asincrónica' | 'Online / virtual (en vivo)' | 'Híbrida (online + presencial)' | 'Presencial' | 'Presencial / Virtual' | 'Consultar'
   image_url     text,
   video_url     text,
   duration      text, -- ej: "6 meses"
@@ -40,14 +42,35 @@ create table if not exists public.courses (
   updated_at    timestamptz not null default now()
 );
 
+comment on column public.courses.whatsapp_number is
+  'Número de WhatsApp de contacto para este curso (solo dígitos, con código de país). Si es NULL, el sitio usa el WhatsApp general del negocio.';
+
 create index if not exists courses_category_id_idx on public.courses (category_id);
 create index if not exists courses_slug_idx on public.courses (slug);
 create index if not exists courses_active_idx on public.courses (active);
+create index if not exists courses_featured_idx on public.courses (featured);
+
+-- ------------------------------------------------------------
+-- 3. FUNCIONES Y TRIGGERS compartidos
+-- ------------------------------------------------------------
+create or replace function public.set_updated_at()
+returns trigger
+language plpgsql
+set search_path = 'public'
+as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
 
 -- Valida el formato del WhatsApp del curso: solo dígitos, entre 10 y 15
 -- caracteres (código de país + número, sin "+" ni espacios).
 create or replace function public.validate_course_whatsapp_number()
-returns trigger as $$
+returns trigger
+language plpgsql
+set search_path = 'public'
+as $$
 begin
   if new.whatsapp_number is not null and new.whatsapp_number <> '' then
     if new.whatsapp_number !~ '^[0-9]{10,15}$' then
@@ -56,7 +79,12 @@ begin
   end if;
   return new;
 end;
-$$ language plpgsql;
+$$;
+
+drop trigger if exists courses_set_updated_at on public.courses;
+create trigger courses_set_updated_at
+  before update on public.courses
+  for each row execute function public.set_updated_at();
 
 drop trigger if exists trg_courses_validate_whatsapp on public.courses;
 create trigger trg_courses_validate_whatsapp
@@ -64,35 +92,96 @@ create trigger trg_courses_validate_whatsapp
   for each row execute function public.validate_course_whatsapp_number();
 
 -- ------------------------------------------------------------
--- 3. TABLA: orders
+-- 4. TABLA: orders (cabecera de pedido)
 -- ------------------------------------------------------------
+-- Nota: la tabla "orders"/"order_items" queda del sistema de carrito +
+-- Mercado Pago anterior (ya desactivado, ahora el sitio deriva todo a
+-- WhatsApp). Se dejan creadas por compatibilidad pero no se usan desde
+-- el frontend actual.
 create table if not exists public.orders (
   id              uuid primary key default gen_random_uuid(),
   student_email   text not null,
   student_name    text,
   student_phone   text,
-  items           jsonb not null default '[]'::jsonb, -- [{course_id, title, price, quantity}]
   total           numeric(12, 2) not null default 0,
-  status          text not null default 'pending', -- 'pending' (nueva) | 'contacted' (ya contactada)
+  status          text not null default 'pending' check (status in ('pending', 'approved', 'rejected', 'cancelled')),
   mp_payment_id   text,
   mp_preference_id text,
   created_at      timestamptz not null default now()
 );
 
-create index if not exists orders_status_idx on public.orders (status);
-create index if not exists orders_email_idx on public.orders (student_email);
+-- ------------------------------------------------------------
+-- 5. TABLA: order_items (líneas de pedido)
+-- ------------------------------------------------------------
+create table if not exists public.order_items (
+  id          uuid primary key default gen_random_uuid(),
+  order_id    uuid not null references public.orders(id) on delete cascade,
+  course_id   uuid references public.courses(id) on delete set null,
+  title       text not null,
+  price       numeric(12, 2) not null default 0,
+  quantity    integer not null default 1,
+  created_at  timestamptz not null default now()
+);
+
+create index if not exists order_items_order_id_idx on public.order_items (order_id);
 
 -- ------------------------------------------------------------
--- 3B. TABLA: site_content (textos editables de la web)
+-- 6. TABLA: team_members (equipo / profesionales)
+-- ------------------------------------------------------------
+create table if not exists public.team_members (
+  id                uuid primary key default gen_random_uuid(),
+  name              text not null,
+  profession        text not null default '',
+  photo_url         text,
+  whatsapp          text,   -- solo dígitos, con código de país. Ej: 5493876543210
+  whatsapp_message  text,
+  bio               text,
+  display_order     integer not null default 0,
+  active            boolean not null default true,
+  created_at        timestamptz not null default now(),
+  updated_at        timestamptz not null default now()
+);
+
+create index if not exists team_members_order_idx on public.team_members (display_order);
+create index if not exists team_members_active_idx on public.team_members (active);
+
+drop trigger if exists trg_team_members_updated_at on public.team_members;
+create trigger trg_team_members_updated_at
+  before update on public.team_members
+  for each row execute function public.set_updated_at();
+
+-- ------------------------------------------------------------
+-- 7. TABLA: site_settings (config general, tabla de una sola fila)
+-- ------------------------------------------------------------
+-- Nota: tabla legacy; el contenido editable de la landing que
+-- realmente usa el frontend hoy vive en "site_content" (más abajo).
+create table if not exists public.site_settings (
+  id                smallint primary key default 1 check (id = 1),
+  logo_url          text,
+  whatsapp_number   text default '',
+  hero_title        text not null default 'FORMAR',
+  hero_subtitle     text not null default 'Cursos · Capacitaciones',
+  show_prices       boolean not null default true,
+  price_placeholder text not null default '$0000',
+  splash_enabled    boolean not null default true,
+  updated_at        timestamptz not null default now()
+);
+
+drop trigger if exists trg_site_settings_updated_at on public.site_settings;
+create trigger trg_site_settings_updated_at
+  before update on public.site_settings
+  for each row execute function public.set_updated_at();
+
+-- ------------------------------------------------------------
+-- 8. TABLA: site_content (textos editables de la web)
 -- ------------------------------------------------------------
 -- Guarda en una sola fila (id = 1) todos los textos de la landing que
 -- el admin puede editar desde /admin: hero, estadísticas, ventajas,
 -- contacto y footer. El frontend lee esta fila al cargar la página.
 create table if not exists public.site_content (
-  id          integer primary key default 1,
+  id          smallint primary key default 1 check (id = 1),
   data        jsonb not null default '{}'::jsonb,
-  updated_at  timestamptz not null default now(),
-  constraint site_content_single_row check (id = 1)
+  updated_at  timestamptz not null default now()
 );
 
 drop trigger if exists trg_site_content_updated_at on public.site_content;
@@ -100,25 +189,68 @@ create trigger trg_site_content_updated_at
   before update on public.site_content
   for each row execute function public.set_updated_at();
 
--- ------------------------------------------------------------
--- 3C. TABLA: team_members (equipo / profesionales)
--- ------------------------------------------------------------
-create table if not exists public.team_members (
-  id              uuid primary key default gen_random_uuid(),
-  name            text not null,
-  role            text not null default '',
-  photo_url       text,
-  whatsapp_number text,   -- solo dígitos, con código de país. Ej: 5493876543210
-  whatsapp_message text default 'Hola, quiero más información',
-  display_order   integer not null default 0,
-  active          boolean not null default true,
-  created_at      timestamptz not null default now()
-);
-
-create index if not exists team_members_order_idx on public.team_members (display_order);
-
+-- ============================================================
+-- 9. ROW LEVEL SECURITY (RLS)
+-- ============================================================
+alter table public.categories enable row level security;
+alter table public.courses enable row level security;
+alter table public.orders enable row level security;
+alter table public.order_items enable row level security;
 alter table public.team_members enable row level security;
+alter table public.site_settings enable row level security;
+alter table public.site_content enable row level security;
 
+-- Lectura pública de categorías y cursos activos (para la web pública)
+drop policy if exists "categories_public_read" on public.categories;
+create policy "categories_public_read"
+  on public.categories for select
+  using (true);
+
+drop policy if exists "categories_admin_write" on public.categories;
+create policy "categories_admin_write"
+  on public.categories for all
+  using (auth.role() = 'authenticated')
+  with check (auth.role() = 'authenticated');
+
+drop policy if exists "courses_public_read" on public.courses;
+create policy "courses_public_read"
+  on public.courses for select
+  using (active = true);
+
+drop policy if exists "courses_admin_write" on public.courses;
+create policy "courses_admin_write"
+  on public.courses for all
+  using (auth.role() = 'authenticated')
+  with check (auth.role() = 'authenticated');
+
+-- Cualquiera puede crear una orden y sus items (checkout público),
+-- solo admins pueden leer/gestionar.
+drop policy if exists "orders_public_insert" on public.orders;
+create policy "orders_public_insert"
+  on public.orders for insert
+  with check (true);
+
+drop policy if exists "orders_admin_read" on public.orders;
+create policy "orders_admin_read"
+  on public.orders for select
+  using (auth.role() = 'authenticated');
+
+drop policy if exists "orders_admin_update" on public.orders;
+create policy "orders_admin_update"
+  on public.orders for update
+  using (auth.role() = 'authenticated');
+
+drop policy if exists "order_items_public_insert" on public.order_items;
+create policy "order_items_public_insert"
+  on public.order_items for insert
+  with check (true);
+
+drop policy if exists "order_items_admin_read" on public.order_items;
+create policy "order_items_admin_read"
+  on public.order_items for select
+  using (auth.role() = 'authenticated');
+
+-- team_members: lectura pública solo de activos, gestión para admins
 drop policy if exists "public_read_team_members" on public.team_members;
 create policy "public_read_team_members"
   on public.team_members for select
@@ -130,81 +262,25 @@ create policy "admin_all_team_members"
   using (auth.role() = 'authenticated')
   with check (auth.role() = 'authenticated');
 
--- ------------------------------------------------------------
--- 4. TRIGGER: actualizar updated_at en courses
--- ------------------------------------------------------------
-create or replace function public.set_updated_at()
-returns trigger as $$
-begin
-  new.updated_at = now();
-  return new;
-end;
-$$ language plpgsql;
-
-drop trigger if exists trg_courses_updated_at on public.courses;
-create trigger trg_courses_updated_at
-  before update on public.courses
-  for each row execute function public.set_updated_at();
-
--- ------------------------------------------------------------
--- 5. ROW LEVEL SECURITY (RLS)
--- ------------------------------------------------------------
-alter table public.categories enable row level security;
-alter table public.courses enable row level security;
-alter table public.orders enable row level security;
-
--- Lectura pública de categorías y cursos activos (para la web pública)
-drop policy if exists "public_read_categories" on public.categories;
-create policy "public_read_categories"
-  on public.categories for select
+-- site_settings: lectura pública, alta y edición solo para admins
+drop policy if exists "public_read_site_settings" on public.site_settings;
+create policy "public_read_site_settings"
+  on public.site_settings for select
   using (true);
 
-drop policy if exists "public_read_courses" on public.courses;
-create policy "public_read_courses"
-  on public.courses for select
-  using (active = true);
-
--- Los usuarios autenticados (administradores) pueden hacer todo
-drop policy if exists "admin_all_categories" on public.categories;
-create policy "admin_all_categories"
-  on public.categories for all
-  using (auth.role() = 'authenticated')
+drop policy if exists "admin_insert_site_settings" on public.site_settings;
+create policy "admin_insert_site_settings"
+  on public.site_settings for insert
   with check (auth.role() = 'authenticated');
 
-drop policy if exists "admin_all_courses" on public.courses;
-create policy "admin_all_courses"
-  on public.courses for all
+drop policy if exists "admin_update_site_settings" on public.site_settings;
+create policy "admin_update_site_settings"
+  on public.site_settings for update
   using (auth.role() = 'authenticated')
   with check (auth.role() = 'authenticated');
-
--- Cualquiera puede crear una orden (checkout público), solo admins pueden leer/gestionar
-drop policy if exists "public_insert_orders" on public.orders;
-create policy "public_insert_orders"
-  on public.orders for insert
-  with check (true);
-
-drop policy if exists "admin_read_orders" on public.orders;
-create policy "admin_read_orders"
-  on public.orders for select
-  using (auth.role() = 'authenticated');
-
-drop policy if exists "admin_update_orders" on public.orders;
-create policy "admin_update_orders"
-  on public.orders for update
-  using (auth.role() = 'authenticated');
-
-drop policy if exists "admin_delete_orders" on public.orders;
-create policy "admin_delete_orders"
-  on public.orders for delete
-  using (auth.role() = 'authenticated');
--- Nota: la tabla "orders" queda del sistema de carrito anterior (ya
--- desactivado, ahora se usa WhatsApp). Se deja creada por compatibilidad
--- pero no se usa desde el frontend actual.
 
 -- site_content: lectura pública (la landing la necesita sin login),
 -- edición solo para administradores autenticados.
-alter table public.site_content enable row level security;
-
 drop policy if exists "public_read_site_content" on public.site_content;
 create policy "public_read_site_content"
   on public.site_content for select
@@ -212,54 +288,56 @@ create policy "public_read_site_content"
 
 drop policy if exists "admin_write_site_content" on public.site_content;
 create policy "admin_write_site_content"
-  on public.site_content for insert
+  on public.site_content for all
+  using (auth.role() = 'authenticated')
   with check (auth.role() = 'authenticated');
 
-drop policy if exists "admin_update_site_content" on public.site_content;
-create policy "admin_update_site_content"
-  on public.site_content for update
-  using (auth.role() = 'authenticated');
-
 -- ------------------------------------------------------------
--- 6. STORAGE: bucket para imágenes de cursos
+-- 10. STORAGE: bucket para imágenes de cursos
 -- ------------------------------------------------------------
 insert into storage.buckets (id, name, public)
 values ('course-media', 'course-media', true)
 on conflict (id) do nothing;
 
-drop policy if exists "public_read_course_media" on storage.objects;
-create policy "public_read_course_media"
+drop policy if exists "course_media_public_read" on storage.objects;
+create policy "course_media_public_read"
   on storage.objects for select
   using (bucket_id = 'course-media');
 
-drop policy if exists "admin_write_course_media" on storage.objects;
-create policy "admin_write_course_media"
+drop policy if exists "course_media_admin_write" on storage.objects;
+create policy "course_media_admin_write"
   on storage.objects for insert
   with check (bucket_id = 'course-media' and auth.role() = 'authenticated');
 
-drop policy if exists "admin_update_course_media" on storage.objects;
-create policy "admin_update_course_media"
+drop policy if exists "course_media_admin_update" on storage.objects;
+create policy "course_media_admin_update"
   on storage.objects for update
   using (bucket_id = 'course-media' and auth.role() = 'authenticated');
 
-drop policy if exists "admin_delete_course_media" on storage.objects;
-create policy "admin_delete_course_media"
+drop policy if exists "course_media_admin_delete" on storage.objects;
+create policy "course_media_admin_delete"
   on storage.objects for delete
   using (bucket_id = 'course-media' and auth.role() = 'authenticated');
 
 -- ============================================================
--- 7. SEMILLA DE DATOS (CATEGORÍAS)
+-- 11. SEMILLA DE DATOS (CATEGORÍAS)
 -- ============================================================
 insert into public.categories (name, slug) values
-  ('Docencia y Educación', 'docencia-y-educacion'),
-  ('Salud y Ciencias', 'salud-y-ciencias'),
-  ('Seguridad y Criminalística', 'seguridad-y-criminalistica'),
+  ('Docencia y Educación', 'educacion'),
+  ('Salud y Bienestar', 'salud-y-bienestar'),
+  ('Veterinaria y Cuidado Animal', 'veterinaria-y-cuidado-animal'),
+  ('Seguridad y Peritaje', 'seguridad-y-peritaje'),
+  ('Criminología y Criminalística', 'criminologia-y-criminalistica'),
   ('Administración y Gestión', 'administracion-y-gestion'),
-  ('Oficios', 'oficios')
+  ('Oficios y Formación Laboral', 'oficios-y-formacion-laboral'),
+  ('Tecnología y Competencias Digitales', 'tecnologia-y-competencias-digitales'),
+  ('Deporte y Actividad Física', 'deporte-y-actividad-fisica'),
+  ('Psicología', 'psicologia'),
+  ('Agro y Producción', 'agro-y-produccion')
 on conflict (slug) do nothing;
 
 -- ============================================================
--- 8. SEMILLA DE DATOS (CURSOS)
+-- 12. SEMILLA DE DATOS (CURSOS)
 -- ============================================================
 insert into public.courses
   (title, slug, description, short_description, price, modality, image_url, video_url, duration, location, featured, active, category_id)
@@ -277,7 +355,7 @@ values
   'Salta, Córdoba y modalidad virtual para todo el país',
   true,
   true,
-  (select id from public.categories where slug = 'docencia-y-educacion')
+  null
 ),
 (
   'Auxiliar Veterinario',
@@ -292,7 +370,7 @@ values
   'Consultar sede y modalidad',
   false,
   true,
-  (select id from public.categories where slug = 'salud-y-ciencias')
+  null
 ),
 (
   'Auxiliar en Criminalística',
@@ -307,7 +385,7 @@ values
   'Salta, Córdoba y modalidad virtual para todo el país',
   true,
   true,
-  (select id from public.categories where slug = 'seguridad-y-criminalistica')
+  (select id from public.categories where slug = 'seguridad-y-peritaje')
 ),
 (
   'Auxiliar en Criminología',
@@ -322,7 +400,7 @@ values
   'Salta, Córdoba y modalidad virtual para todo el país',
   false,
   true,
-  (select id from public.categories where slug = 'seguridad-y-criminalistica')
+  (select id from public.categories where slug = 'seguridad-y-peritaje')
 ),
 (
   'Administración',
@@ -352,7 +430,7 @@ values
   'Salta',
   true,
   true,
-  (select id from public.categories where slug = 'oficios')
+  null
 ),
 (
   'Plomería',
@@ -367,7 +445,7 @@ values
   'Salta',
   false,
   true,
-  (select id from public.categories where slug = 'oficios')
+  null
 ),
 (
   'Capacitación Pedagógica para Técnicos Profesionales',
@@ -382,18 +460,17 @@ values
   'Salta, Córdoba y modalidad online',
   true,
   true,
-  (select id from public.categories where slug = 'docencia-y-educacion')
+  null
 )
 on conflict (slug) do nothing;
 
 -- ============================================================
--- 9. SEMILLA DE DATOS (CONTENIDO EDITABLE DE LA WEB)
+-- 13. SEMILLA DE DATOS (CONTENIDO EDITABLE DE LA WEB)
 -- ============================================================
 insert into public.site_content (id, data) values (
   1,
   '{
-    "logo_url": "https://i.ibb.co/LDXsp8FF/Formar-posts.png",
-    "hero_logo_url": "",
+    "logo_url": "formarsinfondo.png",
     "show_prices": false,
     "hero_badge": "Cursos online asincrónicos · Todo el país",
     "hero_title": "Capacitate desde donde quieras, en el momento que puedas",
@@ -418,58 +495,47 @@ insert into public.site_content (id, data) values (
 )
 on conflict (id) do nothing;
 
--- Si la tabla site_content ya existía con datos previos (sitio ya en
--- producción), el INSERT de arriba no pisa nada por el "on conflict do
--- nothing". Corré este UPDATE para aplicar el nuevo mensaje (online
--- asincrónico primero) sobre los datos ya cargados, sin perder el resto
--- de la configuración (logo, WhatsApp, splash, etc. no se tocan):
-update public.site_content
-set data = data || '{
-  "hero_badge": "Cursos online asincrónicos · Todo el país",
-  "hero_title": "Capacitate desde donde quieras, en el momento que puedas",
-  "hero_lead": "Cursos y capacitaciones online asincrónicas con certificación de validez nacional e internacional, pensadas para estudiantes, trabajadores y profesionales que quieren avanzar sin depender de horarios fijos. También contamos con propuestas presenciales en Salta Capital.",
-  "advantage_2_title": "Online asincrónica: estudiá cuando puedas",
-  "advantage_2_text": "Accedé al contenido y avanzá a tu ritmo, sin depender de un horario fijo de conexión. Ideal si trabajás, estudiás o vivís lejos. También tenemos propuestas presenciales en Salta Capital.",
-  "advantage_3_title": "Formación orientada al mundo laboral",
-  "advantage_3_text": "Diseñamos cada curso pensando en las demandas actuales del mercado laboral argentino, con contenido 100% práctico.",
-  "footer_text": "Cursos y capacitaciones online asincrónicas con validez nacional e internacional. También en Salta Capital, de forma presencial."
-}'::jsonb
-where id = 1;
+-- ============================================================
+-- 14. SEMILLA DE DATOS (CONFIGURACIÓN GENERAL - legacy)
+-- ============================================================
+insert into public.site_settings (id, logo_url, whatsapp_number, hero_title, hero_subtitle, show_prices, price_placeholder, splash_enabled)
+values (1, 'https://i.ibb.co/LDXsp8FF/Formar-posts.png', '', 'FORMAR', 'Cursos · Capacitaciones', true, '$0000', true)
+on conflict (id) do nothing;
 
 -- ============================================================
--- 10. SEMILLA DE DATOS (EQUIPO / PROFESIONALES)
+-- 15. SEMILLA DE DATOS (EQUIPO / PROFESIONALES)
 -- ============================================================
-insert into public.team_members (name, role, photo_url, whatsapp_number, whatsapp_message, display_order) values
-(
-  'Cra. Sol Camila Montenegro Trogliero',
-  'Vicedirectora',
-  'https://i.ibb.co/gLMMKntm/Contadora-Sol-Camila-Montenegro-Trogliero-Vivedirectora.jpg',
-  '5493870000000',
-  'Hola Sol, quiero más información sobre los cursos de Formar Capacitaciones',
-  1
-),
+insert into public.team_members (name, profession, photo_url, whatsapp, whatsapp_message, display_order) values
 (
   'Lic. Tania Simkin',
   'Directora',
   'https://i.ibb.co/DHVQFYWR/Lic-Tania-Simkin-Directora.jpg',
-  '5493870000000',
-  'Hola Tania, quiero más información sobre los cursos de Formar Capacitaciones',
+  '5493491530328',
+  null,
+  1
+),
+(
+  'Cra. Sol Camila Montenegro Trogliero',
+  'Vicedirectora',
+  'https://i.ibb.co/gLMMKntm/Contadora-Sol-Camila-Montenegro-Trogliero-Vivedirectora.jpg',
+  '5493876236285',
+  null,
   2
 ),
 (
   'Lic. Dalia Korman',
-  'Coordinadora',
+  'Coordinadora Pedagógica',
   'https://i.ibb.co/k29Dpdhb/Lic-Dalia-Korman-Coordinadora.jpg',
-  '5493870000000',
-  'Hola Dalia, quiero más información sobre los cursos de Formar Capacitaciones',
+  '5493876054669',
+  null,
   3
 ),
 (
   'Lic. Damián Simkin',
-  'Recursos Humanos',
+  'RRHH',
   'https://i.ibb.co/kgzZZQ04/Lic-Dami-n-Simkin-RRHH.jpg',
-  '5493870000000',
-  'Hola Damián, quiero más información sobre los cursos de Formar Capacitaciones',
+  '5493874537157',
+  null,
   4
 )
 on conflict do nothing;

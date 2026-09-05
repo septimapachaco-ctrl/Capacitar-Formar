@@ -446,6 +446,22 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
 .contact h2 { color: var(--color-white); font-size: clamp(1.85rem, 3.2vw, 2.6rem); }
 .contact p { max-width: 520px; margin: 1.1rem auto 2.1rem; color: rgba(255, 255, 255, 0.85); }
 .contact-btn { background: var(--color-white); color: var(--color-blue); box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.3); }
+.contact-email-note { margin: 1.6rem auto 0; font-size: 0.88rem; color: rgba(255, 255, 255, 0.85); }
+.contact-email-note a { color: var(--color-white); font-weight: 700; text-decoration: underline; }
+.contact-form {
+  max-width: 480px; margin: 2.2rem auto 0; background: var(--color-white); border-radius: var(--radius-lg);
+  padding: 1.6rem; box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.35); text-align: left;
+}
+.contact-form .form-row { margin-bottom: 0.9rem; }
+.contact-form label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--color-blue); margin-bottom: 0.35rem; }
+.contact-form input, .contact-form textarea {
+  width: 100%; padding: 0.75rem 0.9rem; border-radius: var(--radius-md); border: 1.5px solid var(--color-border);
+  font-size: 0.92rem; font-family: inherit; color: var(--color-text); transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: var(--color-turquoise); box-shadow: 0 0 0 4px rgba(18, 123, 123, 0.12); }
+.contact-form textarea { resize: vertical; min-height: 100px; }
+.contact-form .btn { width: 100%; justify-content: center; }
+.contact-form-status { margin-top: 0.8rem; font-size: 0.85rem; text-align: center; }
 
 /* ---------- Footer ---------- */
 .site-footer { background: var(--color-blue); color: rgba(255, 255, 255, 0.7); padding: 2.75rem 0; text-align: center; font-size: 0.85rem; }
@@ -1042,6 +1058,26 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
         </a>
         <a href="gracias.html" class="btn btn-outline-light">Conocé a nuestro equipo</a>
       </div>
+      <p class="contact-email-note reveal">
+        O escribinos directamente a <a href="mailto:formar.cursosycapacitaciones@gmail.com">formar.cursosycapacitaciones@gmail.com</a>
+      </p>
+      <form class="contact-form reveal" id="contact-email-form">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+        <div class="form-row">
+          <label for="contact-form-name">Nombre</label>
+          <input type="text" id="contact-form-name" name="name" required autocomplete="name" />
+        </div>
+        <div class="form-row">
+          <label for="contact-form-email">Tu email</label>
+          <input type="email" id="contact-form-email" name="email" required autocomplete="email" />
+        </div>
+        <div class="form-row">
+          <label for="contact-form-message">Mensaje</label>
+          <textarea id="contact-form-message" name="message" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" id="contact-form-submit">Enviar mensaje</button>
+        <p class="contact-form-status" id="contact-form-status"></p>
+      </form>
     </div>
   </section>
 
@@ -1215,6 +1251,57 @@ function renderFooter(footerText) {
     </footer>
   `;
   document.getElementById("footer-year").textContent = new Date().getFullYear();
+}
+
+/**
+ * Formulario de contacto por email (sección "Contacto" de la landing).
+ * Envía el mensaje por AJAX a formar.cursosycapacitaciones@gmail.com
+ * usando FormSubmit (https://formsubmit.co), sin necesidad de backend
+ * propio. La primera vez que alguien envíe el formulario, FormSubmit
+ * manda un email de confirmación a esa casilla que hay que activar
+ * una única vez haciendo clic en "Activate Form".
+ */
+function initContactForm() {
+  const form = document.getElementById("contact-email-form");
+  if (!form) return;
+
+  const statusEl = document.getElementById("contact-form-status");
+  const submitBtn = document.getElementById("contact-form-submit");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (form.querySelector('[name="_honey"]').value) return; // honeypot anti-spam
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Enviando...";
+    statusEl.textContent = "";
+    statusEl.style.color = "";
+
+    try {
+      const res = await fetch("https://formsubmit.co/ajax/formar.cursosycapacitaciones@gmail.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: form.name.value.trim(),
+          email: form.email.value.trim(),
+          message: form.message.value.trim(),
+          _subject: "Nuevo mensaje desde formarcapacitaciones.com.ar",
+        }),
+      });
+      if (!res.ok) throw new Error("request failed");
+
+      statusEl.textContent = "¡Gracias! Tu mensaje fue enviado, te vamos a responder a la brevedad.";
+      statusEl.style.color = "var(--color-turquoise)";
+      form.reset();
+    } catch (err) {
+      console.warn("[Formar Capacitaciones] Error al enviar el formulario de contacto.", err.message || err);
+      statusEl.textContent = "No pudimos enviar tu mensaje. Probá de nuevo o escribinos a formar.cursosycapacitaciones@gmail.com.";
+      statusEl.style.color = "#d9534f";
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Enviar mensaje";
+    }
+  });
 }
 
 // ==============================================================
@@ -1667,6 +1754,7 @@ async function init() {
   initAllAnimations();
   initFaqAccordion();
   initCourseSearch();
+  initContactForm();
 
   const contactWhatsapp = document.getElementById("contact-whatsapp-link");
   if (contactWhatsapp) {
