@@ -103,6 +103,11 @@
   background: var(--color-blue); color: var(--color-white); font-size: 0.68rem; font-weight: 800; flex-shrink: 0; overflow: hidden;
 }
 .formal-access-logo img { width: 100%; height: 100%; object-fit: cover; }
+.formal-access-logo.wordmark {
+  width: auto; height: 28px; min-width: 0; max-width: 92px; border-radius: 6px;
+  background: var(--color-white); border: 1px solid var(--color-border); padding: 2px 5px;
+}
+.formal-access-logo.wordmark img { width: auto; height: 100%; max-width: 100%; object-fit: contain; }
 .formal-access-label { font-size: 0.68rem; line-height: 1.25; color: var(--color-text-muted); }
 .formal-access-label strong { display: block; font-size: 0.78rem; color: var(--color-blue); }
 .formal-access-menu {
@@ -624,7 +629,7 @@ const DEFAULT_HERO_LOGO_URL = "https://i.ibb.co/sv8S8Gmr/logo-poster.jpg";
  * (por ejemplo, subido a Supabase Storage o a un hosting de imágenes).
  */
 const PIAGET_URL = "https://piagetsalta.com.ar/";
-const PIAGET_LOGO_URL = "https://tse4.mm.bing.net/th/id/OIP.IHLk7ADO10Q0WLeZArqNmgHaCN?r=0&rs=1&pid=ImgDetMain&o=7&rm=3";
+const PIAGET_LOGO_URL = "https://piagetsalta.com.ar/wp-content/uploads/2020/09/1400x418-1024x306.png";
 
 function formatARS(value) {
   return new Intl.NumberFormat("es-AR", {
@@ -684,7 +689,7 @@ function renderHeader() {
         </button>
         <div class="formal-access" id="formal-access">
           <a href="${PIAGET_URL}" target="_blank" rel="noopener noreferrer" class="formal-access-trigger">
-            <span class="formal-access-logo">${PIAGET_LOGO_URL ? `<img src="${PIAGET_LOGO_URL}" alt="Instituto Jean Piaget" />` : "JP"}</span>
+            <span class="formal-access-logo${PIAGET_LOGO_URL ? " wordmark" : ""}">${PIAGET_LOGO_URL ? `<img src="${PIAGET_LOGO_URL}" alt="Instituto Jean Piaget" />` : "JP"}</span>
             <span class="formal-access-label">Educación Formal<br /><strong>Instituto Jean Piaget</strong></span>
           </a>
           <div class="formal-access-menu">
