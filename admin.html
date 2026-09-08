@@ -588,6 +588,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
         <button class="admin-tab" data-tab="categorias" id="tab-categorias">Categorías (<span id="categories-count">0</span>)</button>
         <button class="admin-tab" data-tab="equipo" id="tab-equipo">Equipo (<span id="team-count">0</span>)</button>
         <button class="admin-tab" data-tab="contenido" id="tab-contenido">Contenido del sitio</button>
+        <button class="admin-tab" data-tab="cuenta" id="tab-cuenta">Mi cuenta</button>
       </div>
 
       <!-- TAB CURSOS -->
@@ -852,6 +853,30 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
           <button type="submit" class="btn btn-primary" style="margin-top:1rem;" id="content-submit-btn">Guardar cambios</button>
         </form>
       </div>
+
+      <!-- TAB MI CUENTA -->
+      <div id="panel-cuenta" class="hidden">
+        <form class="admin-panel" id="account-form" style="max-width:480px;">
+          <h2>Cambiar contraseña</h2>
+          <p class="muted" style="margin-bottom:1.25rem;font-size:0.85rem;">
+            Sesión iniciada como <strong id="account-email">—</strong>. Elegí una contraseña nueva para acceder al panel.
+          </p>
+
+          <div class="form-field">
+            <label>Contraseña nueva *</label>
+            <input type="password" id="account-new-password" required minlength="6" autocomplete="new-password" />
+          </div>
+          <div class="form-field">
+            <label>Repetir contraseña nueva *</label>
+            <input type="password" id="account-new-password-confirm" required minlength="6" autocomplete="new-password" />
+          </div>
+
+          <p class="form-error hidden" id="account-form-error"></p>
+          <p class="hint hidden" id="account-form-success" style="color:#127b7b;font-weight:700;">✓ Contraseña actualizada correctamente.</p>
+
+          <button type="submit" class="btn btn-primary" style="margin-top:0.5rem;" id="account-submit-btn">Guardar contraseña</button>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -1082,6 +1107,9 @@ async function showDashboard() {
   document.getElementById("dashboard-screen").classList.remove("hidden");
   await loadData();
   await loadSiteContent();
+
+  const { data } = await supabase.auth.getUser();
+  document.getElementById("account-email").textContent = data?.user?.email ?? "—";
 }
 
 function initTabs() {
@@ -1089,10 +1117,11 @@ function initTabs() {
   document.getElementById("tab-categorias").addEventListener("click", () => switchTab("categorias"));
   document.getElementById("tab-equipo").addEventListener("click", () => switchTab("equipo"));
   document.getElementById("tab-contenido").addEventListener("click", () => switchTab("contenido"));
+  document.getElementById("tab-cuenta").addEventListener("click", () => switchTab("cuenta"));
 }
 
 function switchTab(tab) {
-  ["cursos", "categorias", "equipo", "contenido"].forEach((t) => {
+  ["cursos", "categorias", "equipo", "contenido", "cuenta"].forEach((t) => {
     document.getElementById(`tab-${t}`).classList.toggle("active", t === tab);
     document.getElementById(`panel-${t}`).classList.toggle("hidden", t !== tab);
   });
@@ -1702,6 +1731,56 @@ function initContentForm() {
 }
 
 /* ============================================================
+   MI CUENTA — cambiar contraseña
+   ============================================================ */
+
+function initAccountForm() {
+  const form = document.getElementById("account-form");
+  const errorEl = document.getElementById("account-form-error");
+  const successEl = document.getElementById("account-form-success");
+  const submitBtn = document.getElementById("account-submit-btn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorEl.classList.add("hidden");
+    successEl.classList.add("hidden");
+
+    const newPassword = document.getElementById("account-new-password").value;
+    const confirmPassword = document.getElementById("account-new-password-confirm").value;
+
+    if (newPassword.length < 6) {
+      errorEl.textContent = "La contraseña debe tener al menos 6 caracteres.";
+      errorEl.classList.remove("hidden");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      errorEl.textContent = "Las contraseñas no coinciden.";
+      errorEl.classList.remove("hidden");
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Guardando...";
+
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Guardar contraseña";
+
+    if (error) {
+      errorEl.textContent = `No se pudo actualizar la contraseña: ${error.message}`;
+      errorEl.classList.remove("hidden");
+      return;
+    }
+
+    form.reset();
+    successEl.classList.remove("hidden");
+    setTimeout(() => successEl.classList.add("hidden"), 4000);
+  });
+}
+
+/* ============================================================
    INIT
    ============================================================ */
 
@@ -1713,6 +1792,7 @@ function init() {
   initCategoryForm();
   initTeamForm();
   initContentForm();
+  initAccountForm();
   checkSession();
 }
 
