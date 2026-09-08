@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cursos Online Asincrónicos con Certificación | FORMAR</title>
-  <meta name="description" content="Capacitate desde donde quieras y en el momento que puedas. FORMAR ofrece cursos online asincrónicos, propuestas presenciales en Salta Capital, certificación nacional e internacional y acceso al Portal de Empleo para egresados." />
+  <meta name="description" content="Cursos online asincrónicos con certificación nacional e internacional. Propuestas presenciales en Salta Capital y acceso al Portal de Empleo para egresados." />
   <meta name="keywords" content="cursos online asincrónicos, capacitaciones online asincrónicas, cursos online con certificación, cursos a distancia, cursos online Argentina, formación online para profesionales, cursos online desde Salta, cursos presenciales en Salta Capital" />
   <link rel="canonical" href="https://formarcapacitaciones.com.ar/" />
 
@@ -187,9 +187,25 @@
     "@type": "EducationalOrganization",
     "name": "Formar Capacitaciones",
     "url": "https://formarcapacitaciones.com.ar",
+    "logo": "https://formarcapacitaciones.com.ar/formarsinfondo.png",
+    "image": "https://i.ibb.co/sv8S8Gmr/logo-poster.jpg",
     "sameAs": ["https://instagram.com/formar.capacitaciones"],
     "areaServed": ["Salta", "Córdoba", "Argentina"],
-    "description": "Cursos y capacitaciones con certificación de validez nacional e internacional, presenciales y online, para estudiantes y profesionales de toda Argentina."
+    "description": "Cursos y capacitaciones con certificación de validez nacional e internacional, presenciales y online, para estudiantes y profesionales de toda Argentina.",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Alberdi 615",
+      "addressLocality": "Salta",
+      "addressRegion": "Salta",
+      "addressCountry": "AR"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+54-9-387-623-6285",
+      "contactType": "customer service",
+      "areaServed": "AR",
+      "availableLanguage": "Spanish"
+    }
   }
   </script>
 </head>
@@ -542,8 +558,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 
 /**
  * Número de WhatsApp del negocio (solo dígitos, con código de país,
- * SIN "+" ni espacios). Ej: Argentina +54 9 387 654-3210 → "5493876543210".
- * ⚠️ REEMPLAZAR por el número real: se usa en TODOS los botones de
+ * SIN "+" ni espacios). Se usa en TODOS los botones de
  * "Consultar por WhatsApp" del sitio (cursos, equipo, contacto).
  */
 const WHATSAPP_NUMBER = "5493876236285"; // 📲 WhatsApp principal de contacto: 3876 23-6285
