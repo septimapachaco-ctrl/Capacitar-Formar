@@ -6,22 +6,22 @@ Un curso online asincrónico de FORMAR significa que el alumno accede al conteni
 
 ## Cursos disponibles
 
-- [Administración](https://formarcapacitaciones.com.ar/curso.html?slug=administracion): gestión administrativa, atención al público y herramientas de oficina. Duración 4 meses.
-- [Auxiliar en Criminalística](https://formarcapacitaciones.com.ar/curso.html?slug=auxiliar-en-criminalistica): técnicas de investigación forense, preservación de indicios y cadena de custodia. Presencial en Salta y Córdoba o virtual para todo el país. Duración 5 meses.
-- [Auxiliar en Criminología](https://formarcapacitaciones.com.ar/curso.html?slug=auxiliar-en-criminologia): análisis científico del delito, victimología y prevención. Presencial en Salta y Córdoba o virtual para todo el país. Duración 5 meses.
-- [Auxiliar Veterinario](https://formarcapacitaciones.com.ar/curso.html?slug=auxiliar-veterinario): asistencia clínica y cuidado animal para insertarte en el ámbito veterinario. Duración 6 meses.
-- [Capacitación Pedagógica para Técnicos Profesionales](https://formarcapacitaciones.com.ar/curso.html?slug=capacitacion-pedagogica-para-tecnicos-profesionales): herramientas pedagógicas y didácticas para que técnicos y profesionales puedan enseñar su oficio. Presencial en Salta y Córdoba u online. Duración 3 meses.
-- [Electricidad](https://formarcapacitaciones.com.ar/curso.html?slug=electricidad): instalaciones eléctricas domiciliarias e industriales con práctica intensiva en taller. Presencial en Salta. Duración 5 meses.
-- [Plomería](https://formarcapacitaciones.com.ar/curso.html?slug=plomeria): instalaciones sanitarias, de agua y gas con práctica real en taller. Presencial en Salta. Duración 5 meses.
-- [Preceptores](https://formarcapacitaciones.com.ar/curso.html?slug=preceptores): formación integral para desempeñarte como preceptor en instituciones educativas públicas y privadas. Presencial en Salta y Córdoba o virtual para todo el país. Duración 4 meses.
+- [Administración](https://formarcapacitaciones.com/curso.html?slug=administracion): gestión administrativa, atención al público y herramientas de oficina. Duración 4 meses.
+- [Auxiliar en Criminalística](https://formarcapacitaciones.com/curso.html?slug=auxiliar-en-criminalistica): técnicas de investigación forense, preservación de indicios y cadena de custodia. Presencial en Salta y Córdoba o virtual para todo el país. Duración 5 meses.
+- [Auxiliar en Criminología](https://formarcapacitaciones.com/curso.html?slug=auxiliar-en-criminologia): análisis científico del delito, victimología y prevención. Presencial en Salta y Córdoba o virtual para todo el país. Duración 5 meses.
+- [Auxiliar Veterinario](https://formarcapacitaciones.com/curso.html?slug=auxiliar-veterinario): asistencia clínica y cuidado animal para insertarte en el ámbito veterinario. Duración 6 meses.
+- [Capacitación Pedagógica para Técnicos Profesionales](https://formarcapacitaciones.com/curso.html?slug=capacitacion-pedagogica-para-tecnicos-profesionales): herramientas pedagógicas y didácticas para que técnicos y profesionales puedan enseñar su oficio. Presencial en Salta y Córdoba u online. Duración 3 meses.
+- [Electricidad](https://formarcapacitaciones.com/curso.html?slug=electricidad): instalaciones eléctricas domiciliarias e industriales con práctica intensiva en taller. Presencial en Salta. Duración 5 meses.
+- [Plomería](https://formarcapacitaciones.com/curso.html?slug=plomeria): instalaciones sanitarias, de agua y gas con práctica real en taller. Presencial en Salta. Duración 5 meses.
+- [Preceptores](https://formarcapacitaciones.com/curso.html?slug=preceptores): formación integral para desempeñarte como preceptor en instituciones educativas públicas y privadas. Presencial en Salta y Córdoba o virtual para todo el país. Duración 4 meses.
 
-La oferta de cursos cambia con el tiempo; la lista completa y actualizada siempre está en [/cursos.html](https://formarcapacitaciones.com.ar/cursos.html).
+La oferta de cursos cambia con el tiempo; la lista completa y actualizada siempre está en [/cursos.html](https://formarcapacitaciones.com/cursos.html).
 
 ## Páginas del sitio
 
-- [Inicio](https://formarcapacitaciones.com.ar/): presentación de FORMAR, ventajas de la modalidad asincrónica y preguntas frecuentes.
-- [Todos los cursos](https://formarcapacitaciones.com.ar/cursos.html): listado completo y buscador de cursos.
-- [Nuestro equipo](https://formarcapacitaciones.com.ar/gracias.html): equipo docente y de coordinación.
+- [Inicio](https://formarcapacitaciones.com/): presentación de FORMAR, ventajas de la modalidad asincrónica y preguntas frecuentes.
+- [Todos los cursos](https://formarcapacitaciones.com/cursos.html): listado completo y buscador de cursos.
+- [Nuestro equipo](https://formarcapacitaciones.com/gracias.html): equipo docente y de coordinación.
 
 ## Preguntas frecuentes
 

@@ -42,10 +42,11 @@ create trigger trg_courses_validate_whatsapp
 -- ------------------------------------------------------------
 -- 3. RLS: solo el admin puede editar este campo
 -- ------------------------------------------------------------
--- Este proyecto no tiene una tabla de roles: el único "admin" es
--- cualquier usuario autenticado por Supabase Auth (se crea a mano
--- desde Authentication → Users). Las políticas ya existentes sobre
--- public.courses siguen esa misma regla y cubren también la columna
+-- Este proyecto usa una tabla public.admins (ver schema.sql) para
+-- distinguir al administrador real de cualquier otro usuario que
+-- pudiera autenticarse: "authenticated" por sí solo es el rol de
+-- CUALQUIER usuario logueado, no solo del admin. Las políticas de
+-- abajo usan la función public.is_admin() y cubren también la columna
 -- nueva; se re-declaran acá para dejarlo explícito y a prueba de que
 -- alguien las haya borrado o modificado.
 
@@ -55,10 +56,10 @@ create policy "public_read_courses"
   on public.courses for select
   using (active = true);
 
--- Solo usuarios autenticados (administradores) pueden insertar,
+-- Solo los usuarios cargados en public.admins pueden insertar,
 -- actualizar (incluido whatsapp_number) o borrar cursos.
 drop policy if exists "admin_all_courses" on public.courses;
 create policy "admin_all_courses"
   on public.courses for all
-  using (auth.role() = 'authenticated')
-  with check (auth.role() = 'authenticated');
+  using (public.is_admin())
+  with check (public.is_admin());
