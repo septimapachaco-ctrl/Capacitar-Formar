@@ -9,6 +9,11 @@ on:
 jobs:
   claude:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - name: Claude Code Action Official
