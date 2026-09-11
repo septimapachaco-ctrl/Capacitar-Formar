@@ -149,6 +149,38 @@ create trigger trg_courses_updated_at
 -- ------------------------------------------------------------
 -- 5. ROW LEVEL SECURITY (RLS)
 -- ------------------------------------------------------------
+-- IMPORTANTE: "authenticated" es el rol de CUALQUIER usuario logueado,
+-- no solo del administrador. Si el registro público (sign-up) llegara a
+-- estar habilitado en el proyecto, cualquier persona podría crearse una
+-- cuenta y obtener permisos de administrador. Por eso las políticas de
+-- escritura de acá abajo no usan auth.role() = 'authenticated' sino una
+-- tabla admins explícita + la función is_admin().
+create table if not exists public.admins (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+
+alter table public.admins enable row level security;
+
+drop policy if exists "self_read_admins" on public.admins;
+create policy "self_read_admins"
+  on public.admins for select
+  using (auth.uid() = user_id);
+
+-- Después de correr este script, cargá tu usuario admin (buscá tu
+-- user_id en Authentication → Users del panel de Supabase):
+--   insert into public.admins (user_id) values ('TU-USER-ID-AQUI');
+
+create or replace function public.is_admin()
+returns boolean
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select exists (select 1 from public.admins a where a.user_id = auth.uid());
+$$;
+
 alter table public.categories enable row level security;
 alter table public.courses enable row level security;
 alter table public.orders enable row level security;
@@ -164,45 +196,46 @@ create policy "public_read_courses"
   on public.courses for select
   using (active = true);
 
--- Los usuarios autenticados (administradores) pueden hacer todo
+-- Solo los usuarios de la tabla admins pueden escribir
 drop policy if exists "admin_all_categories" on public.categories;
 create policy "admin_all_categories"
   on public.categories for all
-  using (auth.role() = 'authenticated')
-  with check (auth.role() = 'authenticated');
+  using (public.is_admin())
+  with check (public.is_admin());
 
 drop policy if exists "admin_all_courses" on public.courses;
 create policy "admin_all_courses"
   on public.courses for all
-  using (auth.role() = 'authenticated')
-  with check (auth.role() = 'authenticated');
+  using (public.is_admin())
+  with check (public.is_admin());
 
--- Cualquiera puede crear una orden (checkout público), solo admins pueden leer/gestionar
+-- La tabla "orders" queda del sistema de carrito anterior (ya
+-- desactivado, ahora se usa WhatsApp) y hoy no recibe escrituras desde
+-- el frontend actual. Se deja creada por compatibilidad, pero SIN
+-- insert público: una tabla que acepta filas de cualquiera sin
+-- validación es una superficie de abuso/spam gratuita. Si en el futuro
+-- reactivás un checkout público, agregá primero validación de formato
+-- (como el trigger de whatsapp_number de courses) y algún tipo de
+-- verificación (Turnstile/hCaptcha) antes de reabrir el insert.
 drop policy if exists "public_insert_orders" on public.orders;
-create policy "public_insert_orders"
-  on public.orders for insert
-  with check (true);
 
 drop policy if exists "admin_read_orders" on public.orders;
 create policy "admin_read_orders"
   on public.orders for select
-  using (auth.role() = 'authenticated');
+  using (public.is_admin());
 
 drop policy if exists "admin_update_orders" on public.orders;
 create policy "admin_update_orders"
   on public.orders for update
-  using (auth.role() = 'authenticated');
+  using (public.is_admin());
 
 drop policy if exists "admin_delete_orders" on public.orders;
 create policy "admin_delete_orders"
   on public.orders for delete
-  using (auth.role() = 'authenticated');
--- Nota: la tabla "orders" queda del sistema de carrito anterior (ya
--- desactivado, ahora se usa WhatsApp). Se deja creada por compatibilidad
--- pero no se usa desde el frontend actual.
+  using (public.is_admin());
 
 -- site_content: lectura pública (la landing la necesita sin login),
--- edición solo para administradores autenticados.
+-- edición solo para administradores.
 alter table public.site_content enable row level security;
 
 drop policy if exists "public_read_site_content" on public.site_content;
@@ -213,12 +246,12 @@ create policy "public_read_site_content"
 drop policy if exists "admin_write_site_content" on public.site_content;
 create policy "admin_write_site_content"
   on public.site_content for insert
-  with check (auth.role() = 'authenticated');
+  with check (public.is_admin());
 
 drop policy if exists "admin_update_site_content" on public.site_content;
 create policy "admin_update_site_content"
   on public.site_content for update
-  using (auth.role() = 'authenticated');
+  using (public.is_admin());
 
 -- ------------------------------------------------------------
 -- 6. STORAGE: bucket para imágenes de cursos
@@ -235,17 +268,17 @@ create policy "public_read_course_media"
 drop policy if exists "admin_write_course_media" on storage.objects;
 create policy "admin_write_course_media"
   on storage.objects for insert
-  with check (bucket_id = 'course-media' and auth.role() = 'authenticated');
+  with check (bucket_id = 'course-media' and public.is_admin());
 
 drop policy if exists "admin_update_course_media" on storage.objects;
 create policy "admin_update_course_media"
   on storage.objects for update
-  using (bucket_id = 'course-media' and auth.role() = 'authenticated');
+  using (bucket_id = 'course-media' and public.is_admin());
 
 drop policy if exists "admin_delete_course_media" on storage.objects;
 create policy "admin_delete_course_media"
   on storage.objects for delete
-  using (bucket_id = 'course-media' and auth.role() = 'authenticated');
+  using (bucket_id = 'course-media' and public.is_admin());
 
 -- ============================================================
 -- 7. SEMILLA DE DATOS (CATEGORÍAS)
