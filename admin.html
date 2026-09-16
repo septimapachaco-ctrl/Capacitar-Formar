@@ -12,6 +12,10 @@
   <style>
 .login-locked-msg { text-align: center; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-md); padding: 0.75rem 1rem; font-size: 0.85rem; font-weight: 600; margin-top: 1rem; }
 .login-card .hint a { color: var(--color-turquoise); font-weight: 700; text-decoration: underline; }
+.password-field { position: relative; display: flex; align-items: center; }
+.password-field input { width: 100%; padding-right: 2.6rem; }
+.password-toggle-btn { position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%); background: none; border: none; padding: 0.2rem; font-size: 1.05rem; line-height: 1; cursor: pointer; color: var(--color-text-muted); }
+.password-toggle-btn:hover { color: var(--color-turquoise); }
 .team-card-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-smooth); }
 .team-card-plaque h3 { font-size: 1rem; margin-bottom: 0.15rem; }
 .team-card-plaque p { font-size: 0.82rem; color: var(--color-turquoise); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.9rem; }
@@ -33,7 +37,10 @@
       <input type="email" id="login-email" required />
 
       <label for="login-password">Contraseña</label>
-      <input type="password" id="login-password" required />
+      <div class="password-field">
+        <input type="password" id="login-password" required />
+        <button type="button" class="password-toggle-btn" data-target="login-password" aria-label="Mostrar contraseña">👁</button>
+      </div>
 
       <p class="form-error hidden" id="login-error"></p>
 
@@ -41,7 +48,6 @@
         Ingresar
       </button>
       <p class="hint"><a href="#" id="forgot-password-link">¿Olvidaste tu contraseña?</a></p>
-      <p class="hint">El usuario administrador se crea desde el panel de Supabase (Authentication → Users).</p>
     </form>
   </div>
 
@@ -70,10 +76,16 @@
       <input type="text" id="forgot-code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required autocomplete="one-time-code" />
 
       <label for="forgot-new-password">Contraseña nueva</label>
-      <input type="password" id="forgot-new-password" required minlength="6" autocomplete="new-password" />
+      <div class="password-field">
+        <input type="password" id="forgot-new-password" required minlength="6" autocomplete="new-password" />
+        <button type="button" class="password-toggle-btn" data-target="forgot-new-password" aria-label="Mostrar contraseña">👁</button>
+      </div>
 
       <label for="forgot-new-password-confirm">Repetir contraseña nueva</label>
-      <input type="password" id="forgot-new-password-confirm" required minlength="6" autocomplete="new-password" />
+      <div class="password-field">
+        <input type="password" id="forgot-new-password-confirm" required minlength="6" autocomplete="new-password" />
+        <button type="button" class="password-toggle-btn" data-target="forgot-new-password-confirm" aria-label="Mostrar contraseña">👁</button>
+      </div>
 
       <p class="form-error hidden" id="forgot-reset-error"></p>
 
@@ -376,11 +388,17 @@
 
           <div class="form-field">
             <label>Contraseña nueva *</label>
-            <input type="password" id="account-new-password" required minlength="6" autocomplete="new-password" />
+            <div class="password-field">
+              <input type="password" id="account-new-password" required minlength="6" autocomplete="new-password" />
+              <button type="button" class="password-toggle-btn" data-target="account-new-password" aria-label="Mostrar contraseña">👁</button>
+            </div>
           </div>
           <div class="form-field">
             <label>Repetir contraseña nueva *</label>
-            <input type="password" id="account-new-password-confirm" required minlength="6" autocomplete="new-password" />
+            <div class="password-field">
+              <input type="password" id="account-new-password-confirm" required minlength="6" autocomplete="new-password" />
+              <button type="button" class="password-toggle-btn" data-target="account-new-password-confirm" aria-label="Mostrar contraseña">👁</button>
+            </div>
           </div>
 
           <p class="form-error hidden" id="account-form-error"></p>
@@ -607,6 +625,23 @@ function initLoginForm() {
 function initLogout() {
   document.getElementById("logout-btn").addEventListener("click", async () => {
     await supabase.auth.signOut();
+  });
+}
+
+/* ============================================================
+   MOSTRAR/OCULTAR CONTRASEÑA
+   ============================================================ */
+
+function initPasswordToggles() {
+  document.querySelectorAll(".password-toggle-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const input = document.getElementById(btn.getAttribute("data-target"));
+      if (!input) return;
+      const isHidden = input.type === "password";
+      input.type = isHidden ? "text" : "password";
+      btn.textContent = isHidden ? "🙈" : "👁";
+      btn.setAttribute("aria-label", isHidden ? "Ocultar contraseña" : "Mostrar contraseña");
+    });
   });
 }
 
@@ -1437,6 +1472,7 @@ function initAccountForm() {
 function init() {
   initLoginForm();
   initLogout();
+  initPasswordToggles();
   initForgotPassword();
   initTabs();
   initCourseForm();
