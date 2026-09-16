@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="styles-inner.css" />
   <style>
 .login-locked-msg { text-align: center; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-md); padding: 0.75rem 1rem; font-size: 0.85rem; font-weight: 600; margin-top: 1rem; }
+.login-card .hint a { color: var(--color-turquoise); font-weight: 700; text-decoration: underline; }
 .team-card-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-smooth); }
 .team-card-plaque h3 { font-size: 1rem; margin-bottom: 0.15rem; }
 .team-card-plaque p { font-size: 0.82rem; color: var(--color-turquoise); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.9rem; }
@@ -39,7 +40,45 @@
       <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.25rem;" id="login-submit">
         Ingresar
       </button>
+      <p class="hint"><a href="#" id="forgot-password-link">¿Olvidaste tu contraseña?</a></p>
       <p class="hint">El usuario administrador se crea desde el panel de Supabase (Authentication → Users).</p>
+    </form>
+  </div>
+
+  <!-- RECUPERAR CONTRASEÑA -->
+  <div id="forgot-screen" class="login-wrap hidden">
+    <form class="login-card" id="forgot-request-form">
+      <span class="brand-logo" style="margin:0 auto 0.75rem;display:flex;">FC</span>
+      <h1>Recuperar contraseña</h1>
+      <p class="sub">Te enviamos un código de 6 dígitos a tu email</p>
+
+      <label for="forgot-email">Email</label>
+      <input type="email" id="forgot-email" required />
+
+      <p class="form-error hidden" id="forgot-request-error"></p>
+
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.25rem;" id="forgot-request-submit">Enviar código</button>
+      <p class="hint"><a href="#" id="forgot-back-to-login-1">Volver a iniciar sesión</a></p>
+    </form>
+
+    <form class="login-card hidden" id="forgot-reset-form" style="margin-top:1rem;">
+      <span class="brand-logo" style="margin:0 auto 0.75rem;display:flex;">FC</span>
+      <h1>Ingresá el código</h1>
+      <p class="sub">Revisá el email enviado a <strong id="forgot-reset-email-label"></strong></p>
+
+      <label for="forgot-code">Código de 6 dígitos</label>
+      <input type="text" id="forgot-code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required autocomplete="one-time-code" />
+
+      <label for="forgot-new-password">Contraseña nueva</label>
+      <input type="password" id="forgot-new-password" required minlength="6" autocomplete="new-password" />
+
+      <label for="forgot-new-password-confirm">Repetir contraseña nueva</label>
+      <input type="password" id="forgot-new-password-confirm" required minlength="6" autocomplete="new-password" />
+
+      <p class="form-error hidden" id="forgot-reset-error"></p>
+
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.25rem;" id="forgot-reset-submit">Cambiar contraseña</button>
+      <p class="hint"><a href="#" id="forgot-resend-code">Reenviar código</a> · <a href="#" id="forgot-back-to-login-2">Cancelar</a></p>
     </form>
   </div>
 
@@ -568,6 +607,144 @@ function initLoginForm() {
 function initLogout() {
   document.getElementById("logout-btn").addEventListener("click", async () => {
     await supabase.auth.signOut();
+  });
+}
+
+/* ============================================================
+   RECUPERAR CONTRASEÑA (email + código de 6 dígitos)
+   ============================================================ */
+
+function initForgotPassword() {
+  const loginScreen = document.getElementById("login-screen");
+  const forgotScreen = document.getElementById("forgot-screen");
+  const requestForm = document.getElementById("forgot-request-form");
+  const resetForm = document.getElementById("forgot-reset-form");
+  const requestError = document.getElementById("forgot-request-error");
+  const resetError = document.getElementById("forgot-reset-error");
+  let recoveryEmail = "";
+
+  function showForgotScreen() {
+    loginScreen.classList.add("hidden");
+    forgotScreen.classList.remove("hidden");
+    requestForm.classList.remove("hidden");
+    resetForm.classList.add("hidden");
+    requestError.classList.add("hidden");
+    resetError.classList.add("hidden");
+    requestForm.reset();
+  }
+
+  function backToLogin() {
+    forgotScreen.classList.add("hidden");
+    loginScreen.classList.remove("hidden");
+    requestForm.reset();
+    resetForm.reset();
+  }
+
+  async function sendRecoveryCode(email) {
+    return supabase.auth.resetPasswordForEmail(email);
+  }
+
+  document.getElementById("forgot-password-link").addEventListener("click", (e) => {
+    e.preventDefault();
+    showForgotScreen();
+  });
+  document.getElementById("forgot-back-to-login-1").addEventListener("click", (e) => {
+    e.preventDefault();
+    backToLogin();
+  });
+  document.getElementById("forgot-back-to-login-2").addEventListener("click", (e) => {
+    e.preventDefault();
+    backToLogin();
+  });
+
+  document.getElementById("forgot-resend-code").addEventListener("click", async (e) => {
+    e.preventDefault();
+    resetError.classList.add("hidden");
+    if (!recoveryEmail) return;
+    const { error } = await sendRecoveryCode(recoveryEmail);
+    resetError.textContent = error
+      ? `No se pudo reenviar el código: ${error.message}`
+      : "Te enviamos un nuevo código a tu email.";
+    resetError.classList.remove("hidden");
+  });
+
+  requestForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    requestError.classList.add("hidden");
+
+    recoveryEmail = document.getElementById("forgot-email").value.trim();
+    const submitBtn = document.getElementById("forgot-request-submit");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Enviando...";
+
+    const { error } = await sendRecoveryCode(recoveryEmail);
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Enviar código";
+
+    if (error) {
+      requestError.textContent = `No se pudo enviar el código: ${error.message}`;
+      requestError.classList.remove("hidden");
+      return;
+    }
+
+    document.getElementById("forgot-reset-email-label").textContent = recoveryEmail;
+    requestForm.classList.add("hidden");
+    resetForm.classList.remove("hidden");
+  });
+
+  resetForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    resetError.classList.add("hidden");
+
+    const code = document.getElementById("forgot-code").value.trim();
+    const newPassword = document.getElementById("forgot-new-password").value;
+    const confirmPassword = document.getElementById("forgot-new-password-confirm").value;
+
+    if (newPassword.length < 6) {
+      resetError.textContent = "La contraseña debe tener al menos 6 caracteres.";
+      resetError.classList.remove("hidden");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      resetError.textContent = "Las contraseñas no coinciden.";
+      resetError.classList.remove("hidden");
+      return;
+    }
+
+    const submitBtn = document.getElementById("forgot-reset-submit");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Guardando...";
+
+    const { error: verifyError } = await supabase.auth.verifyOtp({
+      email: recoveryEmail,
+      token: code,
+      type: "recovery",
+    });
+
+    if (verifyError) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Cambiar contraseña";
+      resetError.textContent = "Código inválido o vencido. Pedí uno nuevo con \"Reenviar código\".";
+      resetError.classList.remove("hidden");
+      return;
+    }
+
+    const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Cambiar contraseña";
+
+    if (updateError) {
+      resetError.textContent = `No se pudo actualizar la contraseña: ${updateError.message}`;
+      resetError.classList.remove("hidden");
+      return;
+    }
+
+    clearLoginAttempts();
+    resetForm.reset();
+    forgotScreen.classList.add("hidden");
+    // La sesión ya quedó iniciada por verifyOtp; onAuthStateChange muestra el dashboard.
   });
 }
 
@@ -1260,6 +1437,7 @@ function initAccountForm() {
 function init() {
   initLoginForm();
   initLogout();
+  initForgotPassword();
   initTabs();
   initCourseForm();
   initCategoryForm();
