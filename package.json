@@ -1,0 +1,13 @@
+{
+  "name": "formar-capacitaciones-web",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sitio estático de Formar Capacitaciones (GitHub Pages) + generador de HTML pre-renderizado para SEO/GEO.",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "generate": "node scripts/generate-static.mjs"
+  }
+}

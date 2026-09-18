@@ -334,7 +334,10 @@ let showPrices = false;
 
 function getSlugFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("slug");
+  if (params.get("slug")) return params.get("slug");
+  // Rutas limpias generadas estáticamente: /cursos/<slug>/index.html
+  const match = window.location.pathname.match(/\/cursos\/([^/]+)\/?/i);
+  return match ? decodeURIComponent(match[1]) : null;
 }
 
 async function fetchSiteContent() {
@@ -381,7 +384,7 @@ function applySEO(course) {
     (isAsync
       ? `Formate en ${course.title} de forma online asincrónica: estudiá desde donde quieras, en el momento que puedas. Certificación con validez nacional e internacional.`
       : `Formate en ${course.title} con Formar Capacitaciones. Modalidad ${course.modality}. Certificación con validez nacional e internacional.`);
-  const url = `${SITE_URL}/curso.html?slug=${encodeURIComponent(course.slug)}`;
+  const url = `${SITE_URL}/cursos/${encodeURIComponent(course.slug)}/`;
 
   document.title = title;
   document.getElementById("page-title").textContent = title;
@@ -481,7 +484,7 @@ function renderCourse(course, related) {
                   ${related
                     .map(
                       (r) => `
-                    <a href="curso.html?slug=${encodeURIComponent(r.slug)}" class="related-card">
+                    <a href="/cursos/${encodeURIComponent(r.slug)}/" class="related-card">
                       <h4>${escapeHtml(r.title)}</h4>
                       <p>${escapeHtml(r.modality)}</p>
                     </a>`

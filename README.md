@@ -148,15 +148,49 @@ apunte a donde corre este servidor (por defecto `http://localhost:4000/api/check
   `notification_url` del webhook se arma sola a partir del dominio del
   backend.
 
-## 8. Nota sobre SEO en `curso.html`
+## 8. Generación estática (SEO / GEO)
 
-Como es un sitio sin servidor de renderizado, `curso.html` carga los
-datos del curso con JavaScript después de leer el `slug` de la URL
-(`?slug=nombre-del-curso`) y ahí completa el `<title>`, la meta
-`description`, Open Graph y el JSON-LD de tipo `Course`. Los buscadores
-modernos (Google) ejecutan JavaScript y lo indexan correctamente, pero si
-en el futuro necesitás SEO server-side "puro" (por ejemplo, para que
-WhatsApp o Facebook muestren la imagen correcta al compartir, ya que
-esas plataformas no ejecutan JS), la solución sería pasar esta página
-a un framework con renderizado en servidor (como Next.js) o generar un
-`.html` estático por curso en el momento de crear/editar desde el admin.
+`cursos.html` y `curso.html` traen su contenido desde Supabase con
+JavaScript en el navegador. Eso funciona para usuarios reales y para
+Google (que ejecuta JS), pero no para WhatsApp, Facebook, ni para la
+mayoría de los rastreadores de motores de IA (GEO), que leen el HTML
+"tal cual" sin correr JavaScript.
+
+Por eso `scripts/generate-static.mjs` genera, antes de publicar, el
+HTML final con el contenido ya escrito adentro:
+
+- **`cursos.html`**: la lista completa de cursos queda pre-renderizada
+  dentro de `#courses-full-list` (el buscador y los filtros siguen
+  funcionando con JavaScript, pero filtran algo que ya está en el DOM,
+  no algo que va a buscar de cero).
+- **`cursos/<slug>/index.html`**: una página estática por curso, en una
+  ruta limpia (ej: `/cursos/plomeria/`), con el `<title>`, meta
+  `description`, Open Graph, Twitter Card y JSON-LD de tipo `Course` ya
+  completos —y el detalle del curso ya escrito en el HTML, no detrás de
+  un `fetch`—. La versión JS de `curso.html` sigue funcionando arriba de
+  eso (hidrata con datos frescos), así que `curso.html?slug=...` sigue
+  sirviendo como vista previa inmediata para un curso recién creado
+  desde `/admin`, incluso antes de que corra la generación estática.
+- **`sitemap.xml`** y **`llms.txt`**: se regeneran con la lista real de
+  cursos activos (el segundo, pensado específicamente para que los
+  motores de IA generativa —GEO— entiendan la oferta de cursos).
+
+### Cómo correrlo
+
+```bash
+node scripts/generate-static.mjs
+# o
+npm run generate
+```
+
+No requiere dependencias (usa `fetch` nativo de Node ≥ 18) y se conecta
+a Supabase con la misma clave pública de lectura (`anon key`) que ya usa
+el sitio en el navegador.
+
+### Automatización
+
+El workflow `.github/workflows/generate-static.yml` corre este script
+cada 15 minutos y también se puede disparar a mano desde la pestaña
+**Actions** de GitHub. Si hay cambios (por ejemplo, un curso nuevo
+cargado desde `/admin`), los commitea y pushea automáticamente al
+repo — lo que dispara el redeploy de GitHub Pages.

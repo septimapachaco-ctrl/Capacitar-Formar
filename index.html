@@ -658,6 +658,20 @@ function escapeHtml(str) {
 }
 
 /**
+ * Normaliza texto para búsqueda: minúsculas y sin acentos/tildes, para
+ * que "criminalistica" encuentre "Criminalística", "salta" encuentre
+ * "Saltá", etc.
+ */
+function normalizeSearch(str) {
+  return (str ?? "")
+    .toString()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+/**
  * Genera un link de WhatsApp (wa.me) con mensaje pre-cargado.
  * number: solo dígitos con código de país (ej: "5493876543210")
  */
@@ -1105,7 +1119,7 @@ function createCourseSearch({ wrapId, inputId, resultsId }) {
       .slice(0, 8)
       .map(
         (course) => `
-      <a class="search-result-item" href="curso.html?slug=${encodeURIComponent(course.slug)}">
+      <a class="search-result-item" href="/cursos/${encodeURIComponent(course.slug)}/">
         <span class="sr-title">${escapeHtml(course.title)}</span>
         <span class="sr-cat">${escapeHtml(course.categories?.name || course.modality || "")}</span>
       </a>`
@@ -1115,13 +1129,15 @@ function createCourseSearch({ wrapId, inputId, resultsId }) {
   }
 
   function filterCourses() {
-    const t = term.trim().toLowerCase();
+    const t = normalizeSearch(term);
     if (!t) return [];
     return allCourses.filter(
       (course) =>
-        course.title.toLowerCase().includes(t) ||
-        (course.short_description || "").toLowerCase().includes(t) ||
-        (course.categories?.name || "").toLowerCase().includes(t)
+        normalizeSearch(course.title).includes(t) ||
+        normalizeSearch(course.short_description).includes(t) ||
+        normalizeSearch(course.description).includes(t) ||
+        normalizeSearch(course.categories?.name).includes(t) ||
+        normalizeSearch(course.modality).includes(t)
     );
   }
 
@@ -1143,7 +1159,7 @@ function createCourseSearch({ wrapId, inputId, resultsId }) {
       if (e.key !== "Enter") return;
       const matches = filterCourses();
       if (matches.length > 0) {
-        window.location.href = `curso.html?slug=${encodeURIComponent(matches[0].slug)}`;
+        window.location.href = `/cursos/${encodeURIComponent(matches[0].slug)}/`;
       } else if (term.trim()) {
         window.location.href = `cursos.html?buscar=${encodeURIComponent(term.trim())}`;
       }
