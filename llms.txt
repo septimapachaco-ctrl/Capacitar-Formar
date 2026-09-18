@@ -6,14 +6,14 @@ Un curso online asincrónico de FORMAR significa que el alumno accede al conteni
 
 ## Cursos disponibles
 
-- [Administración](https://formarcapacitaciones.com/curso.html?slug=administracion): gestión administrativa, atención al público y herramientas de oficina. Duración 4 meses.
-- [Auxiliar en Criminalística](https://formarcapacitaciones.com/curso.html?slug=auxiliar-en-criminalistica): técnicas de investigación forense, preservación de indicios y cadena de custodia. Presencial en Salta y Córdoba o virtual para todo el país. Duración 5 meses.
-- [Auxiliar en Criminología](https://formarcapacitaciones.com/curso.html?slug=auxiliar-en-criminologia): análisis científico del delito, victimología y prevención. Presencial en Salta y Córdoba o virtual para todo el país. Duración 5 meses.
-- [Auxiliar Veterinario](https://formarcapacitaciones.com/curso.html?slug=auxiliar-veterinario): asistencia clínica y cuidado animal para insertarte en el ámbito veterinario. Duración 6 meses.
-- [Capacitación Pedagógica para Técnicos Profesionales](https://formarcapacitaciones.com/curso.html?slug=capacitacion-pedagogica-para-tecnicos-profesionales): herramientas pedagógicas y didácticas para que técnicos y profesionales puedan enseñar su oficio. Presencial en Salta y Córdoba u online. Duración 3 meses.
-- [Electricidad](https://formarcapacitaciones.com/curso.html?slug=electricidad): instalaciones eléctricas domiciliarias e industriales con práctica intensiva en taller. Presencial en Salta. Duración 5 meses.
-- [Plomería](https://formarcapacitaciones.com/curso.html?slug=plomeria): instalaciones sanitarias, de agua y gas con práctica real en taller. Presencial en Salta. Duración 5 meses.
-- [Preceptores](https://formarcapacitaciones.com/curso.html?slug=preceptores): formación integral para desempeñarte como preceptor en instituciones educativas públicas y privadas. Presencial en Salta y Córdoba o virtual para todo el país. Duración 4 meses.
+- [Electricidad](https://formarcapacitaciones.com/cursos/electricidad/): Instalaciones eléctricas domiciliarias e industriales con práctica intensiva en taller. Duración 5 meses.
+- [Auxiliar en Criminalística](https://formarcapacitaciones.com/cursos/auxiliar-en-criminalistica/): Técnicas de investigación forense, preservación de indicios y cadena de custodia. Duración 5 meses.
+- [Preceptores](https://formarcapacitaciones.com/cursos/preceptores/): Formación integral para desempeñarte como preceptor en instituciones educativas públicas y privadas. Duración 4 meses.
+- [Capacitación Pedagógica para Técnicos Profesionales](https://formarcapacitaciones.com/cursos/capacitacion-pedagogica-para-tecnicos-profesionales/): Herramientas pedagógicas y didácticas para que técnicos y profesionales puedan enseñar su oficio. Duración 3 meses.
+- [Auxiliar en Criminología](https://formarcapacitaciones.com/cursos/auxiliar-en-criminologia/): Análisis científico del delito, victimología y prevención desde una mirada interdisciplinaria. Duración 5 meses.
+- [Administración](https://formarcapacitaciones.com/cursos/administracion/): Gestión administrativa, atención al público y herramientas de oficina para el mundo laboral actual. Duración 4 meses.
+- [Auxiliar Veterinario](https://formarcapacitaciones.com/cursos/auxiliar-veterinario/): Asistencia clínica y cuidado animal para insertarte en el ámbito veterinario. Duración 6 meses.
+- [Plomería](https://formarcapacitaciones.com/cursos/plomeria/): Instalaciones sanitarias, de agua y gas con práctica real en taller. Duración 5 meses.
 
 La oferta de cursos cambia con el tiempo; la lista completa y actualizada siempre está en [/cursos.html](https://formarcapacitaciones.com/cursos.html).
 
