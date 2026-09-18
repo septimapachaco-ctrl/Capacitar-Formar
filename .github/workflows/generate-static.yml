@@ -1,0 +1,42 @@
+name: Generar HTML estático (SEO/GEO)
+
+on:
+  schedule:
+    # Cada 15 minutos: si se cargó un curso nuevo desde /admin, en poco
+    # tiempo queda publicada su página estática en /cursos/<slug>/.
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {} # permite dispararlo a mano desde la pestaña Actions
+
+permissions:
+  contents: write
+
+concurrency:
+  group: generate-static
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Generar cursos.html, cursos/<slug>/index.html, sitemap.xml y llms.txt
+        run: node scripts/generate-static.mjs
+
+      - name: Commitear cambios si hay contenido nuevo
+        run: |
+          git config user.name "formar-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if git status --porcelain | grep -q .; then
+            git add cursos.html "cursos/" sitemap.xml llms.txt
+            git commit -m "chore: regenerar HTML estático de cursos (SEO/GEO)"
+            git push
+          else
+            echo "Sin cambios, no hay nada para publicar."
+          fi

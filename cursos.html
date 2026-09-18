@@ -91,9 +91,9 @@
         </svg>
         <input type="text" id="search-input" placeholder="Buscar curso: preceptores, electricidad, criminalística..." />
       </div>
-      <div class="filters reveal" id="category-filters"></div>
+      <div class="filters reveal" id="category-filters"><!-- STATIC:FILTERS --><!-- /STATIC:FILTERS --></div>
 
-      <div id="courses-full-list" style="display:flex;flex-direction:column;gap:1.75rem;"></div>
+      <div id="courses-full-list" style="display:flex;flex-direction:column;gap:1.75rem;"><!-- STATIC:COURSES --><!-- /STATIC:COURSES --></div>
       <p class="empty-state hidden" id="courses-empty">No encontramos cursos que coincidan con tu búsqueda.</p>
     </div>
   </section>
@@ -161,6 +161,20 @@ function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str ?? "";
   return div.innerHTML;
+}
+
+/**
+ * Normaliza texto para búsqueda: minúsculas y sin acentos/tildes, para
+ * que "criminalistica" encuentre "Criminalística", "salta" encuentre
+ * "Saltá", etc.
+ */
+function normalizeSearch(str) {
+  return (str ?? "")
+    .toString()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .trim();
 }
 
 /**
@@ -427,11 +441,15 @@ function renderCourses() {
   const emptyState = document.getElementById("courses-empty");
   if (!list) return;
 
+  const t = normalizeSearch(searchTerm);
   const filtered = allCourses.filter((course) => {
     const matchesSearch =
-      course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (course.short_description || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (course.description || "").toLowerCase().includes(searchTerm.toLowerCase());
+      !t ||
+      normalizeSearch(course.title).includes(t) ||
+      normalizeSearch(course.short_description).includes(t) ||
+      normalizeSearch(course.description).includes(t) ||
+      normalizeSearch(course.categories?.name).includes(t) ||
+      normalizeSearch(course.modality).includes(t);
     const matchesCategory = activeCategory === "todas" || course.category_id === activeCategory;
     return matchesSearch && matchesCategory;
   });
@@ -464,7 +482,7 @@ function renderCourses() {
           <div class="course-card-wide-footer">
             <span class="price">${priceDisplay(course)}</span>
             <div class="course-card-wide-actions">
-              <a href="curso.html?slug=${encodeURIComponent(course.slug)}" class="btn btn-outline btn-sm">Ver detalle completo</a>
+              <a href="/cursos/${encodeURIComponent(course.slug)}/" class="btn btn-outline btn-sm">Ver detalle completo</a>
               <a href="${whatsappLink(course.whatsapp_number || WHATSAPP_NUMBER, message)}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">${WHATSAPP_ICON} Consultar</a>
             </div>
           </div>
@@ -486,6 +504,14 @@ async function init() {
     searchTerm = e.target.value;
     renderCourses();
   });
+
+  // Si venimos de un buscador de otra página (ej: index.html?buscar=...
+  // redirige a cursos.html?buscar=...), precargamos el término.
+  const buscarParam = new URLSearchParams(window.location.search).get("buscar");
+  if (buscarParam) {
+    searchTerm = buscarParam;
+    if (searchInput) searchInput.value = buscarParam;
+  }
 
   try {
     const content = await fetchSiteContent();
