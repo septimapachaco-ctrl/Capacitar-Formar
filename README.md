@@ -1,37 +1,49 @@
 # Formar Capacitaciones — Sitio en HTML / CSS / JavaScript puro
 
 Sitio de venta de cursos 100% en **HTML, CSS y JavaScript vanilla** (sin
-frameworks ni build tools), con **Supabase** como base de datos/backend y
-**Mercado Pago** para los pagos.
+frameworks ni build tools), con **Supabase** como base de datos/backend.
+El contacto para inscribirse es directo por **WhatsApp e Instagram** (no
+hay carrito de compras ni pasarela de pago integrada).
 
 ---
 
 ## 1. Estructura del proyecto
 
 ```
-index.html            → Landing page
-curso.html             → Detalle de curso (dinámico, vía ?slug=...)
-admin.html              → Panel de administración (login + CRUD)
-gracias.html            → Página post-pago
-schema.sql               → Script SQL para Supabase
+index.html              → Landing page
+cursos.html               → Listado completo de cursos (con buscador y filtros)
+curso.html                  → Detalle de curso (dinámico, vía ?slug=..., usado como
+                               vista previa inmediata de un curso recién creado)
+admin.html                    → Panel de administración (login + CRUD)
+gracias.html                    → Página "Nuestro equipo" (perfiles del staff)
 
-css/
-  styles.css              → Todos los estilos del sitio (paleta de marca incluida)
+cursos/<slug>/index.html    → Una página estática por curso (generada, ver sección 8),
+                               en una ruta limpia (ej: /cursos/plomeria/)
 
-js/
-  supabaseClient.js        → Conexión a Supabase (ACÁ van tus credenciales)
-  utils.js                  → Formateo de precios, slugify, etc.
-  layout.js                  → Header y footer reutilizables
-  cart.js                     → Carrito de compras (localStorage) + checkout
-  main.js                      → Lógica de la landing (buscador, filtros, listado)
-  curso.js                      → Lógica del detalle de curso (SEO + render)
-  admin.js                       → Lógica del panel de administración
+styles-common.css           → Estilos compartidos por todo el sitio (paleta de marca)
+styles-inner.css            → Estilos puntuales de páginas internas
 
-server/                → Backend mínimo (Node/Express) para Mercado Pago
-  server.js
-  package.json
-  .env.example
+schema.sql                  → Script SQL completo para crear la base en Supabase
+supabase_migration.sql      → Migraciones incrementales sobre una base ya creada
+
+scripts/
+  generate-static.mjs       → Generador de HTML estático para SEO/GEO (ver sección 8)
+
+sitemap.xml, robots.txt, llms.txt → Archivos para buscadores tradicionales y
+                                     motores de IA (GEO), regenerados automáticamente
+
+.github/workflows/
+  generate-static.yml       → Corre el generador estático cada 15 minutos
+  keep-alive.yml             → Evita que Supabase pause el proyecto por inactividad
+  claude.yml                   → Claude Code Action (responde en issues/PRs)
 ```
+
+No hay carpetas `js/`, `css/` ni `server/`: todo el JavaScript de cada
+página vive **inline**, dentro de un `<script type="module">` en el
+propio `.html` (por ejemplo, la lógica de `index.html` está al final de
+`index.html`, la de `admin.html` al final de `admin.html`, etc.). No hay
+ningún backend propio (Node/Express): el sitio habla directo con
+Supabase desde el navegador.
 
 ---
 
@@ -40,26 +52,46 @@ server/                → Backend mínimo (Node/Express) para Mercado Pago
 1. Creá una cuenta/proyecto en [supabase.com](https://supabase.com).
 2. En el menú lateral, entrá a **SQL Editor → New query**.
 3. Pegá **todo** el contenido de `schema.sql` y hacé clic en **RUN**.
-   Esto crea las tablas `categories`, `courses`, `orders`, los permisos
-   (RLS), el bucket de imágenes y carga los 8 cursos de ejemplo.
-4. Andá a **Authentication → Users → Add user** y creá tu usuario
-   administrador (email + contraseña). Con ese usuario vas a entrar a
-   `admin.html`.
-5. Andá a **Project Settings → API** y copiá:
+   Esto crea las tablas `categories`, `courses`, `orders` (en desuso,
+   ver nota abajo), `site_content`, `team_members`, `admins`, los
+   permisos (RLS), el bucket de imágenes (`course-media`) y carga
+   cursos de ejemplo.
+4. Si la base ya existía antes de tener columnas/políticas más nuevas
+   (como el WhatsApp propio por curso), corré también
+   `supabase_migration.sql` — es idempotente, se puede ejecutar más de
+   una vez sin romper nada.
+5. Andá a **Authentication → Users → Add user** y creá tu usuario
+   administrador (email + contraseña).
+6. Insertá ese usuario en la tabla `public.admins` (`user_id` = el
+   `id` del usuario creado). Solo los usuarios cargados ahí tienen
+   permisos de escritura sobre cursos, categorías y contenido del
+   sitio — con ese usuario vas a entrar a `admin.html`.
+7. Andá a **Project Settings → API** y copiá:
    - `Project URL`
-   - `anon public` key
+   - la clave pública (`anon` / `publishable`)
+
+> La tabla `orders` es un remanente de un sistema de carrito + Mercado
+> Pago que ya no está activo (hoy la conversión es por WhatsApp). Se
+> deja creada por compatibilidad pero **sin insert público** — no
+> escribe nada el frontend actual. Si en el futuro se reactiva un
+> checkout, hay que agregar antes validación de formato y algún tipo
+> de verificación anti-spam (ver el comentario en `schema.sql`).
 
 ## 3. Conectar el frontend a Supabase
 
-Abrí `js/supabaseClient.js` y reemplazá:
+La URL y la clave pública de Supabase están **hardcodeadas dentro de
+cada archivo `.html`** (no hay un archivo central tipo
+`supabaseClient.js`). Si cambiás de proyecto de Supabase, tenés que
+reemplazar `SUPABASE_URL` y `SUPABASE_ANON_KEY` en el `<script
+type="module">` de cada uno de estos archivos:
 
-```js
-const SUPABASE_URL = "https://TU-PROYECTO.supabase.co";
-const SUPABASE_ANON_KEY = "TU_ANON_KEY_PUBLICA";
-```
+- `index.html`, `cursos.html`, `curso.html`, `admin.html`, `gracias.html`
+- `cursos/<slug>/index.html` (todas las páginas de curso generadas)
+- `scripts/generate-static.mjs`
 
-por los datos reales de tu proyecto. Es lo único que necesitás tocar para
-que la landing, el detalle de curso y el login del admin funcionen.
+La clave que va acá es la **pública** (`anon`/`publishable`): es segura
+de exponer en el navegador porque la seguridad real la da Supabase Row
+Level Security (RLS), no el secreto de la clave.
 
 ## 4. Correr el sitio en local
 
@@ -82,71 +114,48 @@ python3 -m http.server 5500
 
 Y abrís `http://localhost:5500`.
 
-## 5. Configurar el checkout con Mercado Pago (backend)
+## 5. Cómo se maneja la conversión (WhatsApp / Instagram)
 
-El **Access Token** de Mercado Pago es secreto: nunca puede vivir en el
-HTML/JS del navegador, porque cualquiera podría verlo y usarlo. Por eso el
-checkout necesita un pequeño servidor intermediario (`/server`) que:
-
-1. Recibe el carrito desde el sitio.
-2. Registra la orden en Supabase.
-3. Crea la preferencia de pago en Mercado Pago usando el Access Token
-   (que solo vive en el servidor).
-4. Devuelve al sitio el link de pago (`init_point`) para redirigir al
-   comprador al Checkout Pro de Mercado Pago.
-
-### Pasos:
-
-```bash
-cd server
-npm install
-cp .env.example .env
-```
-
-Completá `.env` con:
-- `SITE_URL` → la URL donde corre tu sitio (ej: `http://localhost:5500`)
-- `SUPABASE_URL` → la misma URL del paso 2
-- `SUPABASE_SERVICE_ROLE_KEY` → en Supabase: **Project Settings → API →
-  service_role** (⚠️ es secreta, nunca la pongas en el frontend)
-- `MERCADOPAGO_ACCESS_TOKEN` → en [Mercado Pago
-  Developers](https://www.mercadopago.com.ar/developers/panel) → Tus
-  integraciones → Credenciales de producción o de prueba
-
-Corré el servidor:
-```bash
-npm start
-```
-
-Por último, en `js/supabaseClient.js`, verificá que `CHECKOUT_API_URL`
-apunte a donde corre este servidor (por defecto `http://localhost:4000/api/checkout`).
-
-> Si no configurás el backend, el sitio sigue funcionando en **modo
-> demo**: el carrito y el resto del sitio andan normalmente, pero al
-> pagar no habrá cobro real (mostrará un error de conexión al backend).
+No hay carrito ni pasarela de pago: cada curso, en el listado y en el
+detalle, muestra botones de **"Consultar por WhatsApp"** y
+**"Consultar por Instagram"**. El número de WhatsApp es configurable
+por curso (columna `whatsapp_number` en `courses`); si un curso no
+tiene uno propio, se usa el WhatsApp general del negocio (constante
+`WHATSAPP_NUMBER`, definida en cada `.html` que la necesita). Los
+precios se pueden ocultar globalmente desde el panel de admin
+(`site_content.data.show_prices`), mostrando "Consultar" en su lugar.
 
 ## 6. Panel de administración (`admin.html`)
 
-- Entrá a `admin.html` y logueate con el usuario creado en el paso 2.4.
+- Entrá a `admin.html` y logueate con el usuario creado en el paso 2.5
+  (y agregado a `public.admins` en el paso 2.6).
+- Incluye recuperación de contraseña por email con código de 6 dígitos
+  (flujo nativo de Supabase Auth: `resetPasswordForEmail` +
+  verificación de OTP).
 - Pestaña **Cursos**: crear, editar y eliminar cursos (con subida de
-  imagen directa a Supabase Storage o pegando una URL).
+  imagen directa a Supabase Storage o pegando una URL), incluido el
+  WhatsApp propio de cada curso.
 - Pestaña **Categorías**: crear y eliminar categorías dinámicamente.
+- Pestaña **Equipo**: gestionar los perfiles que se muestran en
+  `gracias.html`.
+- Pestaña **Contenido**: editar textos de la landing (hero,
+  estadísticas, ventajas, contacto, footer) y el toggle de mostrar/
+  ocultar precios.
 - La seguridad real la da **Supabase Auth + Row Level Security**: sin
-  sesión iniciada, cualquier intento de crear/editar/eliminar es
-  rechazado por la base de datos, sin importar el JavaScript del cliente.
+  sesión de un usuario cargado en `public.admins`, cualquier intento de
+  crear/editar/eliminar es rechazado por la base de datos, sin importar
+  el JavaScript del cliente.
 
 ## 7. Despliegue en producción
 
-- **Frontend (HTML/CSS/JS):** se puede alojar gratis en Netlify, Vercel,
-  GitHub Pages o Cloudflare Pages — simplemente subís la carpeta raíz
-  (no necesita build).
-- **Backend del checkout (`/server`):** se despliega en cualquier
-  hosting de Node (Render, Railway, Fly.io, un VPS, etc.). Actualizá
-  `CHECKOUT_API_URL` en `js/supabaseClient.js` con la URL final del
-  backend en producción, y `SITE_URL` en el `.env` del servidor con el
-  dominio final del sitio.
-- En Mercado Pago, no hace falta configurar nada extra: la
-  `notification_url` del webhook se arma sola a partir del dominio del
-  backend.
+- El sitio se publica con **GitHub Pages** sobre la rama `main`
+  (dominio propio configurado en `CNAME`:
+  `formarcapacitaciones.com`), sin necesidad de build.
+- No hay backend propio que desplegar: todo corre en el navegador
+  contra Supabase directamente.
+- El workflow `.github/workflows/keep-alive.yml` hace un ping
+  periódico a Supabase para que el proyecto free no se pause por
+  inactividad.
 
 ## 8. Generación estática (SEO / GEO)
 
@@ -166,11 +175,12 @@ HTML final con el contenido ya escrito adentro:
 - **`cursos/<slug>/index.html`**: una página estática por curso, en una
   ruta limpia (ej: `/cursos/plomeria/`), con el `<title>`, meta
   `description`, Open Graph, Twitter Card y JSON-LD de tipo `Course` ya
-  completos —y el detalle del curso ya escrito en el HTML, no detrás de
-  un `fetch`—. La versión JS de `curso.html` sigue funcionando arriba de
-  eso (hidrata con datos frescos), así que `curso.html?slug=...` sigue
-  sirviendo como vista previa inmediata para un curso recién creado
-  desde `/admin`, incluso antes de que corra la generación estática.
+  completos —y el detalle del curso ya escrito en el HTML, no detrás
+  de un `fetch`—. La versión JS de `curso.html` sigue funcionando arriba
+  de eso (hidrata con datos frescos), así que `curso.html?slug=...`
+  sigue sirviendo como vista previa inmediata para un curso recién
+  creado desde `/admin`, incluso antes de que corra la generación
+  estática.
 - **`sitemap.xml`** y **`llms.txt`**: se regeneran con la lista real de
   cursos activos (el segundo, pensado específicamente para que los
   motores de IA generativa —GEO— entiendan la oferta de cursos).
