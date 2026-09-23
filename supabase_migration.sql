@@ -63,3 +63,17 @@ create policy "admin_all_courses"
   on public.courses for all
   using (public.is_admin())
   with check (public.is_admin());
+
+-- ------------------------------------------------------------
+-- 4. RLS: team_members usa is_admin() en vez de "authenticated"
+-- ------------------------------------------------------------
+-- La política original de team_members usaba auth.role() =
+-- 'authenticated', que es el rol de CUALQUIER usuario logueado, no solo
+-- del admin real (la misma brecha que ya se había cerrado en
+-- categories/courses). Se reemplaza acá por public.is_admin() para
+-- quedar consistente con el resto de las tablas.
+drop policy if exists "admin_all_team_members" on public.team_members;
+create policy "admin_all_team_members"
+  on public.team_members for all
+  using (public.is_admin())
+  with check (public.is_admin());

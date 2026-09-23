@@ -124,11 +124,9 @@ create policy "public_read_team_members"
   on public.team_members for select
   using (active = true);
 
-drop policy if exists "admin_all_team_members" on public.team_members;
-create policy "admin_all_team_members"
-  on public.team_members for all
-  using (auth.role() = 'authenticated')
-  with check (auth.role() = 'authenticated');
+-- La política de escritura de team_members se define más abajo, junto
+-- con las de categories/courses, porque depende de public.is_admin()
+-- (ver sección 5).
 
 -- ------------------------------------------------------------
 -- 4. TRIGGER: actualizar updated_at en courses
@@ -206,6 +204,18 @@ create policy "admin_all_categories"
 drop policy if exists "admin_all_courses" on public.courses;
 create policy "admin_all_courses"
   on public.courses for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- team_members: mismo criterio que categories/courses. Antes usaba
+-- auth.role() = 'authenticated', que es el rol de CUALQUIER usuario
+-- logueado (no solo del admin) — con eso, si el sign-up público
+-- llegara a estar habilitado, cualquiera podría crearse una cuenta y
+-- editar el equipo. Se reemplaza por is_admin() para quedar consistente
+-- con el resto de las tablas.
+drop policy if exists "admin_all_team_members" on public.team_members;
+create policy "admin_all_team_members"
+  on public.team_members for all
   using (public.is_admin())
   with check (public.is_admin());
 
