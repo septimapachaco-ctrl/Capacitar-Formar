@@ -175,6 +175,31 @@ HTML final con el contenido ya escrito adentro:
   cursos activos (el segundo, pensado específicamente para que los
   motores de IA generativa —GEO— entiendan la oferta de cursos).
 
+- **`index.html`**: la lista de enlaces "Nuestros cursos" (enlazado
+  interno desde el inicio hacia cada curso).
+- Borra `cursos/<slug>/` de los cursos que se desactivaron o borraron.
+
+### Categorías, buscador y datos estructurados (`course-catalog.js`)
+
+La lógica compartida entre el navegador y el generador vive en
+`course-catalog.js`:
+
+- **Categorías automáticas**: si un curso queda sin categoría (por
+  ejemplo, porque se borró su categoría desde `/admin`), se clasifica
+  solo por palabras clave de su título. Los filtros sin cursos se ocultan.
+  Para sumar palabras clave, editá `CATEGORY_KEYWORDS`.
+- **Buscador**: busca palabra por palabra, sin acentos y por raíz
+  ("electricista" → Electricidad, "plomero" → Plomería).
+- **Schema.org**: arma el JSON-LD `Course`, `BreadcrumbList` e `ItemList`.
+- **Cursos relacionados**: cada curso enlaza siempre a otros 3.
+
+### Cursos nuevos antes de la regeneración
+
+`404.html` redirige cualquier `/cursos/<slug>/` que todavía no tenga
+página estática a `curso.html?slug=<slug>`, que lee el curso directo de
+Supabase. Así un curso recién cargado desde `/admin` se ve enseguida,
+sin esperar a que corra el workflow.
+
 ### Cómo correrlo
 
 ```bash
@@ -189,8 +214,8 @@ el sitio en el navegador.
 
 ### Automatización
 
-El workflow `.github/workflows/generate-static.yml` corre este script
-cada 15 minutos y también se puede disparar a mano desde la pestaña
+El workflow `.github/workflows/generate-static.yml` pide correr este script
+cada 15 minutos (en la práctica GitHub lo demora y corre cada algunas horas) y también se puede disparar a mano desde la pestaña
 **Actions** de GitHub. Si hay cambios (por ejemplo, un curso nuevo
 cargado desde `/admin`), los commitea y pushea automáticamente al
 repo — lo que dispara el redeploy de GitHub Pages.

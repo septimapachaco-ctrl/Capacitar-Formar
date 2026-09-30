@@ -35,13 +35,16 @@
   {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
+    "@id": "https://formarcapacitaciones.com/#organization",
     "name": "Formar Capacitaciones",
-    "url": "https://formarcapacitaciones.com",
+    "url": "https://formarcapacitaciones.com/",
     "sameAs": ["https://instagram.com/formar.capacitaciones"],
     "areaServed": ["Salta", "Córdoba", "Argentina"],
     "description": "Cursos y capacitaciones con certificación de validez nacional e internacional, presenciales y online, para estudiantes y profesionales de toda Argentina."
   }
   </script>
+  <!-- Lista de cursos para Google (carrusel de cursos). La completa scripts/generate-static.mjs. -->
+  <script type="application/ld+json" id="courses-itemlist-jsonld">{"@context":"https://schema.org","@type":"ItemList","name":"Cursos de Formar Capacitaciones","numberOfItems":8,"itemListElement":[{"@type":"ListItem","position":1,"url":"https://formarcapacitaciones.com/cursos/electricidad/","name":"Electricidad"},{"@type":"ListItem","position":2,"url":"https://formarcapacitaciones.com/cursos/auxiliar-en-criminalistica/","name":"Auxiliar en Criminalística"},{"@type":"ListItem","position":3,"url":"https://formarcapacitaciones.com/cursos/preceptores/","name":"Preceptores"},{"@type":"ListItem","position":4,"url":"https://formarcapacitaciones.com/cursos/capacitacion-pedagogica-para-tecnicos-profesionales/","name":"Capacitación Pedagógica para Técnicos Profesionales"},{"@type":"ListItem","position":5,"url":"https://formarcapacitaciones.com/cursos/auxiliar-en-criminologia/","name":"Auxiliar en Criminología"},{"@type":"ListItem","position":6,"url":"https://formarcapacitaciones.com/cursos/administracion/","name":"Administración"},{"@type":"ListItem","position":7,"url":"https://formarcapacitaciones.com/cursos/auxiliar-veterinario/","name":"Auxiliar Veterinario"},{"@type":"ListItem","position":8,"url":"https://formarcapacitaciones.com/cursos/plomeria/","name":"Plomería"}]}</script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -91,7 +94,7 @@
         </svg>
         <input type="text" id="search-input" placeholder="Buscar curso: preceptores, electricidad, criminalística..." />
       </div>
-      <div class="filters reveal" id="category-filters"><!-- STATIC:FILTERS --><button class="filter-chip active" data-cat="todas">Todas</button><button class="filter-chip" data-cat="9bc9fd9c-04b1-488b-8e76-130e15f61ce8">Administración y Gestión</button><button class="filter-chip" data-cat="752767e7-6ce6-4134-a136-f4b220f23735">Agro y Producción</button><button class="filter-chip" data-cat="2d9e479d-fc5e-440c-b876-788ba93ca425">Criminología y Criminalística</button><button class="filter-chip" data-cat="c4f61b19-f109-40a6-8d24-b8dc88cb48fe">Deporte y Actividad Física</button><button class="filter-chip" data-cat="80a02636-f5ca-416d-9547-32de31cb0259">Educación</button><button class="filter-chip" data-cat="380f8763-a354-41ad-b40b-588ea5427856">Oficios y Formación Laboral</button><button class="filter-chip" data-cat="737d0026-ae78-4379-a98a-975c39a12256">Psicología</button><button class="filter-chip" data-cat="0bb3f097-4833-472d-a185-a7518cdee408">Salud y Bienestar</button><button class="filter-chip" data-cat="ea4aaeb1-1a50-41e3-bec6-6787dea7cf46">Seguridad y Peritaje</button><button class="filter-chip" data-cat="60dd6dd5-2caf-4fe7-8d4a-0e208dec530b">Tecnología y Competencias Digitales</button><button class="filter-chip" data-cat="8fce455b-74b9-4d27-b553-7fedafb900e9">Veterinaria y Cuidado Animal</button><!-- /STATIC:FILTERS --></div>
+      <div class="filters reveal" id="category-filters"><!-- STATIC:FILTERS --><button class="filter-chip active" data-cat="todas">Todas</button><button class="filter-chip" data-cat="9bc9fd9c-04b1-488b-8e76-130e15f61ce8">Administración y Gestión</button><button class="filter-chip" data-cat="2d9e479d-fc5e-440c-b876-788ba93ca425">Criminología y Criminalística</button><button class="filter-chip" data-cat="80a02636-f5ca-416d-9547-32de31cb0259">Educación</button><button class="filter-chip" data-cat="380f8763-a354-41ad-b40b-588ea5427856">Oficios y Formación Laboral</button><button class="filter-chip" data-cat="ea4aaeb1-1a50-41e3-bec6-6787dea7cf46">Seguridad y Peritaje</button><button class="filter-chip" data-cat="8fce455b-74b9-4d27-b553-7fedafb900e9">Veterinaria y Cuidado Animal</button><!-- /STATIC:FILTERS --></div>
 
       <div id="courses-full-list" style="display:flex;flex-direction:column;gap:1.75rem;"><!-- STATIC:COURSES -->
       <article class="course-card-wide reveal reveal-delay-1">
@@ -100,7 +103,7 @@
           <span class="badge-featured"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7-6.3-3.8L5.7 21l1.7-7-5.4-4.7 7.1-.6L12 2z"/></svg>Destacado</span>
         </div>
         <div class="course-card-wide-body">
-          <span class="course-category">Curso</span>
+          <span class="course-category">Oficios y Formación Laboral</span>
           <h3 style="font-size:1.3rem;">Electricidad</h3>
           <p class="desc-full">Formación práctica en instalaciones eléctricas domiciliarias: normativa vigente, herramientas, tableros, seguridad eléctrica y resolución de problemas comunes.</p>
           <div class="course-card-wide-tags">
@@ -146,7 +149,7 @@
           <span class="badge-featured"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7-6.3-3.8L5.7 21l1.7-7-5.4-4.7 7.1-.6L12 2z"/></svg>Destacado</span>
         </div>
         <div class="course-card-wide-body">
-          <span class="course-category">Curso</span>
+          <span class="course-category">Educación</span>
           <h3 style="font-size:1.3rem;">Preceptores</h3>
           <p class="desc-full">Formación integral para desempeñarte como preceptor/a en instituciones educativas de nivel primario y secundario: normativa escolar, convivencia, acompañamiento a estudiantes y tareas administrativas del cargo.</p>
           <div class="course-card-wide-tags">
@@ -169,7 +172,7 @@
           <span class="badge-featured"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7-6.3-3.8L5.7 21l1.7-7-5.4-4.7 7.1-.6L12 2z"/></svg>Destacado</span>
         </div>
         <div class="course-card-wide-body">
-          <span class="course-category">Curso</span>
+          <span class="course-category">Educación</span>
           <h3 style="font-size:1.3rem;">Capacitación Pedagógica para Técnicos Profesionales</h3>
           <p class="desc-full">Trayecto pedagógico destinado a técnicos y profesionales que quieren dar clases: didáctica, planificación, evaluación y herramientas de enseñanza para el aula.</p>
           <div class="course-card-wide-tags">
@@ -238,7 +241,7 @@
           
         </div>
         <div class="course-card-wide-body">
-          <span class="course-category">Curso</span>
+          <span class="course-category">Veterinaria y Cuidado Animal</span>
           <h3 style="font-size:1.3rem;">Auxiliar Veterinario</h3>
           <p class="desc-full">Capacitación práctica para asistir en clínicas y consultorios veterinarios: manejo y contención de animales, asistencia en consultas y cirugías, cuidados básicos e higiene y bioseguridad.</p>
           <div class="course-card-wide-tags">
@@ -261,7 +264,7 @@
           
         </div>
         <div class="course-card-wide-body">
-          <span class="course-category">Curso</span>
+          <span class="course-category">Oficios y Formación Laboral</span>
           <h3 style="font-size:1.3rem;">Plomería</h3>
           <p class="desc-full">Curso de oficio orientado a instalaciones sanitarias y de gas domiciliarias: materiales, herramientas, lectura de planos básicos y reparaciones frecuentes.</p>
           <div class="course-card-wide-tags">
@@ -301,6 +304,7 @@
 // proyecto (Project Settings → API en el panel de Supabase).
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { assignCategories, categoriesWithCourses, courseInCategory, courseMatchesSearch } from "/course-catalog.js";
 
 const SUPABASE_URL = "https://vwgwjhbkchzcawfohimu.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_okikSztE3beBxMI6rpTgXg_s3h5tmh_";
@@ -345,20 +349,6 @@ function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str ?? "";
   return div.innerHTML;
-}
-
-/**
- * Normaliza texto para búsqueda: minúsculas y sin acentos/tildes, para
- * que "criminalistica" encuentre "Criminalística", "salta" encuentre
- * "Saltá", etc.
- */
-function normalizeSearch(str) {
-  return (str ?? "")
-    .toString()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .trim();
 }
 
 /**
@@ -436,8 +426,16 @@ function renderFooter(footerText) {
       <div class="container">
         <p><strong>Formar Capacitaciones</strong></p>
         <p style="margin-top:0.5rem;" id="footer-text">${footerText || "Cursos y capacitaciones online asincrónicas con validez nacional e internacional. También en Salta Capital, de forma presencial."}</p>
+        <nav class="footer-links" aria-label="Enlaces del sitio" style="margin-top:1rem;display:flex;flex-wrap:wrap;justify-content:center;gap:0.4rem 1.1rem;">
+          <a href="/">Inicio</a>
+          <a href="/cursos.html">Todos los cursos</a>
+          <a href="/gracias.html">Nuestro equipo</a>
+          <a href="/index.html#preguntas-frecuentes">Preguntas frecuentes</a>
+          <a href="/index.html#contacto">Contacto</a>
+          <a href="https://instagram.com/formar.capacitaciones" target="_blank" rel="noopener noreferrer">Instagram</a>
+        </nav>
         <p style="margin-top:1rem;">© <span id="footer-year"></span> Formar Capacitaciones. Todos los derechos reservados. ·
-          <a href="admin.html">Acceso administrador</a>
+          <a href="/admin.html" rel="nofollow">Acceso administrador</a>
         </p>
       </div>
     </footer>
@@ -625,16 +623,9 @@ function renderCourses() {
   const emptyState = document.getElementById("courses-empty");
   if (!list) return;
 
-  const t = normalizeSearch(searchTerm);
   const filtered = allCourses.filter((course) => {
-    const matchesSearch =
-      !t ||
-      normalizeSearch(course.title).includes(t) ||
-      normalizeSearch(course.short_description).includes(t) ||
-      normalizeSearch(course.description).includes(t) ||
-      normalizeSearch(course.categories?.name).includes(t) ||
-      normalizeSearch(course.modality).includes(t);
-    const matchesCategory = activeCategory === "todas" || course.category_id === activeCategory;
+    const matchesSearch = courseMatchesSearch(course, searchTerm);
+    const matchesCategory = activeCategory === "todas" || courseInCategory(course, activeCategory);
     return matchesSearch && matchesCategory;
   });
 
@@ -705,9 +696,16 @@ async function init() {
   }
 
   try {
-    [allCategories, allCourses] = await Promise.all([fetchCategories(), fetchCourses()]);
+    const [categories, courses] = await Promise.all([fetchCategories(), fetchCourses()]);
+    // Cursos sin categoría (ej: porque se borró la categoría desde /admin)
+    // se clasifican solos, y se ocultan los filtros que no tienen cursos.
+    allCourses = assignCategories(courses, categories);
+    allCategories = categoriesWithCourses(categories, allCourses);
   } catch (err) {
+    // Si Supabase no responde, se deja la lista pre-renderizada tal cual
+    // (en vez de borrarla y mostrar "no encontramos cursos").
     console.warn("No se pudo conectar a Supabase:", err.message || err);
+    return;
   }
 
   renderCategoryFilters();
