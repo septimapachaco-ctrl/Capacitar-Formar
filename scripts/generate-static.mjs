@@ -12,6 +12,7 @@
 //   - cursos/<slug>/index.html: una página estática por curso, con
 //     título, descripción, precio, modalidad y JSON-LD ya en el HTML
 //     (no detrás de un fetch), en una ruta limpia.
+//   - index.html: enlaces directos desde el inicio a cada curso.
 //   - sitemap.xml y llms.txt: se regeneran con la lista real de
 //     cursos activos, para buscadores tradicionales y motores de IA
 //     (GEO).
@@ -19,9 +20,17 @@
 // Se ejecuta con: node scripts/generate-static.mjs
 // No requiere dependencias externas (usa fetch nativo de Node 18+).
 
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir, readdir, rm } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import {
+  assignCategories,
+  categoriesWithCourses,
+  relatedCourses,
+  buildCourseJsonLd,
+  buildCourseBreadcrumbJsonLd,
+  buildCourseListJsonLd,
+} from "../course-catalog.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -90,7 +99,10 @@ async function fetchData() {
     supabaseSelect("site_content", "select=data&id=eq.1"),
   ]);
   const showPrices = !!siteContentRows?.[0]?.data?.show_prices;
-  return { categories, courses, showPrices };
+  // Cursos sin categoría (ej: se borró su categoría en /admin) se
+  // clasifican por palabras clave, y se ocultan los filtros vacíos.
+  const catalog = assignCategories(courses, categories);
+  return { categories: categoriesWithCourses(categories, catalog), courses: catalog, showPrices };
 }
 
 // --------------------------------------------------------------
@@ -193,6 +205,8 @@ function renderCourseDetail(course, related, showPrices) {
               </div>`
             : ""
         }
+
+        <p class="all-courses-link"><a href="/cursos.html">Ver todos los cursos de Formar Capacitaciones →</a></p>
       </div>
 
       <aside class="sidebar-card">
@@ -283,6 +297,7 @@ async function generateCursosListado(courses, categories, showPrices) {
     "COURSES",
     courses.map((c, i) => renderCourseCardWide(c, i, showPrices)).join("")
   );
+  html = setScriptJson(html, "courses-itemlist-jsonld", buildCourseListJsonLd(courses));
 
   await writeFile(filePath, html, "utf8");
   console.log(`✔ cursos.html regenerado con ${courses.length} cursos`);
@@ -314,38 +329,8 @@ async function generateCourseDetailPage(templateHtml, course, related, showPrice
   html = setAttr(html, "twitter-image", "content", image);
   html = setText(html, "breadcrumb-current", escapeHtml(course.title));
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Course",
-    name: course.title,
-    description: course.description,
-    provider: {
-      "@type": "Organization",
-      name: "Formar Capacitaciones",
-      sameAs: "https://instagram.com/formar.capacitaciones",
-      url: SITE_URL,
-    },
-    hasCourseInstance: {
-      "@type": "CourseInstance",
-      courseMode: course.modality,
-      location: course.location || "Argentina",
-    },
-    educationalCredentialAwarded: "Certificado con validez nacional e internacional",
-    inLanguage: "es-AR",
-    areaServed: ["Salta", "Córdoba", "Argentina"],
-  };
-  html = setScriptJson(html, "course-jsonld", jsonLd);
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Inicio", item: `${SITE_URL}/` },
-      { "@type": "ListItem", position: 2, name: "Cursos", item: `${SITE_URL}/cursos.html` },
-      { "@type": "ListItem", position: 3, name: course.title, item: url },
-    ],
-  };
-  html = setScriptJson(html, "breadcrumb-jsonld", breadcrumbJsonLd);
+  html = setScriptJson(html, "course-jsonld", buildCourseJsonLd(course, { showPrices }));
+  html = setScriptJson(html, "breadcrumb-jsonld", buildCourseBreadcrumbJsonLd(course));
 
   const detailHtml = renderCourseDetail(course, related, showPrices);
   html = html.replace(
@@ -363,12 +348,36 @@ async function generateCourseDetailPage(templateHtml, course, related, showPrice
 async function generateAllCourseDetailPages(courses, showPrices) {
   const templateHtml = await readFile(path.join(ROOT, "curso.html"), "utf8");
   for (const course of courses) {
-    const related = courses
-      .filter((c) => c.category_id && c.category_id === course.category_id && c.id !== course.id)
-      .slice(0, 3);
-    await generateCourseDetailPage(templateHtml, course, related, showPrices);
+    await generateCourseDetailPage(templateHtml, course, relatedCourses(course, courses), showPrices);
   }
   console.log(`✔ ${courses.length} páginas estáticas generadas en cursos/<slug>/index.html`);
+
+  // Borra las páginas de cursos que ya no están activos (o se borraron):
+  // así no quedan publicadas con información vieja. Si alguien entra a
+  // esa dirección, 404.html lo lleva a curso.html, que muestra
+  // "Curso no encontrado" con un enlace a todos los cursos.
+  const activeSlugs = new Set(courses.map((c) => c.slug));
+  const dirs = await readdir(path.join(ROOT, "cursos"), { withFileTypes: true });
+  for (const dir of dirs) {
+    if (dir.isDirectory() && !activeSlugs.has(dir.name)) {
+      await rm(path.join(ROOT, "cursos", dir.name), { recursive: true, force: true });
+      console.log(`✔ cursos/${dir.name}/ eliminado (curso inactivo o borrado)`);
+    }
+  }
+}
+
+async function generateHomeCourseLinks(courses) {
+  const filePath = path.join(ROOT, "index.html");
+  let html = await readFile(filePath, "utf8");
+  html = replaceBetweenMarkers(
+    html,
+    "HOME_COURSES",
+    courses
+      .map((c) => `<li><a href="/cursos/${encodeURIComponent(c.slug)}/">${escapeHtml(c.title)}</a></li>`)
+      .join("")
+  );
+  await writeFile(filePath, html, "utf8");
+  console.log("✔ index.html: enlaces del inicio a cada curso actualizados");
 }
 
 async function generateSitemap(courses) {
@@ -427,6 +436,7 @@ async function main() {
 
   await generateCursosListado(courses, categories, showPrices);
   await generateAllCourseDetailPages(courses, showPrices);
+  await generateHomeCourseLinks(courses);
   await generateSitemap(courses);
   await generateLlmsTxt(courses);
 

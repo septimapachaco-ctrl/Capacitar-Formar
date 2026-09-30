@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Página no encontrada | Formar Capacitaciones</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/png" href="/formarsinfondo.png" />
+  <link rel="stylesheet" href="/styles-common.css" />
+  <link rel="stylesheet" href="/styles-inner.css" />
+  <script>
+    // GitHub Pages sirve esta página para cualquier ruta que no existe.
+    // Las páginas /cursos/<slug>/ se generan cada algunas horas
+    // (scripts/generate-static.mjs); si alguien entra a un curso recién
+    // creado desde /admin antes de eso, lo mandamos a la versión dinámica
+    // (curso.html?slug=...), que lee el curso directo de Supabase.
+    (function () {
+      var match = window.location.pathname.match(/^\/cursos\/([^/]+)\/?(index\.html)?$/i);
+      if (match) {
+        window.location.replace("/curso.html?slug=" + encodeURIComponent(decodeURIComponent(match[1])));
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div class="container not-found" style="padding:4rem 0;text-align:center;">
+    <h1>Página no encontrada</h1>
+    <p class="muted">La página que buscás no existe o cambió de dirección.</p>
+    <p style="margin-top:1.5rem;display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;">
+      <a href="/cursos.html" class="btn btn-primary">Ver todos los cursos</a>
+      <a href="/" class="btn btn-outline">Volver al inicio</a>
+    </p>
+  </div>
+</body>
+</html>

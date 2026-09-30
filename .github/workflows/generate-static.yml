@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Generar cursos.html, cursos/<slug>/index.html, sitemap.xml y llms.txt
+      - name: Generar cursos.html, index.html, cursos/<slug>/index.html, sitemap.xml y llms.txt
         run: node scripts/generate-static.mjs
 
       - name: Commitear cambios si hay contenido nuevo
@@ -34,7 +34,7 @@ jobs:
           git config user.name "formar-bot"
           git config user.email "actions@users.noreply.github.com"
           if git status --porcelain | grep -q .; then
-            git add cursos.html "cursos/" sitemap.xml llms.txt
+            git add -A cursos.html index.html "cursos/" sitemap.xml llms.txt
             git commit -m "chore: regenerar HTML estático de cursos (SEO/GEO)"
             git push
           else

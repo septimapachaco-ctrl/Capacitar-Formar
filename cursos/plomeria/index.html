@@ -27,17 +27,19 @@
   <style>
 .team-card-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-smooth); }
 .team-card-plaque h3 { font-size: 1rem; margin-bottom: 0.15rem; }
+.all-courses-link { margin-top: 2rem; font-weight: 700; }
+.all-courses-link a { color: var(--color-turquoise); }
 .team-card-plaque p { font-size: 0.82rem; color: var(--color-turquoise); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.9rem; }
   </style>
 
-  <script type="application/ld+json" id="course-jsonld">{"@context":"https://schema.org","@type":"Course","name":"Plomería","description":"Curso de oficio orientado a instalaciones sanitarias y de gas domiciliarias: materiales, herramientas, lectura de planos básicos y reparaciones frecuentes.","provider":{"@type":"Organization","name":"Formar Capacitaciones","sameAs":"https://instagram.com/formar.capacitaciones","url":"https://formarcapacitaciones.com"},"hasCourseInstance":{"@type":"CourseInstance","courseMode":"Presencial","location":"Salta"},"educationalCredentialAwarded":"Certificado con validez nacional e internacional","inLanguage":"es-AR","areaServed":["Salta","Córdoba","Argentina"]}</script>
+  <script type="application/ld+json" id="course-jsonld">{"@context":"https://schema.org","@type":"Course","@id":"https://formarcapacitaciones.com/cursos/plomeria/#course","url":"https://formarcapacitaciones.com/cursos/plomeria/","name":"Plomería","description":"Curso de oficio orientado a instalaciones sanitarias y de gas domiciliarias: materiales, herramientas, lectura de planos básicos y reparaciones frecuentes.","abstract":"Instalaciones sanitarias, de agua y gas con práctica real en taller.","image":"https://images.unsplash.com/photo-1607472829322-9a3547b8cc85?w=1200&q=80","inLanguage":"es","provider":{"@type":"EducationalOrganization","@id":"https://formarcapacitaciones.com/#organization","name":"Formar Capacitaciones","url":"https://formarcapacitaciones.com/"},"publisher":{"@id":"https://formarcapacitaciones.com/#organization"},"about":[{"@type":"Thing","name":"Oficios y Formación Laboral"}],"timeRequired":"P5M","educationalCredentialAwarded":{"@type":"EducationalOccupationalCredential","name":"Certificado con validez nacional e internacional","credentialCategory":"certificate"},"isAccessibleForFree":false,"offers":[{"@type":"Offer","category":"Paid","url":"https://formarcapacitaciones.com/cursos/plomeria/","availability":"https://schema.org/InStock"}],"hasCourseInstance":[{"@type":"CourseInstance","courseMode":"Onsite","inLanguage":"es","location":{"@type":"Place","name":"Salta","address":{"@type":"PostalAddress","streetAddress":"Alberdi 615","addressLocality":"Salta","addressRegion":"Salta","addressCountry":"AR"}}}],"audience":{"@type":"Audience","geographicArea":{"@type":"Country","name":"Argentina"}}}</script>
   <script type="application/ld+json" id="breadcrumb-jsonld">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://formarcapacitaciones.com/"},{"@type":"ListItem","position":2,"name":"Cursos","item":"https://formarcapacitaciones.com/cursos.html"},{"@type":"ListItem","position":3,"name":"Plomería","item":"https://formarcapacitaciones.com/cursos/plomeria/"}]}</script>
 </head>
 <body>
   <div id="header-root"></div>
 
   <div class="container breadcrumb" id="breadcrumb">
-    <a href="/index.html">Inicio</a> / <a href="/index.html#cursos">Cursos</a> / <span id="breadcrumb-current">Plomería</span>
+    <a href="/index.html">Inicio</a> / <a href="/cursos.html">Cursos</a> / <span id="breadcrumb-current">Plomería</span>
   </div>
 
   <div id="course-content">
@@ -48,7 +50,7 @@
         </div>
 
         <div class="tag-row">
-          
+          <span class="tag tag-category">Oficios y Formación Laboral</span>
           <span class="tag tag-modality">Presencial</span>
           <span class="tag tag-duration">Duración: 5 meses</span>
         </div>
@@ -62,7 +64,26 @@
 
         
 
-        
+        <div class="related-courses">
+                <h2>Otros cursos que te pueden interesar</h2>
+                <div class="related-grid">
+                  
+                    <a href="/cursos/electricidad/" class="related-card">
+                      <h4>Electricidad</h4>
+                      <p>Presencial</p>
+                    </a>
+                    <a href="/cursos/auxiliar-en-criminalistica/" class="related-card">
+                      <h4>Auxiliar en Criminalística</h4>
+                      <p>Presencial / Virtual</p>
+                    </a>
+                    <a href="/cursos/preceptores/" class="related-card">
+                      <h4>Preceptores</h4>
+                      <p>Presencial / Virtual</p>
+                    </a>
+                </div>
+              </div>
+
+        <p class="all-courses-link"><a href="/cursos.html">Ver todos los cursos de Formar Capacitaciones →</a></p>
       </div>
 
       <aside class="sidebar-card">
@@ -118,6 +139,7 @@
 // proyecto (Project Settings → API en el panel de Supabase).
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { assignCategories, relatedCourses, buildCourseJsonLd, buildCourseBreadcrumbJsonLd } from "/course-catalog.js";
 
 const SUPABASE_URL = "https://vwgwjhbkchzcawfohimu.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_okikSztE3beBxMI6rpTgXg_s3h5tmh_";
@@ -239,8 +261,16 @@ function renderFooter(footerText) {
       <div class="container">
         <p><strong>Formar Capacitaciones</strong></p>
         <p style="margin-top:0.5rem;" id="footer-text">${footerText || "Cursos y capacitaciones online asincrónicas con validez nacional e internacional. También en Salta Capital, de forma presencial."}</p>
+        <nav class="footer-links" aria-label="Enlaces del sitio" style="margin-top:1rem;display:flex;flex-wrap:wrap;justify-content:center;gap:0.4rem 1.1rem;">
+          <a href="/">Inicio</a>
+          <a href="/cursos.html">Todos los cursos</a>
+          <a href="/gracias.html">Nuestro equipo</a>
+          <a href="/index.html#preguntas-frecuentes">Preguntas frecuentes</a>
+          <a href="/index.html#contacto">Contacto</a>
+          <a href="https://instagram.com/formar.capacitaciones" target="_blank" rel="noopener noreferrer">Instagram</a>
+        </nav>
         <p style="margin-top:1rem;">© <span id="footer-year"></span> Formar Capacitaciones. Todos los derechos reservados. ·
-          <a href="/admin.html">Acceso administrador</a>
+          <a href="/admin.html" rel="nofollow">Acceso administrador</a>
         </p>
       </div>
     </footer>
@@ -390,27 +420,18 @@ async function fetchSiteContent() {
   return data?.data || {};
 }
 
-async function fetchCourse(slug) {
-  const { data, error } = await supabase
-    .from("courses")
-    .select("*, categories(id, name, slug)")
-    .eq("slug", slug)
-    .eq("active", true)
-    .single();
-  if (error || !data) return null;
-  return data;
-}
-
-async function fetchRelated(categoryId, currentId) {
-  if (!categoryId) return [];
-  const { data } = await supabase
-    .from("courses")
-    .select("*, categories(id, name, slug)")
-    .eq("active", true)
-    .eq("category_id", categoryId)
-    .neq("id", currentId)
-    .limit(3);
-  return data ?? [];
+/**
+ * Trae todos los cursos activos (son pocos) y las categorías, para
+ * poder clasificar los cursos sin categoría y armar siempre la lista
+ * de "Otros cursos" (enlazado interno entre cursos).
+ */
+async function fetchCatalog() {
+  const [coursesRes, categoriesRes] = await Promise.all([
+    supabase.from("courses").select("*, categories(id, name, slug)").eq("active", true).order("featured", { ascending: false }).order("created_at", { ascending: false }),
+    supabase.from("categories").select("*"),
+  ]);
+  if (coursesRes.error) throw coursesRes.error;
+  return assignCategories(coursesRes.data ?? [], categoriesRes.data ?? []);
 }
 
 function priceDisplay(course) {
@@ -444,38 +465,8 @@ function applySEO(course) {
   }
   document.getElementById("breadcrumb-current").textContent = course.title;
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Course",
-    name: course.title,
-    description: course.description,
-    provider: {
-      "@type": "Organization",
-      name: "Formar Capacitaciones",
-      sameAs: "https://instagram.com/formar.capacitaciones",
-      url: SITE_URL,
-    },
-    hasCourseInstance: {
-      "@type": "CourseInstance",
-      courseMode: course.modality,
-      location: course.location || "Argentina",
-    },
-    educationalCredentialAwarded: "Certificado con validez nacional e internacional",
-    inLanguage: "es-AR",
-    areaServed: ["Salta", "Córdoba", "Argentina"],
-  };
-  document.getElementById("course-jsonld").textContent = JSON.stringify(jsonLd);
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Inicio", item: `${SITE_URL}/` },
-      { "@type": "ListItem", position: 2, name: "Cursos", item: `${SITE_URL}/cursos.html` },
-      { "@type": "ListItem", position: 3, name: course.title, item: url },
-    ],
-  };
-  document.getElementById("breadcrumb-jsonld").textContent = JSON.stringify(breadcrumbJsonLd);
+  document.getElementById("course-jsonld").textContent = JSON.stringify(buildCourseJsonLd(course, { showPrices }));
+  document.getElementById("breadcrumb-jsonld").textContent = JSON.stringify(buildCourseBreadcrumbJsonLd(course));
 }
 
 function renderCourse(course, related) {
@@ -538,6 +529,8 @@ function renderCourse(course, related) {
               </div>`
             : ""
         }
+
+        <p class="all-courses-link"><a href="/cursos.html">Ver todos los cursos de Formar Capacitaciones →</a></p>
       </div>
 
       <aside class="sidebar-card">
@@ -575,7 +568,15 @@ async function init() {
   }
 
   const slug = getSlugFromUrl();
-  const course = slug ? await fetchCourse(slug) : null;
+  let catalog = [];
+  try {
+    catalog = slug ? await fetchCatalog() : [];
+  } catch (err) {
+    console.warn("No se pudieron cargar los cursos:", err.message || err);
+    // En /cursos/<slug>/ el curso ya viene escrito en el HTML: se deja así.
+    if (document.getElementById("course-content").children.length > 0) return;
+  }
+  const course = catalog.find((c) => c.slug === slug) || null;
 
   if (!course) {
     document.getElementById("not-found").classList.remove("hidden");
@@ -583,7 +584,7 @@ async function init() {
     return;
   }
 
-  const related = await fetchRelated(course.category_id, course.id);
+  const related = relatedCourses(course, catalog);
   applySEO(course);
   renderCourse(course, related);
   initScrollReveal();
