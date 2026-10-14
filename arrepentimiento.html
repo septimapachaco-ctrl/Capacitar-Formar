@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Botón de arrepentimiento | Formar Capacitaciones</title>
+  <meta name="description" content="Revocá la compra de un curso dentro de los 10 días corridos o solicitá la baja de un servicio de Formar Capacitaciones." />
+  <link rel="canonical" href="https://formarcapacitaciones.com/arrepentimiento.html" />
+  <link rel="icon" type="image/png" href="formarsinfondo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles-common.css" />
+  <link rel="stylesheet" href="styles-inner.css" />
+  <link rel="stylesheet" href="legal.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <img src="https://i.ibb.co/sv8S8Gmr/logo-poster.jpg" alt="Formar Capacitaciones" style="width:36px;height:36px;object-fit:contain;border-radius:8px;" />
+        <span class="brand-name">Formar<br class="mobile-only" /> Capacitaciones</span>
+      </a>
+      <nav class="main-nav" id="main-nav">
+        <a href="cursos.html">Cursos</a>
+        <a href="index.html#equipo">Equipo</a>
+        <a href="index.html#ventajas">Por qué elegirnos</a>
+        <a href="index.html#contacto">Contacto</a>
+      </nav>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+      <a href="https://instagram.com/formar.capacitaciones" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm header-cta">
+        Consultar ahora
+      </a>
+    </div>
+  </header>
+
+  <main class="container legal-page">
+    <nav class="breadcrumb" style="padding-top:0;margin-bottom:1rem;"><a href="index.html">Inicio</a> / Botón de arrepentimiento</nav>
+    <h1>Botón de arrepentimiento</h1>
+    <p class="legal-updated">Última actualización: <span data-legal="ultimaActualizacion"></span></p>
+    <div class="legal-box">
+      <p>Si te inscribiste en un curso a distancia (por WhatsApp, Instagram, email o desde el sitio), tenés derecho a <strong>arrepentirte dentro de los 10 días corridos</strong> desde la confirmación de tu inscripción, sin dar explicaciones y sin ningún costo (art. 34 de la Ley 24.240, arts. 1110 a 1116 del Código Civil y Comercial y Resolución 424/2020).</p>
+    </div>
+
+    <h2>¿Cómo funciona?</h2>
+    <ol>
+      <li>Completá el formulario de abajo con los datos de tu inscripción.</li>
+      <li>Enviá la solicitud por WhatsApp o por email. No necesitás registrarte ni iniciar sesión.</li>
+      <li>Dentro de las <strong>24 horas</strong> te enviamos un <strong>código de identificación</strong> de tu solicitud.</li>
+      <li>Te devolvemos el <strong>total abonado</strong> por el mismo medio de pago que usaste, sin descuentos ni penalidades.</li>
+    </ol>
+
+    <h2>Baja del servicio</h2>
+    <p>Si ya pasaron los 10 días y pagás tu curso en cuotas, también podés usar este formulario para <strong>solicitar la baja</strong> (Resolución 316/2018). Vamos a dejar de cobrarte las cuotas que no hayan vencido y te confirmamos la baja con un código de identificación. Las condiciones de reembolso están en el punto 6 de los <a href="terminos.html#cancelaciones">Términos y condiciones</a>.</p>
+
+    <h2>Formulario de solicitud</h2>
+    <form id="arrepentimiento-form" class="legal-form" novalidate>
+      <div>
+        <label for="arr-tipo">Tipo de solicitud</label>
+        <select id="arr-tipo" name="tipo" required>
+          <option value="arrepentimiento">Arrepentimiento (dentro de los 10 días)</option>
+          <option value="baja">Baja del servicio / de las cuotas</option>
+        </select>
+      </div>
+      <div class="row">
+        <div>
+          <label for="arr-nombre">Nombre y apellido *</label>
+          <input id="arr-nombre" name="nombre" type="text" autocomplete="name" required />
+        </div>
+        <div>
+          <label for="arr-dni">DNI *</label>
+          <input id="arr-dni" name="dni" type="text" inputmode="numeric" pattern="[0-9.]{7,11}" required />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label for="arr-email">Email *</label>
+          <input id="arr-email" name="email" type="email" autocomplete="email" required />
+        </div>
+        <div>
+          <label for="arr-telefono">Teléfono</label>
+          <input id="arr-telefono" name="telefono" type="tel" autocomplete="tel" />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label for="arr-curso">Curso *</label>
+          <input id="arr-curso" name="curso" type="text" required />
+        </div>
+        <div>
+          <label for="arr-fecha">Fecha de inscripción / pago *</label>
+          <input id="arr-fecha" name="fecha" type="date" required />
+        </div>
+      </div>
+      <div>
+        <label for="arr-medio">Medio de pago</label>
+        <input id="arr-medio" name="medio" type="text" placeholder="Transferencia, Mercado Pago, tarjeta..." />
+      </div>
+      <div>
+        <label for="arr-comentario">Comentarios (opcional)</label>
+        <textarea id="arr-comentario" name="comentario" rows="3"></textarea>
+      </div>
+      <p class="form-error" id="arrepentimiento-error" role="alert"></p>
+      <div class="actions">
+        <button type="submit" class="btn btn-whatsapp">Enviar por WhatsApp</button>
+        <button type="button" class="btn btn-outline" id="arrepentimiento-email">Enviar por email</button>
+      </div>
+      <p style="font-size:0.85rem;color:var(--color-text-muted);">Los datos que cargues se usan únicamente para gestionar tu solicitud, según nuestra <a href="privacidad.html">Política de privacidad</a>. Este formulario no guarda información en el sitio: arma el mensaje y lo abre en WhatsApp o en tu programa de email para que lo envíes.</p>
+    </form>
+
+    <h2>Otros canales</h2>
+    <p>También podés ejercer tu derecho de arrepentimiento o pedir la baja escribiéndonos directamente por WhatsApp al <span data-legal="whatsappVisible"></span>, por email a <span data-legal="email"></span> o presentándote en <span data-legal="domicilio"></span>.</p>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p><strong>Formar Capacitaciones</strong></p>
+      <p style="margin-top:0.5rem;"><span data-legal="razonSocial"></span> · CUIT <span data-legal="cuit"></span> · <span data-legal="domicilio"></span></p>
+      <p style="margin-top:1rem;">
+        <a href="terminos.html">Términos y condiciones</a> ·
+        <a href="privacidad.html">Política de privacidad</a> ·
+        <a href="arrepentimiento.html">Botón de arrepentimiento</a> ·
+        <a href="https://www.argentina.gob.ar/produccion/defensadelconsumidor/formulario" target="_blank" rel="noopener noreferrer">Defensa de las y los consumidores. Para reclamos ingrese aquí</a>
+      </p>
+      <!-- QR "Data Fiscal" de ARCA (ex AFIP): pegar acá el código que ARCA genera para el CUIT del titular -->
+      <p style="margin-top:1rem;">© <span id="footer-year"></span> Formar Capacitaciones. Todos los derechos reservados. ·
+        <a href="admin.html">Acceso administrador</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="legal.js"></script>
+</body>
+</html>
