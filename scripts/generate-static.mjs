@@ -266,7 +266,7 @@ function fixRelativePathsForNestedPage(html) {
     .replace(/href="index\.html/g, 'href="/index.html')
     .replace(/href="cursos\.html"/g, 'href="/cursos.html"')
     .replace(/href="admin\.html"/g, 'href="/admin.html"')
-    .replace(/href="(terminos|privacidad|arrepentimiento)\.html"/g, 'href="/$1.html"')
+    .replace(/href="(terminos|privacidad)\.html"/g, 'href="/$1.html"')
     .replace(/src="https:\/\/i\.ibb\.co/g, 'src="https://i.ibb.co'); // no-op, deja absolutas intactas
 }
 
@@ -386,7 +386,6 @@ async function generateSitemap(courses) {
     { loc: `${SITE_URL}/gracias.html`, changefreq: "monthly", priority: "0.5" },
     { loc: `${SITE_URL}/terminos.html`, changefreq: "yearly", priority: "0.3" },
     { loc: `${SITE_URL}/privacidad.html`, changefreq: "yearly", priority: "0.3" },
-    { loc: `${SITE_URL}/arrepentimiento.html`, changefreq: "yearly", priority: "0.3" },
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
