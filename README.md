@@ -13,6 +13,8 @@ index.html            → Landing page
 curso.html             → Detalle de curso (dinámico, vía ?slug=...)
 admin.html              → Panel de administración (login + CRUD)
 gracias.html            → Página post-pago
+terminos.html           → Términos y condiciones (Ley 24.240)
+privacidad.html          → Política de privacidad (Ley 25.326)
 schema.sql               → Script SQL para Supabase
 
 css/
