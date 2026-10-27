@@ -254,6 +254,30 @@ function setScriptJson(html, id, obj) {
 }
 
 /**
+ * En curso.html (la plantilla dinámica usada para ?slug=...) el <noscript>
+ * y el bloque #not-found son necesarios: sin JS, #course-content queda
+ * vacío. Pero en cursos/<slug>/index.html el contenido real del curso ya
+ * quedó escrito en el HTML por generateCourseDetailPage(), así que:
+ *   - el <noscript> queda redundante y además repite un <h1> genérico
+ *     ("Cursos de Formar Capacitaciones") que no es el tema de la página,
+ *     justo para los rastreadores sin JS que esto debería ayudar (GEO).
+ *   - el <h1>Curso no encontrado</h1> de #not-found (un estado de borde
+ *     que solo se activa si el curso se borró después de generar la
+ *     página) queda como un segundo/tercer <h1> real en el HTML estático.
+ * Se quita el <noscript> y se baja el <h1> de #not-found a un párrafo.
+ */
+function removeRedundantNoScriptFallback(html) {
+  html = html.replace(
+    /\n *<!-- Contenido mínimo para rastreadores[\s\S]*?<\/noscript>\n/,
+    "\n"
+  );
+  return html.replace(
+    '<div id="not-found" class="container not-found hidden">\n    <h1>Curso no encontrado</h1>',
+    '<div id="not-found" class="container not-found hidden">\n    <p class="not-found-title">Curso no encontrado</p>'
+  );
+}
+
+/**
  * Reescribe las rutas relativas de una plantilla que vivía en la raíz
  * del sitio (curso.html) para que sigan funcionando dos niveles más
  * abajo, en cursos/<slug>/index.html.
@@ -292,9 +316,17 @@ async function generateCursosListado(courses, categories, showPrices) {
 async function generateCourseDetailPage(templateHtml, course, related, showPrices) {
   const slug = course.slug;
   const isAsync = /asincr/i.test(course.modality || "");
-  const title = isAsync
-    ? `${course.title} | Curso online asincrónico con certificación`
-    : `${course.title} | Curso con validez nacional`;
+  // Si el nombre del curso ya es largo, un sufijo largo empuja el
+  // <title> bien pasado los ~60 caracteres que Google suele mostrar
+  // sin cortar en los resultados de búsqueda. Para esos casos se usa
+  // un sufijo corto en vez de recortar el nombre del curso.
+  const suffixLong = isAsync
+    ? " | Curso online asincrónico con certificación"
+    : " | Curso con validez nacional";
+  const title =
+    course.title.length + suffixLong.length <= 60
+      ? `${course.title}${suffixLong}`
+      : `${course.title} | FORMAR`;
   const description =
     course.short_description ||
     (isAsync
@@ -354,6 +386,7 @@ async function generateCourseDetailPage(templateHtml, course, related, showPrice
     `<div id="course-content">${detailHtml}</div>\n\n  <!-- Contenido mínimo`
   );
 
+  html = removeRedundantNoScriptFallback(html);
   html = fixRelativePathsForNestedPage(html);
 
   const outDir = path.join(ROOT, "cursos", slug);
