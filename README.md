@@ -16,6 +16,8 @@ curso.html                  → Detalle de curso (dinámico, vía ?slug=..., usa
                                vista previa inmediata de un curso recién creado)
 admin.html                    → Panel de administración (login + CRUD)
 gracias.html                    → Página "Nuestro equipo" (perfiles del staff)
+terminos.html                     → Términos y condiciones (Ley 24.240)
+privacidad.html                     → Política de privacidad (Ley 25.326)
 
 cursos/<slug>/index.html    → Una página estática por curso (generada, ver sección 8),
                                en una ruta limpia (ej: /cursos/plomeria/)
