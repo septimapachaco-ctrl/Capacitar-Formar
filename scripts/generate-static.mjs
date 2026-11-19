@@ -60,7 +60,7 @@ function whatsappLink(number, message) {
 }
 
 function priceDisplay(course, showPrices) {
-  if (!showPrices) return `<span class="price-placeholder">$0000</span>`;
+  if (!showPrices) return "";
   return course.price > 0 ? formatARS(course.price) : "Consultar";
 }
 

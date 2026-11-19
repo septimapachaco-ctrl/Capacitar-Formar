@@ -397,3 +397,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--color-blue); fon
   * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* Precio oculto: cuando el admin desactiva "Mostrar precios", el casillero queda vacío y no se muestra */
+.price:empty { display: none; }
+.sidebar-card .label:has(+ .price:empty) { display: none; }
+.course-card-wide-actions { margin-left: auto; }

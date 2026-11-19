@@ -75,7 +75,7 @@
 
       <aside class="sidebar-card">
         <span class="label">Inversión</span>
-        <p class="price"><span class="price-placeholder">$0000</span></p>
+        <p class="price"></p>
         <p class="modality-line">Modalidad: <strong>Consultar</strong></p>
 
         <a href="https://wa.me/5493876236285?text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20curso%20%22Administraci%C3%B3n%22" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-block">
@@ -413,7 +413,7 @@ async function fetchRelated(categoryId, currentId) {
 }
 
 function priceDisplay(course) {
-  if (!showPrices) return `<span class="price-placeholder">$0000</span>`;
+  if (!showPrices) return "";
   return course.price > 0 ? formatARS(course.price) : "Consultar";
 }
 
